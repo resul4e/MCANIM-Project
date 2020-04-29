@@ -1,15 +1,16 @@
 #include "Window.h"
+#include "Renderer.h"
 
 int main(int argc, char** argv)
 {
     Window window;
+    Renderer renderer;
 
     window.create("Skeletal Animator", 800, 600);
 
     while (window.isOpen())
     {
-        //glClearColor(1, 0, 0, 1);
-        //glClear(GL_COLOR_BUFFER_BIT);
+        renderer.update();
 
         window.render();
         window.update();
