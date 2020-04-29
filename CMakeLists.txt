@@ -17,4 +17,5 @@ add_executable(${AnimationProject}
 
 source_group(Source FILES ${BASE_SOURCES})
 
-target_link_libraries(${AnimationProject} ${CMAKE_SOURCE_DIR}/ThirdParty/GLFW/lib/glfw3.lib) 
+target_link_libraries(${AnimationProject} ${CMAKE_SOURCE_DIR}/ThirdParty/GLFW/lib/glfw3.lib)
+target_link_libraries(${AnimationProject} ${CMAKE_DL_LIBS})
