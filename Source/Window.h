@@ -7,7 +7,7 @@ class GLFWwindow;
 class Window
 {
 public:
-    void create(std::string title, unsigned int width, unsigned int height);
+    void create(std::string title, unsigned int width, unsigned int height, bool fullScreen = false);
     void update();
     void render();
 

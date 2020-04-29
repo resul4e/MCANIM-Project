@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-void Window::create(std::string title, unsigned int width, unsigned int height)
+void Window::create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
 {
     if (!glfwInit())
     {
@@ -19,7 +19,8 @@ void Window::create(std::string title, unsigned int width, unsigned int height)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
-    window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+    GLFWmonitor* monitor = fullScreen ? glfwGetPrimaryMonitor() : nullptr;
+    window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
     if (!window)
     {
         // Window or OpenGL context creation failed
