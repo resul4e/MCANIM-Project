@@ -6,6 +6,12 @@ set(BASE_SOURCES
     ${DIR}/Window.cpp
     ${DIR}/Renderer.h
     ${DIR}/Renderer.cpp
+    ${DIR}/RigLoader.h
+    ${DIR}/RigLoader.cpp
+    ${DIR}/Joint.h
+    ${DIR}/Joint.cpp
+    ${DIR}/Rig.h
+    ${DIR}/Rig.cpp
     ${DIR}/glad.c
     PARENT_SCOPE
 )
