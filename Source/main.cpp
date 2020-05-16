@@ -1,6 +1,4 @@
 ﻿#include "Window.h"
-#include "Shader.h"
-#include "Texture.h"
 #include "Renderer.h"
 #include "RigLoader.h"
 
@@ -10,12 +8,8 @@ int main(int argc, char** argv)
     Renderer renderer;
     RigLoader::LoadRig("../Assets/Idle.fbx");
 
-    // renderer.SetupQuad();
-
     window.create("Skeletal Animator", 800, 600);
-
-    Shader shader("../Assets/shader.shader");
-    Texture texture("../Assets/Universiteit-Utrecht.png");
+    renderer.SetupQuad();
 
     while (window.isOpen())
     {    	
