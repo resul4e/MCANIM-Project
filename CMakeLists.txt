@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(${CMAKE_SOURCE_DIR}/ThirdParty/glad/include/)
 include_directories(${CMAKE_SOURCE_DIR}/ThirdParty/GLFW/include/)
 include_directories(${CMAKE_SOURCE_DIR}/ThirdParty/assimp/include/)
+include_directories(${CMAKE_SOURCE_DIR}/ThirdParty/glm/include/)
 
 # Add source subdirectory which contains the source files
 add_subdirectory(Source)
