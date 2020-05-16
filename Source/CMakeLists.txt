@@ -10,8 +10,8 @@ set(BASE_SOURCES
     ${DIR}/RigLoader.cpp
     ${DIR}/Shader.h
     ${DIR}/Shader.cpp
-    ${DIR}/Vendor/stbImage/stb_image.h
-    ${DIR}/Vendor/stbImage/stb_image.cpp
+    ${DIR}/stb_image.h
+    ${DIR}/stb_image.cpp
     ${DIR}/Texture.h
     ${DIR}/Texture.cpp
     ${DIR}/Joint.h

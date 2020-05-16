@@ -10,13 +10,12 @@ int main(int argc, char** argv)
     Renderer renderer;
     RigLoader::LoadRig("../Assets/Idle.fbx");
 
-    // Something is wrong with unlocking opengl functionality above the fixed function pipeline.
-    // Texture texture("../Assets/Universiteit-Utrecht.png");
-    // Shader shader("../Assets/shader.shader");
-
     // renderer.SetupQuad();
 
     window.create("Skeletal Animator", 800, 600);
+
+    Shader shader("../Assets/shader.shader");
+    Texture texture("../Assets/Universiteit-Utrecht.png");
 
     while (window.isOpen())
     {    	
