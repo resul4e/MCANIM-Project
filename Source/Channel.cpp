@@ -1,9 +1,17 @@
 #include "Channel.h"
+#include "KeyFrame.h"
 
-Channel::Channel(float _time, glm::vec3 _position, glm::dquat _rotation, glm::vec3 _scale) :
-	m_time(_time),
-	m_position(_position),
-	m_rotation(_rotation),
-	m_scale(_scale)
+Channel::Channel(std::string _jointName) :
+m_jointName(_jointName)
 {
+}
+
+std::string Channel::GetJointName() const
+{
+	return m_jointName;
+}
+
+void Channel::AddKeyFrame(std::unique_ptr<KeyFrame> _keyFrame)
+{
+	m_keyFrames.push_back(std::move(_keyFrame));
 }

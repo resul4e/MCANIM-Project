@@ -14,6 +14,8 @@ set(BASE_SOURCES
     ${DIR}/AnimationClip.cpp
     ${DIR}/Channel.h
     ${DIR}/Channel.cpp
+    ${DIR}/KeyFrame.h
+    ${DIR}/KeyFrame.cpp
     ${DIR}/Shader.h
     ${DIR}/Shader.cpp
     ${DIR}/stb_image.h

@@ -12,13 +12,12 @@ public:
 	AnimationClip(std::string _animationName, float _fps);
 	~AnimationClip() = default;
 
-	void AddChannelMap(std::string _channelName);
-	void AddChannel(std::string _channelName, std::unique_ptr<Channel> _channel);
+	void AddChannel(std::shared_ptr<Channel> _channel);
 
 private:
 	std::string m_animationName;
-
 	float m_fps;
-	
+
+	std::map<std::string, std::shared_ptr<Channel>> m_channels;
 	std::map<std::string, std::vector<std::unique_ptr<Channel>>> m_channelMap;
 };
