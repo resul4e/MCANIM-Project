@@ -17,5 +17,5 @@ std::shared_ptr<Channel> AnimationClip::GetChannel(std::string _name) const
 {
 	assert(m_channels.find(_name) == m_channels.end());
 	
-	return m_channels[_name];
+	return m_channels.at(_name);
 }
