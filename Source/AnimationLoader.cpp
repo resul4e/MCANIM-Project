@@ -16,7 +16,7 @@ void AnimationLoader::LoadAnimation(std::filesystem::path _filePath)
 	
 	assert(scene->mNumAnimations > 0);
 	
-	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(scene->mAnimations[0]->mName.C_Str());
+	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(scene->mAnimations[0]->mName.C_Str(), scene->mAnimations[0]->mTicksPerSecond);
 
 	for(size_t c = 0; c < scene->mAnimations[0]->mNumChannels; c++)
 	{
