@@ -8,6 +8,12 @@ set(BASE_SOURCES
     ${DIR}/Renderer.cpp
     ${DIR}/RigLoader.h
     ${DIR}/RigLoader.cpp
+    ${DIR}/AnimationLoader.h
+    ${DIR}/AnimationLoader.cpp
+    ${DIR}/AnimationClip.h
+    ${DIR}/AnimationClip.cpp
+    ${DIR}/Channel.h
+    ${DIR}/Channel.cpp
     ${DIR}/Shader.h
     ${DIR}/Shader.cpp
     ${DIR}/stb_image.h

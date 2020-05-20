@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "RigLoader.h"
 #include "Rig.h"
+#include "AnimationLoader.h"
 
 int main(int argc, char** argv)
 {
@@ -10,6 +11,7 @@ int main(int argc, char** argv)
 
 	//loading the test rig.
     std::shared_ptr<Rig> rig = RigLoader::LoadRig("../Assets/Idle.fbx");
+    AnimationLoader::LoadAnimation("../Assets/Idle.fbx");
 	
 
     window.create("Skeletal Animator", 800, 600);
