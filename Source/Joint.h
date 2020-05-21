@@ -10,22 +10,22 @@ enum class JointType
 	ROTATIONAL,
 	TRANSLATIONAL
 };
-enum class RotationalType
+namespace RotationalType
 {
-	HINGE = 1,
-	UNIVERSAL = 2,
-	BALLSOCKET = 3
+	static const unsigned int HINGE = 1;
+	static const unsigned int UNIVERSAL = 2;
+	static const unsigned int BALLSOCKET = 3;
 };
-enum class TranslationalType
+namespace TranslationalType
 {
-	PRISMATIC = 1,
-	COORDS = 3
+	static const unsigned int PRISMATIC = 1;
+	static const unsigned int COORDS = 3;
 };
 
 class Joint : public std::enable_shared_from_this<Joint>
 {
 public:
-	Joint(std::string _name, glm::mat4x4 _localTransform, const JointType _jointType, const int _nDofs, glm::vec3 _offset);
+	Joint(std::string _name, glm::mat4x4 _localTransform, const JointType _jointType, const int _nDofs, glm::vec3 _offset = glm::vec3(0, 0, 0));
 	~Joint() = default;
 
 	/**

@@ -30,7 +30,7 @@ std::shared_ptr<Joint> RigLoader::ExtractChild(aiNode* _node)
 								t.d1, t.d2, t.d3, t.d4 };
 
 
-	auto node = std::make_shared<Joint>(_node->mName.C_Str(), localTransform);
+	auto node = std::make_shared<Joint>(_node->mName.C_Str(), localTransform, JointType::ROTATIONAL, RotationalType::BALLSOCKET);
 
 	for (size_t i = 0; i < _node->mNumChildren; i++)
 	{

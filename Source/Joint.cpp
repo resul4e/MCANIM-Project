@@ -1,6 +1,6 @@
 #include "Joint.h"
 
-Joint::Joint(std::string _name, glm::mat4x4 _localTransform, const JointType _jointType, const int _nDofs, glm::vec3 _offset = glm::vec3(0,0,0)) :
+Joint::Joint(std::string _name, glm::mat4x4 _localTransform, const JointType _jointType, const int _nDofs, glm::vec3 _offset) :
 m_name(_name),
 m_parent(nullptr),
 m_localTransform(_localTransform),
