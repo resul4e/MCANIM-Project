@@ -6,6 +6,9 @@ set(BASE_SOURCES
     ${DIR}/Window.cpp
     ${DIR}/Renderer.h
     ${DIR}/Renderer.cpp
+    ${DIR}/ModelLoader.h
+    ${DIR}/ModelLoader.cpp
+    ${DIR}/Model.h
     ${DIR}/RigLoader.h
     ${DIR}/RigLoader.cpp
     ${DIR}/AnimationLoader.h
