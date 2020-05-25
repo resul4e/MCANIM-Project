@@ -5,12 +5,12 @@
 
 #include <glad/glad.h>
 
-void Renderer::Initialize()
+void Renderer::Initialize(std::filesystem::path _assetPath)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-	shader = new Shader("../Assets/shader.shader");
+	shader = new Shader(_assetPath.string() + "/shader.shader");
 }
 
 void Renderer::Update()
