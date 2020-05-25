@@ -1,6 +1,7 @@
 #shader vertex
 #version 330 core
 
+uniform mat4 projMatrix;
 uniform mat4 modelMatrix;
 
 layout(location = 0) in vec4 position;
@@ -13,13 +14,6 @@ out vec2 v_TexCoord;
 
 void main()
 {
-	mat4 projMatrix = mat4(
-		1.73205080757, 0, 0, 0,
-		0, 1.73205080757, 0, 0,
-		0, 0, -1.002002002, -1,
-		0, 0, -0.2002002002, 0
-	);
-
 	gl_Position = projMatrix * modelMatrix * position;
 	v_Position = (modelMatrix * position).xyz;
 	v_Normal = normal;

@@ -32,6 +32,8 @@ set(RENDERING_SOURCES
     ${DIR}/Renderer.cpp
     ${DIR}/Model.h
     ${DIR}/Model.cpp
+    ${DIR}/Camera.h
+    ${DIR}/Camera.cpp
     ${DIR}/Shader.h
     ${DIR}/Shader.cpp
     ${DIR}/stb_image.h

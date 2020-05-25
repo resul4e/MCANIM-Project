@@ -5,6 +5,12 @@
 
 #include <glad/glad.h>
 
+Renderer::Renderer() :
+	camera(glm::radians(60.0f), 1, 0.1f, 100.0f)
+{
+
+}
+
 void Renderer::Initialize(std::filesystem::path _assetPath)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -20,10 +26,14 @@ void Renderer::Update()
 	shader->Bind();
 	//texture->Bind();
 
+	glm::mat4 projMatrix(1);
+	camera.loadProjectionMatrix(projMatrix);
+
 	glm::mat4 modelMatrix(1);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, -2, -5));
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.02f));
 
+	shader->SetMatrix4("projMatrix", projMatrix);
 	shader->SetMatrix4("modelMatrix", modelMatrix);
 
 	for (Mesh& mesh : m_model->meshes)
