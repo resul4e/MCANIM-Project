@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	//loading the test rig.
 	std::shared_ptr<Rig> rig = RigLoader::LoadRig("../Assets/Idle.fbx");
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation("../Assets/Idle.fbx");
-	std::shared_ptr<Model> model = ModelLoader::LoadModel("../Assets/giraffe.obj");
+	std::shared_ptr<Model> model = ModelLoader::LoadModel("../Assets/Idle.fbx");
 
 	window.create("Skeletal Animator", 800, 600);
 

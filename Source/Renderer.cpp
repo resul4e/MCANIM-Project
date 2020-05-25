@@ -1,5 +1,8 @@
 #include "Renderer.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+
 #include <glad/glad.h>
 
 void Renderer::Initialize()
@@ -16,6 +19,12 @@ void Renderer::Update()
 
 	shader->Bind();
 	//texture->Bind();
+
+	glm::mat4 modelMatrix(1);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, -2, -5));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.02f));
+
+	shader->SetMatrix4("modelMatrix", modelMatrix);
 
 	for (Mesh& mesh : m_model->meshes)
 	{
