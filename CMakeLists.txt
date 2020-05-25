@@ -24,9 +24,13 @@ add_subdirectory(Source)
 
 add_executable(${AnimationProject}
     ${BASE_SOURCES}
+    ${ANIMATION_BASE_SOURCES}
+    ${RENDERING_SOURCES}
 )
 
 source_group(Source FILES ${BASE_SOURCES})
+source_group(Source\\AnimationBase FILES ${ANIMATION_BASE_SOURCES})
+source_group(Source\\Rendering FILES ${RENDERING_SOURCES})
 
 target_link_libraries(${AnimationProject} ${CMAKE_SOURCE_DIR}/ThirdParty/GLFW/lib/glfw3.lib)
 target_link_libraries(${AnimationProject} ${CMAKE_SOURCE_DIR}/ThirdParty/assimp/lib/assimp.lib)
