@@ -50,9 +50,8 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 		mesh.faces.resize(aiMesh->mNumFaces);
 		for (unsigned int i = 0; i < aiMesh->mNumFaces; i++)
 		{
-			mesh.faces[i].i0 = aiMesh->mFaces[i].mIndices[0];
-			mesh.faces[i].i1 = aiMesh->mFaces[i].mIndices[1];
-			mesh.faces[i].i2 = aiMesh->mFaces[i].mIndices[2];
+			for (unsigned int v = 0; v < 3; v++)
+				mesh.faces[i].indices[v] = aiMesh->mFaces[i].mIndices[v];
 		}
 	}
 	return model;

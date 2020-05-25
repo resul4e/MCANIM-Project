@@ -9,6 +9,7 @@ set(BASE_SOURCES
     ${DIR}/ModelLoader.h
     ${DIR}/ModelLoader.cpp
     ${DIR}/Model.h
+    ${DIR}/Model.cpp
     ${DIR}/RigLoader.h
     ${DIR}/RigLoader.cpp
     ${DIR}/AnimationLoader.h
