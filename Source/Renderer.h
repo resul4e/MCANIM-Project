@@ -1,18 +1,21 @@
 #pragma once
+
+#include "Model.h"
 #include "Shader.h"
 #include "Texture.h"
+
+class Model;
 
 class Renderer
 {
 public:
-    void update();
-    void SetupQuad();
+	void Initialize();
+	void Update();
+	void SetupQuad();
+	void SetModel(std::shared_ptr<Model> model);
 private:
-    float vertices[20];
-    int indices[6];
+	Shader* shader;
+	Texture* texture;
 
-    Shader* shader;
-    Texture *texture;
-
-    unsigned int VBO, VAO, EBO;
+	std::shared_ptr<Model> m_model;
 };

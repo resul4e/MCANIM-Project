@@ -3,27 +3,32 @@
 #include "RigLoader.h"
 #include "Rig.h"
 #include "AnimationLoader.h"
+#include "ModelLoader.h"
+#include "Model.h"
 
 int main(int argc, char** argv)
 {
-    Window window;
-    Renderer renderer;
+	Window window;
+	Renderer renderer;
 
 	//loading the test rig.
-    std::shared_ptr<Rig> rig = RigLoader::LoadRig("../Assets/Idle.fbx");
-    std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation("../Assets/Idle.fbx");
-	
+	std::shared_ptr<Rig> rig = RigLoader::LoadRig("../Assets/Idle.fbx");
+	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation("../Assets/Idle.fbx");
+	std::shared_ptr<Model> model = ModelLoader::LoadModel("../Assets/giraffe.obj");
 
-    window.create("Skeletal Animator", 800, 600);
-    renderer.SetupQuad();
+	window.create("Skeletal Animator", 800, 600);
 
-    while (window.isOpen())
-    {    	
-        renderer.update();
-        
-        window.render();
-        window.update();
-    }
+	model->Upload();
+	renderer.Initialize();
+	renderer.SetModel(model);
 
-    return 0;
+	while (window.isOpen())
+	{
+		renderer.Update();
+
+		window.render();
+		window.update();
+	}
+
+	return 0;
 }

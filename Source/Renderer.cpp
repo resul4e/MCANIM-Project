@@ -1,74 +1,94 @@
 #include "Renderer.h"
+
 #include <glad/glad.h>
 
-void Renderer::update()
+void Renderer::Initialize()
 {
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
 
-    shader->Bind();
-    texture->Bind();
+	shader = new Shader("../Assets/shader.shader");
+}
 
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+void Renderer::Update()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    shader->UnBind();
-    texture->UnBind();
+	shader->Bind();
+	//texture->Bind();
+
+	for (Mesh& mesh : m_model->meshes)
+	{
+		glBindVertexArray(mesh.vao);
+		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
+	}
+
+	shader->UnBind();
+	//texture->UnBind();
 }
 
 void Renderer::SetupQuad()
 {
-    shader = new Shader("../Assets/shader.shader");
-    texture = new Texture("../Assets/image.png");
 
-    vertices[0] = 0.5f;
-    vertices[1] = 0.75f;
-    vertices[2] = 0.0f;
-    vertices[3] = 1.0f;
-    vertices[4] = 1.0f;
+	texture = new Texture("../Assets/image.png");
 
-    vertices[5] = 0.5f;
-    vertices[6] = -0.75f;
-    vertices[7] = 0.0f;
-    vertices[8] = 1.0f;
-    vertices[9] = -.0f;
+	float vertices[20];
+	int indices[6];
 
-    vertices[10] = -0.5f;
-    vertices[11] = -0.75f;
-    vertices[12] = 0.0f;
-    vertices[13] = -.0f;
-    vertices[14] = -.0f;
+	unsigned int VBO, VAO, EBO;
 
-    vertices[15] = -0.5f;
-    vertices[16] = 0.75f;
-    vertices[17] = 0.0f;
-    vertices[18] = 0.0f;
-    vertices[19] = 1.0f;
+	vertices[0] = 0.5f;
+	vertices[1] = 0.75f;
+	vertices[2] = 0.0f;
+	vertices[3] = 1.0f;
+	vertices[4] = 1.0f;
 
-    indices[0] = 0;
-    indices[1] = 1;
-    indices[2] = 3;
-    indices[3] = 1;
-    indices[4] = 2;
-    indices[5] = 3;
+	vertices[5] = 0.5f;
+	vertices[6] = -0.75f;
+	vertices[7] = 0.0f;
+	vertices[8] = 1.0f;
+	vertices[9] = -.0f;
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+	vertices[10] = -0.5f;
+	vertices[11] = -0.75f;
+	vertices[12] = 0.0f;
+	vertices[13] = -.0f;
+	vertices[14] = -.0f;
 
-    glBindVertexArray(VAO);
+	vertices[15] = -0.5f;
+	vertices[16] = 0.75f;
+	vertices[17] = 0.0f;
+	vertices[18] = 0.0f;
+	vertices[19] = 1.0f;
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	indices[0] = 0;
+	indices[1] = 1;
+	indices[2] = 3;
+	indices[3] = 1;
+	indices[4] = 2;
+	indices[5] = 3;
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// texture coord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 }
 
+void Renderer::SetModel(std::shared_ptr<Model> model)
+{
+	m_model = model;
+}
