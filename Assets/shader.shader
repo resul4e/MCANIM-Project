@@ -2,6 +2,7 @@
 #version 330 core
 
 uniform mat4 projMatrix;
+uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 
 layout(location = 0) in vec4 position;
@@ -14,7 +15,7 @@ out vec2 v_TexCoord;
 
 void main()
 {
-	gl_Position = projMatrix * modelMatrix * position;
+	gl_Position = projMatrix * viewMatrix * modelMatrix * position;
 	v_Position = (modelMatrix * position).xyz;
 	v_Normal = normal;
 	v_TexCoord = texCoord;
