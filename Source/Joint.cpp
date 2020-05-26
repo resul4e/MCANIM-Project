@@ -22,6 +22,11 @@ void Joint::SetParent(std::shared_ptr<Joint> _parent)
 	m_parent = _parent;
 }
 
+std::vector<std::shared_ptr<Joint>> Joint::GetChildren() const
+{
+	return m_children;
+}
+
 void Joint::SetOffset(glm::vec3 _offset)
 {
 	m_offset = _offset;

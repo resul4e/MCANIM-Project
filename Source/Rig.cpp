@@ -15,3 +15,21 @@ std::shared_ptr<Joint> Rig::GetRootJoint() const
 {
 	return m_root;
 }
+
+std::vector<std::shared_ptr<Joint>> Rig::GetAllJoints()
+{
+	std::vector<std::shared_ptr<Joint>> joints;
+
+	GetAllJoints(joints, m_root);
+	
+	return joints;
+}
+
+void Rig::GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared_ptr<Joint> _parent)
+{
+	for(auto child : _parent->GetChildren())
+	{
+		_joints.push_back(child);
+		GetAllJoints(_joints, child);
+	}
+}

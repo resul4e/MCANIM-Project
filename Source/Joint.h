@@ -41,6 +41,12 @@ public:
 	void SetParent(std::shared_ptr<Joint> _parent);
 
 	/**
+	 * \brief Get a list of all children directly contained by this Joint.
+	 * \return A list of all of the children.
+	 */
+	std::vector<std::shared_ptr<Joint>> GetChildren() const;
+
+	/**
 	 * \brief Sets the offset of the joint, denoting the pivot point relative to the parent's matrix
 	 * \param _offset
 	 */
