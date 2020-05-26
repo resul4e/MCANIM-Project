@@ -32,6 +32,7 @@ int main(int argc, char** argv)
 	model->Upload();
 	renderer.Initialize(assetPath);
 	renderer.SetModel(model);
+	renderer.SetRig(rig);
 
 	while (window.isOpen())
 	{
