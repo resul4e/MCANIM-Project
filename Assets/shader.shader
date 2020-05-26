@@ -31,7 +31,7 @@ in vec3 v_Normal;
 in vec2 v_TexCoord;
 uniform sampler2D u_Texture;
 
-vec3 lightPos = vec3(0, 5, 0);
+vec3 lightPos = vec3(0, 250, 50);
 
 void main()
 {

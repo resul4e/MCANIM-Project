@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
 	std::shared_ptr<Model> model = ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx");
 
-	window.create("Skeletal Animator", 800, 600);
+	window.create("Skeletal Animator", 800, 800);
 
 	model->Upload();
 	renderer.Initialize(assetPath);

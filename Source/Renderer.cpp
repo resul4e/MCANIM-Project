@@ -9,14 +9,14 @@
 #include <glad/glad.h>
 
 Renderer::Renderer() :
-	camera(glm::radians(60.0f), 1, 0.1f, 100.0f)
+	camera(glm::radians(60.0f), 800.0f/800, 1.0f, 10000.0f)
 {
 
 }
 
 void Renderer::Initialize(std::filesystem::path _assetPath)
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	shader = new Shader(_assetPath.string() + "/shader.shader");
