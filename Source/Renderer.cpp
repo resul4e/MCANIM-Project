@@ -111,7 +111,6 @@ void Renderer::RenderModel()
 
 	glm::mat4 viewMatrix(1);
 	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, -100, -300));
-	viewMatrix = glm::rotate(viewMatrix, t, glm::vec3(0, 1, 0));
 
 	glm::mat4 modelMatrix(1);
 	//modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
@@ -138,7 +137,6 @@ void Renderer::RenderRig()
 
 	glm::mat4 viewMatrix(1);
 	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, -100, -300));
-	viewMatrix = glm::rotate(viewMatrix, t, glm::vec3(0, 1, 0));
 	
 	shader->SetMatrix4("projMatrix", projMatrix);
 	shader->SetMatrix4("viewMatrix", viewMatrix);
