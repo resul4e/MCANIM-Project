@@ -22,28 +22,7 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 void Renderer::Update()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	shader->Bind();
-	//texture->Bind();
-
-	glm::mat4 projMatrix(1);
-	camera.loadProjectionMatrix(projMatrix);
-
-	glm::mat4 modelMatrix(1);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, -2, -5));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.02f));
-
-	shader->SetMatrix4("projMatrix", projMatrix);
-	shader->SetMatrix4("modelMatrix", modelMatrix);
-
-	for (Mesh& mesh : m_model->meshes)
-	{
-		glBindVertexArray(mesh.vao);
-		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
-	}
-
-	shader->UnBind();
-	//texture->UnBind();
+	RenderModel();
 }
 
 void Renderer::SetupQuad()
@@ -110,4 +89,31 @@ void Renderer::SetupQuad()
 void Renderer::SetModel(std::shared_ptr<Model> model)
 {
 	m_model = model;
+}
+
+void Renderer::RenderModel()
+{
+	shader->Bind();
+
+	glm::mat4 projMatrix(1);
+	camera.loadProjectionMatrix(projMatrix);
+
+	glm::mat4 viewMatrix(1);
+	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, -100, -300));
+	viewMatrix = glm::rotate(viewMatrix, t, glm::vec3(0, 1, 0));
+
+	glm::mat4 modelMatrix(1);
+	//modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
+
+	shader->SetMatrix4("projMatrix", projMatrix);
+	shader->SetMatrix4("viewMatrix", viewMatrix);
+	shader->SetMatrix4("modelMatrix", modelMatrix);
+
+	for (Mesh& mesh : m_model->meshes)
+	{
+		glBindVertexArray(mesh.vao);
+		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
+	}
+
+	shader->UnBind();
 }
