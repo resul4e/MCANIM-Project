@@ -100,7 +100,7 @@ void Renderer::RenderModel(Scene& scene)
 	camera.loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, -100, -300));
+	viewMatrix = glm::translate(viewMatrix, -scene.GetCamera().position);
 
 	glm::mat4 modelMatrix(1);
 	//modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
@@ -126,7 +126,7 @@ void Renderer::RenderRig(Scene& scene)
 	camera.loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	viewMatrix = glm::translate(viewMatrix, glm::vec3(0, -100, -300));
+	viewMatrix = glm::translate(viewMatrix, -scene.GetCamera().position);
 	
 	shader->SetMatrix4("projMatrix", projMatrix);
 	shader->SetMatrix4("viewMatrix", viewMatrix);

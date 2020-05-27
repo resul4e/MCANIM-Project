@@ -9,6 +9,9 @@ public:
 
 	void loadProjectionMatrix(glm::mat4& projMatrix);
 
+	glm::vec3 position;
+	float distance;
+
 private:
 	float m_fov;
 	float m_aspect;
