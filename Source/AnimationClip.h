@@ -27,6 +27,13 @@ public:
 	void AddChannel(std::shared_ptr<Channel> _channel);
 
 	/**
+	 * \brief Checks if we have a Channel with the given name.
+	 * \param _name The name to check.
+	 * \return True if there is a Channel with that name, False otherwise.
+	 */
+	bool HasChannel(std::string _name) const;
+	
+	/**
 	 * \brief Returns the channel that corresponds to the given name.
 	 * \param _name The name of the channel we want to get.
 	 * \return The channel with the name _name.

@@ -40,7 +40,7 @@ std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::p
 		{
 			//Extract the position, rotation and scaling vectors.
 			glm::vec3 pos(aiChannel->mPositionKeys[k].mValue.x, aiChannel->mPositionKeys[k].mValue.y, aiChannel->mPositionKeys[k].mValue.z);
-			glm::dquat rot(aiChannel->mRotationKeys[k].mValue.x, aiChannel->mRotationKeys[k].mValue.y, aiChannel->mRotationKeys[k].mValue.z, aiChannel->mRotationKeys[k].mValue.w);
+			glm::dquat rot(aiChannel->mRotationKeys[k].mValue.w, aiChannel->mRotationKeys[k].mValue.x, aiChannel->mRotationKeys[k].mValue.y, aiChannel->mRotationKeys[k].mValue.z);
 			glm::vec3 scale(aiChannel->mScalingKeys[k].mValue.x, aiChannel->mScalingKeys[k].mValue.y, aiChannel->mScalingKeys[k].mValue.z);
 			
 			//Create a new keyFrame and add it to the current channel;
