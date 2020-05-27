@@ -1,5 +1,6 @@
 ﻿#include "Window.h"
 #include "Renderer.h"
+#include "Scene.h"
 #include "RigLoader.h"
 #include "Rig.h"
 #include "AnimationLoader.h"
@@ -21,22 +22,21 @@ int main(int argc, char** argv)
 
 	Window window;
 	Renderer renderer;
+	Scene scene;
 
 	//loading the test rig.
-	std::shared_ptr<Rig> rig = RigLoader::LoadRig(assetPath.string() + "/Idle.fbx");
+	scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
+	scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
-	std::shared_ptr<Model> model = ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx");
 
 	window.create("Skeletal Animator", 800, 800);
 
-	model->Upload();
+	scene.GetModel().Upload();
 	renderer.Initialize(assetPath);
-	renderer.SetModel(model);
-	renderer.SetRig(rig);
 
 	while (window.isOpen())
 	{
-		renderer.Update();
+		renderer.Update(scene);
 
 		window.render();
 		window.update();

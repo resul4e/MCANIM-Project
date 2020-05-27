@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Camera.h"
-#include "Model.h"
-#include "Rig.h"
+#include "Scene.h"
 #include "Shader.h"
 #include "Texture.h"
 
@@ -13,19 +12,15 @@ class Renderer
 public:
 	Renderer();
 	void Initialize(std::filesystem::path _assetPath);
-	void Update();
+	void Update(Scene& scene);
 	void SetupQuad();
-	void SetModel(std::shared_ptr<Model> model);
-	void SetRig(std::shared_ptr<Rig> rig);
+
 private:
-	void RenderModel();
-	void RenderRig();
+	void RenderModel(Scene& scene);
+	void RenderRig(Scene& scene);
 
 	Camera camera;
 	Shader* shader;
 	Texture* texture;
 	std::shared_ptr<Model> m_bone;
-
-	std::shared_ptr<Model> m_model;
-	std::shared_ptr<Rig> m_rig;
 };
