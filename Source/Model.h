@@ -29,4 +29,6 @@ public:
 	void Upload();
 
 	std::vector<Mesh> meshes;
+	glm::vec3 minBounds;
+	glm::vec3 maxBounds;
 };

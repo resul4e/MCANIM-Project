@@ -24,11 +24,11 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	m_bone->Upload();
 }
 
-void Renderer::Update()
+void Renderer::Update(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	RenderModel();
-	RenderRig();
+	RenderModel(scene);
+	RenderRig(scene);
 }
 
 void Renderer::SetupQuad()
@@ -92,17 +92,7 @@ void Renderer::SetupQuad()
 	glEnableVertexAttribArray(1);
 }
 
-void Renderer::SetModel(std::shared_ptr<Model> model)
-{
-	m_model = model;
-}
-
-void Renderer::SetRig(std::shared_ptr<Rig> rig)
-{
-	m_rig = rig;
-}
-
-void Renderer::RenderModel()
+void Renderer::RenderModel(Scene& scene)
 {
 	shader->Bind();
 
@@ -119,7 +109,7 @@ void Renderer::RenderModel()
 	shader->SetMatrix4("viewMatrix", viewMatrix);
 	shader->SetMatrix4("modelMatrix", modelMatrix);
 
-	for (Mesh& mesh : m_model->meshes)
+	for (Mesh& mesh : scene.GetModel().meshes)
 	{
 		glBindVertexArray(mesh.vao);
 		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
@@ -128,7 +118,7 @@ void Renderer::RenderModel()
 	shader->UnBind();
 }
 
-void Renderer::RenderRig()
+void Renderer::RenderRig(Scene& scene)
 {
 	shader->Bind();
 
@@ -141,7 +131,7 @@ void Renderer::RenderRig()
 	shader->SetMatrix4("projMatrix", projMatrix);
 	shader->SetMatrix4("viewMatrix", viewMatrix);
 
-	for (auto& joint : m_rig->GetAllJoints())
+	for (auto& joint : scene.GetRig().GetAllJoints())
 	{
 		glm::mat4 transform = glm::transpose(joint->GetGlobalTransform());
 		transform = glm::scale(transform, glm::vec3(20.0f));

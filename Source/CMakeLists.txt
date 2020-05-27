@@ -10,6 +10,8 @@ set(BASE_SOURCES
     ${DIR}/AnimationLoader.cpp
     ${DIR}/ModelLoader.h
     ${DIR}/ModelLoader.cpp
+    ${DIR}/Scene.h
+    ${DIR}/Scene.cpp
     PARENT_SCOPE
 )
 
