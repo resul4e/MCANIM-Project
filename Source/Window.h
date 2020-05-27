@@ -11,6 +11,8 @@ public:
     void update();
     void render();
 
+	GLFWwindow* GetWindow() { return window; }
+
     bool isOpen();
 
 private:

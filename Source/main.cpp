@@ -6,7 +6,8 @@
 #include "AnimationLoader.h"
 #include "ModelLoader.h"
 #include "Model.h"
-
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -34,13 +35,25 @@ int main(int argc, char** argv)
 	scene.GetModel().Upload();
 	renderer.Initialize(assetPath);
 
+	ImGui::CreateContext();
+	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
+	ImGui::StyleColorsDark();
+
 	while (window.isOpen())
 	{
 		renderer.Update(scene);
+		
+		ImGui_ImplGlfwGL3_NewFrame();
+		ImGui::ShowDemoWindow();
+		
+		ImGui::Render();
+		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
 		window.render();
 		window.update();
 	}
+
+	ImGui_ImplGlfwGL3_Shutdown();
 
 	return 0;
 }

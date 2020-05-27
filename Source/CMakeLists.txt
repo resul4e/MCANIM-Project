@@ -12,6 +12,16 @@ set(BASE_SOURCES
     ${DIR}/ModelLoader.cpp
     ${DIR}/Scene.h
     ${DIR}/Scene.cpp
+    ${DIR}/imgui.cpp
+    ${DIR}/imgui.h
+    ${DIR}/imgui_demo.cpp
+    ${DIR}/imgui_draw.cpp
+    ${DIR}/imgui_impl_glfw_gl3.cpp
+    ${DIR}/imgui_impl_glfw_gl3.h
+    ${DIR}/imgui_internal.h
+    ${DIR}/stb_rect_pack.h
+    ${DIR}/stb_textedit.h
+    ${DIR}/stb_truetype.h
     PARENT_SCOPE
 )
 
