@@ -51,11 +51,21 @@ glm::mat4x4 Joint::GetLocalTransform() const
 	return m_localTransform;
 }
 
+void Joint::SetLocalTransform(glm::mat4x4 _newTransform)
+{
+	m_localTransform = _newTransform;
+}
+
 glm::mat4x4 Joint::GetGlobalTransform() const
 {
 	if(m_parent == nullptr)
 	{
 		return glm::mat4(1.0f);
 	}
-	return m_parent->GetGlobalTransform() * m_localTransform;
+	return  m_localTransform * m_parent->GetGlobalTransform();
+}
+
+std::string Joint::GetName() const
+{
+	return m_name;
 }

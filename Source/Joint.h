@@ -73,11 +73,18 @@ public:
 	 */
 	glm::mat4x4 GetLocalTransform() const;
 
+	void SetLocalTransform(glm::mat4x4 _newTransform);
+
 	/**
 	 * \brief Gets the global transform.
 	 * \return returns the global transform.
 	 */
 	glm::mat4x4 GetGlobalTransform() const;
+
+	/**
+	 * \brief Returns the name of this Joint. This name will probably match one in a Channel.
+	 */
+	std::string GetName() const;
 	
 private:
 	std::string m_name;
