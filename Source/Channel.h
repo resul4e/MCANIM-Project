@@ -30,6 +30,13 @@ public:
 	 */
 	void AddKeyFrame(std::unique_ptr<KeyFrame> _keyFrame);
 
+	/**
+	 * \brief Returns a value that is interpolated between the closest two keyframes of the passed in time. 
+	 * \param _time Which keyframe we want.
+	 * \return The local transform for this time.
+	 */
+	glm::mat4x4 GetValue(float _time);
+
 private:
 	std::vector<std::unique_ptr<KeyFrame>> m_keyFrames;
 	std::string m_jointName;

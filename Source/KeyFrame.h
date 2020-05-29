@@ -18,6 +18,13 @@ public:
 	 */
 	KeyFrame(float _time, glm::vec3 _position, glm::dquat _rotation, glm::vec3 _scale);
 	~KeyFrame() = default;
+
+	
+	/**
+	 * \brief Get the local transform of this keyframe.	
+	 * \return The local transform.
+	 */
+	glm::mat4x4 GetLocalTransform();
 	
 private:
 	float m_time;
