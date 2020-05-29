@@ -17,7 +17,7 @@ public:
 	 * \param _animationName The name of the animation
 	 * \param _fps How many frames are in a second.
 	 */
-	AnimationClip(std::string _animationName, float _fps);
+	AnimationClip(std::string _animationName, float _fps, float _duration);
 	~AnimationClip() = default;
 
 	/**
@@ -40,9 +40,23 @@ public:
 	 */
 	std::shared_ptr<Channel> GetChannel(std::string _name) const;
 
+	/**
+	 * \brief How long the animation takes to complete. Also depends on the FPS
+	 * \return The duration of the animation
+	 * \see GetFPS()
+	 */
+	float GetDuration() const;
+	
+	/**
+	 * \brief How many frames should be shown per second.
+	 * \return The FPS of the animation.
+	 */
+	float GetFPS() const;
+
 private:
 	std::string m_animationName;
 	float m_fps;
+	float m_duration;
 
 	std::map<std::string, std::shared_ptr<Channel>> m_channels;
 	std::map<std::string, std::vector<std::unique_ptr<Channel>>> m_channelMap;

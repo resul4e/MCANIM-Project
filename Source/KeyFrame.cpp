@@ -10,7 +10,7 @@ KeyFrame::KeyFrame(float _time, glm::vec3 _position, glm::dquat _rotation, glm::
 	
 }
 
-glm::mat4x4 KeyFrame::GetLocalTransform()
+glm::mat4x4 KeyFrame::GetLocalTransform() const
 {
 	glm::mat4x4 localTransform{1};
 	glm::mat4x4 posMatrix{ 1 };
@@ -24,11 +24,42 @@ glm::mat4x4 KeyFrame::GetLocalTransform()
 	posMatrix[1][3] = m_position.y;
 	posMatrix[2][3] = m_position.z;
 
-	glm::mat4x4 rotTransform = glm::toMat4(m_rotation);
+	glm::mat4x4 rotTransform = RotToMat4(m_rotation);
 
 	localTransform *= scaleMatrix;
 	localTransform *= rotTransform;
 	localTransform *= posMatrix;
 	
 	return localTransform;
+}
+
+float KeyFrame::GetTime()
+{
+	return m_time;
+}
+
+glm::mat4x4 KeyFrame::RotToMat4(glm::quat _rotation)
+{
+	float xx = _rotation.x * _rotation.x;
+	float xy = _rotation.x * _rotation.y;
+	float xz = _rotation.x * _rotation.z;
+	float xw = _rotation.x * _rotation.w;
+	float yy = _rotation.y * _rotation.y;
+	float yz = _rotation.y * _rotation.z;
+	float yw = _rotation.y * _rotation.w;
+	float zz = _rotation.z * _rotation.z;
+	float zw = _rotation.z * _rotation.w;
+
+	glm::mat4x4 rotMatrix{ 1 };
+	rotMatrix[0][0] = 1 - 2 * (yy + zz);
+	rotMatrix[0][1] = 2 * (xy - zw);
+	rotMatrix[0][2] = 2 * (xz + yw);
+	rotMatrix[1][0] = 2 * (xy + zw);
+	rotMatrix[1][1] = 1 - 2 * (xx + zz);
+	rotMatrix[1][2] = 2 * (yz - xw);
+	rotMatrix[2][0] = 2 * (xz - yw);
+	rotMatrix[2][1] = 2 * (yz + xw);
+	rotMatrix[2][2] = 1 - 2 * (xx + yy);
+
+	return rotMatrix;
 }

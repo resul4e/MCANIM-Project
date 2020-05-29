@@ -18,15 +18,28 @@ public:
 	 */
 	KeyFrame(float _time, glm::vec3 _position, glm::dquat _rotation, glm::vec3 _scale);
 	~KeyFrame() = default;
-
 	
 	/**
 	 * \brief Get the local transform of this keyframe.	
 	 * \return The local transform.
 	 */
-	glm::mat4x4 GetLocalTransform();
+	glm::mat4x4 GetLocalTransform() const;
+
+	/**
+	 * \brief Returns the time of this keyframe.
+	 * \return The time of this keyframe
+	 */
+	float GetTime();
 	
 private:
+
+	/**
+	 * \brief Converts the quaternion into a 4x4 rotation matrix.
+	 * \param _rotation The rotation to convert.
+	 * \return The converted 4x4 matrix.
+	 */
+	static glm::mat4x4 RotToMat4(glm::quat _rotation);
+	
 	float m_time;
 	glm::vec3 m_position;
 	glm::dquat m_rotation;

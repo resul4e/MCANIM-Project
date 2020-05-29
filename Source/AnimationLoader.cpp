@@ -20,7 +20,7 @@ std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::p
 	assert(scene->mNumAnimations > 0);
 
 	//Create the AnimationClip that we will be storing things in.
-	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(scene->mAnimations[0]->mName.C_Str(), scene->mAnimations[0]->mTicksPerSecond);
+	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(scene->mAnimations[0]->mName.C_Str(), scene->mAnimations[0]->mTicksPerSecond, scene->mAnimations[0]->mDuration);
 
 	//Go through all Channels 
 	for(size_t c = 0; c < scene->mAnimations[0]->mNumChannels; c++)
@@ -44,7 +44,7 @@ std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::p
 			glm::vec3 scale(aiChannel->mScalingKeys[k].mValue.x, aiChannel->mScalingKeys[k].mValue.y, aiChannel->mScalingKeys[k].mValue.z);
 			
 			//Create a new keyFrame and add it to the current channel;
-			std::unique_ptr<KeyFrame> keyFrame = std::make_unique<KeyFrame>(aiChannel->mPositionKeys[k].mTime, pos, rot, scale);
+			std::unique_ptr<KeyFrame> keyFrame = std::make_unique<KeyFrame>(static_cast<float>(aiChannel->mPositionKeys[k].mTime), pos, rot, scale);
 			channel->AddKeyFrame(std::move(keyFrame));
 		}
 	}

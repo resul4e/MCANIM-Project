@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <chrono>
 
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
@@ -31,10 +32,11 @@ int main(int argc, char** argv)
 	
 
 	//loading the test rig.
-	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
+	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/SkinningTest.fbx");
 
-	AnimationPlayer player(scene, ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"), RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
-	
+	AnimationPlayer player(scene, ModelLoader::LoadModel(assetPath.string() + "/SkinningTest.fbx"), RigLoader::LoadRig(assetPath.string() + "/SkinningTest.fbx"));
+	player.AddAnimation(anim);
+
 	window.create("Skeletal Animator", 800, 800);
 
 	scene->GetModel().Upload();
@@ -44,9 +46,11 @@ int main(int argc, char** argv)
 	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
 	ImGui::StyleColorsDark();
 
-	double time;
+	auto time = std::chrono::high_resolution_clock::now();
+	double dt = 0.016;
 	while (window.isOpen())
 	{
+		player.Play(dt);
 		renderer.Update(*scene);
 		
 		ImGui_ImplGlfwGL3_NewFrame();
@@ -57,6 +61,11 @@ int main(int argc, char** argv)
 
 		window.render();
 		window.update();
+
+		//get deltatime
+		std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - time;
+		dt = elapsed.count();
+		time = std::chrono::high_resolution_clock::now();
 	}
 
 	ImGui_ImplGlfwGL3_Shutdown();

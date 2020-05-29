@@ -2,9 +2,10 @@
 #include "Channel.h"
 #include "KeyFrame.h"
 
-AnimationClip::AnimationClip(std::string _animationName, float _fps) :
+AnimationClip::AnimationClip(std::string _animationName, float _fps, float _duration) :
 	m_animationName(_animationName),
-	m_fps(_fps)
+	m_fps(_fps),
+	m_duration(_duration)
 {
 }
 
@@ -23,4 +24,16 @@ std::shared_ptr<Channel> AnimationClip::GetChannel(std::string _name) const
 	assert(HasChannel(_name));
 	
 	return m_channels.at(_name);
+}
+
+float AnimationClip::GetDuration() const
+{
+	return m_duration;
+}
+
+float AnimationClip::GetFPS() const
+{
+	assert(abs(m_fps) > std::numeric_limits<float>::epsilon());
+	
+	return m_fps;
 }
