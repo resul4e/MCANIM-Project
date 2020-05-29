@@ -1,14 +1,17 @@
-﻿#include "Window.h"
-#include "Renderer.h"
-#include "Scene.h"
-#include "RigLoader.h"
-#include "Rig.h"
-#include "AnimationLoader.h"
-#include "ModelLoader.h"
-#include "Model.h"
+﻿#include <iostream>
+
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
-#include <iostream>
+
+#include "RigLoader.h"
+#include "AnimationLoader.h"
+#include "ModelLoader.h"
+
+#include "Window.h"
+#include "Renderer.h"
+#include "Scene.h"
+#include "Model.h"
+
 #include "AnimationPlayer.h"
 
 int main(int argc, char** argv)
@@ -41,6 +44,7 @@ int main(int argc, char** argv)
 	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
 	ImGui::StyleColorsDark();
 
+	double time;
 	while (window.isOpen())
 	{
 		renderer.Update(*scene);
