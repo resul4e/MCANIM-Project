@@ -37,3 +37,8 @@ float AnimationClip::GetFPS() const
 	
 	return m_fps;
 }
+
+std::string AnimationClip::GetName() const
+{
+	return m_animationName;
+}

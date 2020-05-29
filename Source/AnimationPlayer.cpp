@@ -20,9 +20,9 @@ AnimationPlayer::AnimationPlayer(std::shared_ptr<Scene> _scene, std::shared_ptr<
 
 void AnimationPlayer::AddAnimation(std::shared_ptr<AnimationClip> _anim)
 {
-	if (m_animations.size() == 0)
+	if (m_animations.empty())
 	{
-		m_currenAnim = _anim;
+		m_currentAnim = _anim;
 	}
 	
 	m_animations.push_back(_anim);
@@ -35,21 +35,21 @@ void AnimationPlayer::Update(float _dt)
 	if(m_state == PlaybackState::PLAYING)
 	{
 		//Advance and reset timer if necessary.
-		time += _dt * m_currenAnim->GetFPS();
-		if (time > m_currenAnim->GetDuration())
+		time += _dt * m_currentAnim->GetFPS();
+		if (time > m_currentAnim->GetDuration())
 		{
-			time -= m_currenAnim->GetDuration();
+			time -= m_currentAnim->GetDuration();
 		}
 	}
 	
 	for(auto j :m_rig->GetAllJoints())
 	{
-		if(!m_currenAnim->HasChannel(j->GetName()))
+		if(!m_currentAnim->HasChannel(j->GetName()))
 		{
 			continue;
 		}
 
-		auto channel = m_currenAnim->GetChannel(j->GetName());
+		auto channel = m_currentAnim->GetChannel(j->GetName());
 		j->SetLocalTransform(channel->GetValue(time));
 	}
 }
@@ -79,7 +79,27 @@ void AnimationPlayer::Reset()
 void AnimationPlayer::ImGuiRender()
 {
 	ImGui::Begin("AnimationPlayer");
-	
+
+	//Dropdown with all animations that can be chosen
+	const std::string currentSelection = m_currentAnim->GetName();
+	if(ImGui::BeginCombo("Animation", currentSelection.c_str()))
+	{
+		for (auto anim : m_animations)
+		{
+			bool is_selected = strcmp(currentSelection.c_str(), anim->GetName().c_str()) == 0; // You can store your selection however you want, outside or inside your objects
+			if (ImGui::Selectable(anim->GetName().c_str(), is_selected))
+			{
+				m_currentAnim = anim;
+				Reset();
+			}
+			if (is_selected)
+			{
+				ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
+			}
+		}
+		ImGui::EndCombo();
+	}
+
 	//Play/pause button.
 	bool playing = m_state == PlaybackState::PLAYING;
 	ImGui::Checkbox(playing ? "Pause" : "Play", &playing);
@@ -102,7 +122,7 @@ void AnimationPlayer::ImGuiRender()
 
 	//Time slider.
 	auto prevTime = time;
-	ImGui::SliderFloat("Time", &time, 0, m_currenAnim->GetDuration());
+	ImGui::SliderFloat("Time", &time, 0, m_currentAnim->GetDuration());
 	if(time != prevTime)
 	{
 		Pause();

@@ -58,7 +58,7 @@ private:
 
 	PlaybackState m_state;
 	
-	std::shared_ptr<AnimationClip> m_currenAnim;	
+	std::shared_ptr<AnimationClip> m_currentAnim;	
 	std::vector<std::shared_ptr<AnimationClip>> m_animations;
 	std::shared_ptr<Rig> m_rig;
 	std::shared_ptr<Model> m_model;

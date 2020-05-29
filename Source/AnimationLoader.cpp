@@ -20,7 +20,9 @@ std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::p
 	assert(scene->mNumAnimations > 0);
 
 	//Create the AnimationClip that we will be storing things in.
-	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(scene->mAnimations[0]->mName.C_Str(), scene->mAnimations[0]->mTicksPerSecond, scene->mAnimations[0]->mDuration);
+	std::string animName = scene->mAnimations[0]->mName.C_Str();
+	animName += "." + _filePath.filename().replace_extension("").string();
+	std::shared_ptr<AnimationClip> animation = std::make_shared<AnimationClip>(animName, scene->mAnimations[0]->mTicksPerSecond, scene->mAnimations[0]->mDuration);
 
 	//Go through all Channels 
 	for(size_t c = 0; c < scene->mAnimations[0]->mNumChannels; c++)

@@ -53,6 +53,12 @@ public:
 	 */
 	float GetFPS() const;
 
+	/**
+	 * \brief Returns the name of the animation (This is mixamo.com for all of then, but we have added the file name to it to separate them)
+	 * \return The name of the animation
+	 */
+	std::string GetName() const;
+
 private:
 	std::string m_animationName;
 	float m_fps;

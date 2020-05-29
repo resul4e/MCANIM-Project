@@ -18,5 +18,10 @@ void Channel::AddKeyFrame(std::unique_ptr<KeyFrame> _keyFrame)
 
 glm::mat4x4 Channel::GetValue(float _time)
 {
+	if(m_keyFrames.size() <= (int)_time)
+	{
+		return glm::mat4x4{ 1 };
+	}
+	
 	return m_keyFrames[(int)_time]->GetLocalTransform();
 }

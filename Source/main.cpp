@@ -31,11 +31,17 @@ int main(int argc, char** argv)
 	auto scene = std::make_shared<Scene>();
 	
 
-	//loading the test rig.
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/SkinningTest.fbx");
+	std::shared_ptr<AnimationClip> IdleAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
+	std::shared_ptr<AnimationClip> capAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Capoeira.fbx");
+	std::shared_ptr<AnimationClip> sambaAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Samba Dancing.fbx");
 
 	AnimationPlayer player(scene, ModelLoader::LoadModel(assetPath.string() + "/SkinningTest.fbx"), RigLoader::LoadRig(assetPath.string() + "/SkinningTest.fbx"));
+	player.AddAnimation(IdleAnim);
 	player.AddAnimation(anim);
+	player.AddAnimation(capAnim);
+	player.AddAnimation(sambaAnim);
+
 
 	window.create("Skeletal Animator", 800, 800);
 
