@@ -50,12 +50,14 @@ int main(int argc, char** argv)
 	double dt = 0.016;
 	while (window.isOpen())
 	{
-		player.Play(dt);
+		player.Update(dt);
 		renderer.Update(*scene);
 		
 		ImGui_ImplGlfwGL3_NewFrame();
 		ImGui::ShowDemoWindow();
-		
+
+		player.ImGuiRender();
+
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 

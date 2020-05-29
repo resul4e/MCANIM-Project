@@ -7,6 +7,17 @@ class Rig;
 class Scene;
 class AnimationClip;
 
+
+/**
+ * \brief The states the playback of the animation can be in.
+ */
+enum class PlaybackState
+{
+	PLAYING,		///< The animation is playing
+	STOPPED,		///< The animation is stopped (time is at 0)
+	PAUSED			///< The animation is paused (time will resume from wherever it is set)
+};
+
 class AnimationPlayer
 {
 public:
@@ -25,17 +36,29 @@ public:
 	 * \brief Play the selected animation.	
 	 * \param _dt How many seconds to advance the playback.
 	 */
-	void Play(float _dt);
+	void Update(float _dt);
+
+	void Play();
+	void Pause();
+	void Stop();
 
 	/**
 	 * \brief Reset the timer to 0
 	 */
 	void Reset();
 
+	/**
+	 * \brief Renders the Gui for the animation player.
+	 */
+	void ImGuiRender();
+
 private:
 
 	float time;
+
+	PlaybackState m_state;
 	
+	std::shared_ptr<AnimationClip> m_currenAnim;	
 	std::vector<std::shared_ptr<AnimationClip>> m_animations;
 	std::shared_ptr<Rig> m_rig;
 	std::shared_ptr<Model> m_model;
