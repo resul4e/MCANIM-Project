@@ -56,6 +56,8 @@ private:
 
 	float time;
 
+	bool m_isGuiOpen;
+
 	PlaybackState m_state;
 	
 	std::shared_ptr<AnimationClip> m_currentAnim;	

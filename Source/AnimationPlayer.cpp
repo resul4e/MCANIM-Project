@@ -12,7 +12,8 @@ AnimationPlayer::AnimationPlayer(std::shared_ptr<Scene> _scene, std::shared_ptr<
 	m_model(_model),
 	m_rig(_rig),
 	time(0),
-	m_state(PlaybackState::STOPPED)
+	m_state(PlaybackState::STOPPED),
+	m_isGuiOpen(true)
 {
 	m_scene->SetRig(m_rig);
 	m_scene->SetModel(m_model);
@@ -78,7 +79,17 @@ void AnimationPlayer::Reset()
 
 void AnimationPlayer::ImGuiRender()
 {
-	ImGui::Begin("AnimationPlayer");
+	if(ImGui::IsKeyPressed(71 /*G*/))
+	{
+		m_isGuiOpen = !m_isGuiOpen;
+	}
+	
+	if(!m_isGuiOpen)
+	{
+		return;
+	}
+	
+	ImGui::Begin("AnimationPlayer", &m_isGuiOpen);
 
 	//Dropdown with all animations that can be chosen
 	const std::string currentSelection = m_currentAnim->GetName();
