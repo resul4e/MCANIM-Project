@@ -26,6 +26,8 @@ set(BASE_SOURCES
 )
 
 set(ANIMATION_BASE_SOURCES
+    ${DIR}/AnimationPlayer.h
+    ${DIR}/AnimationPlayer.cpp
     ${DIR}/AnimationClip.h
     ${DIR}/AnimationClip.cpp
     ${DIR}/Channel.h

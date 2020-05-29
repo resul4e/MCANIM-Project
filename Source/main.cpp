@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 #include <iostream>
+#include "AnimationPlayer.h"
 
 int main(int argc, char** argv)
 {
@@ -23,16 +24,17 @@ int main(int argc, char** argv)
 
 	Window window;
 	Renderer renderer;
-	Scene scene;
+	auto scene = std::make_shared<Scene>();
+	
 
 	//loading the test rig.
-	scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
-	scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
 
+	AnimationPlayer player(scene, ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"), RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
+	
 	window.create("Skeletal Animator", 800, 800);
 
-	scene.GetModel().Upload();
+	scene->GetModel().Upload();
 	renderer.Initialize(assetPath);
 
 	ImGui::CreateContext();
@@ -41,7 +43,7 @@ int main(int argc, char** argv)
 
 	while (window.isOpen())
 	{
-		renderer.Update(scene);
+		renderer.Update(*scene);
 		
 		ImGui_ImplGlfwGL3_NewFrame();
 		ImGui::ShowDemoWindow();
