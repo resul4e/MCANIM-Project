@@ -18,10 +18,66 @@ void Channel::AddKeyFrame(std::unique_ptr<KeyFrame> _keyFrame)
 
 glm::mat4x4 Channel::GetValue(float _time)
 {
-	if(m_keyFrames.size() <= (int)_time)
+	const int index = static_cast<int>(std::ceil(_time));
+	const int prevIndex = index == 0 ? index : index - 1;
+	
+	if(m_keyFrames.size() <= index || m_keyFrames.size() < 2)
 	{
-		return glm::mat4x4{ 1 };
+		return GetLocalTransform(m_keyFrames.size() - 1, m_keyFrames.size() - 1, 0);
 	}
 	
-	return m_keyFrames[(int)_time]->GetLocalTransform();
+	return GetLocalTransform(prevIndex, index, static_cast<double>(_time) - prevIndex);
+}
+
+glm::mat4x4 Channel::GetLocalTransform(size_t _prev, size_t _current, double _a) const
+{
+	glm::vec3 lerpPos = mix(m_keyFrames[_prev]->GetPosition(), m_keyFrames[_current]->GetPosition(), _a);
+	glm::dquat lerpRot = slerp(m_keyFrames[_prev]->GetRotation(), m_keyFrames[_current]->GetRotation(), _a);
+	glm::vec3 lerpScale = mix(m_keyFrames[_prev]->GetScale(), m_keyFrames[_current]->GetScale(), _a);
+	
+	glm::mat4x4 localTransform{ 1 };
+	glm::mat4x4 posMatrix{ 1 };
+	glm::mat4x4 scaleMatrix{ 1 };
+
+	scaleMatrix[0][0] = lerpScale.x;
+	scaleMatrix[1][1] = lerpScale.y;
+	scaleMatrix[2][2] = lerpScale.z;
+
+	posMatrix[0][3] = lerpPos.x;
+	posMatrix[1][3] = lerpPos.y;
+	posMatrix[2][3] = lerpPos.z;
+
+	glm::mat4x4 rotTransform = RotToMat4(lerpRot);
+
+	localTransform *= scaleMatrix;
+	localTransform *= rotTransform;
+	localTransform *= posMatrix;
+
+	return localTransform;
+}
+
+glm::mat4x4 Channel::RotToMat4(glm::quat _rotation)
+{
+	float xx = _rotation.x * _rotation.x;
+	float xy = _rotation.x * _rotation.y;
+	float xz = _rotation.x * _rotation.z;
+	float xw = _rotation.x * _rotation.w;
+	float yy = _rotation.y * _rotation.y;
+	float yz = _rotation.y * _rotation.z;
+	float yw = _rotation.y * _rotation.w;
+	float zz = _rotation.z * _rotation.z;
+	float zw = _rotation.z * _rotation.w;
+
+	glm::mat4x4 rotMatrix{ 1 };
+	rotMatrix[0][0] = 1 - 2 * (yy + zz);
+	rotMatrix[0][1] = 2 * (xy - zw);
+	rotMatrix[0][2] = 2 * (xz + yw);
+	rotMatrix[1][0] = 2 * (xy + zw);
+	rotMatrix[1][1] = 1 - 2 * (xx + zz);
+	rotMatrix[1][2] = 2 * (yz - xw);
+	rotMatrix[2][0] = 2 * (xz - yw);
+	rotMatrix[2][1] = 2 * (yz + xw);
+	rotMatrix[2][2] = 1 - 2 * (xx + yy);
+
+	return rotMatrix;
 }

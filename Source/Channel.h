@@ -7,6 +7,9 @@
 
 class KeyFrame;
 
+/**
+ * \brief Stores all KeyFrames for a single bone. When asked for a value it will interpolate between the two nearest KeyFrames.
+ */
 class Channel
 {
 public:
@@ -37,7 +40,24 @@ public:
 	 */
 	glm::mat4x4 GetValue(float _time);
 
+	/**
+	 * \brief Interpolates between two KeyFrames and returns the local transform.
+	 * \param _prev The index of the previous KeyFrame.
+	 * \param _current The index of the current KeyFrame.
+	 * \param _a The value between 0 and 1 to interpolate between.
+	 * \return The local transform matrix of the interpolation between the two KeyFrames.
+	 */
+	glm::mat4x4 GetLocalTransform(size_t _prev, size_t _current, double _a) const;
+
 private:
+
+	/**
+	* \brief Converts the quaternion into a 4x4 rotation matrix.
+	* \param _rotation The rotation to convert.
+	* \return The converted 4x4 matrix.
+	*/
+	static glm::mat4x4 RotToMat4(glm::quat _rotation);
+	
 	std::vector<std::unique_ptr<KeyFrame>> m_keyFrames;
 	std::string m_jointName;
 };
