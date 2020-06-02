@@ -4,6 +4,10 @@
 
 class Joint;
 
+
+/**
+ * \brief Holds the root Joint of one Rig. All Joints together represent a single character's skeleton.
+ */
 class Rig
 {
 public:

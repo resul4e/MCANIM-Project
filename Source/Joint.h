@@ -16,6 +16,7 @@ namespace RotationalType
 	static const unsigned int UNIVERSAL = 2;
 	static const unsigned int BALLSOCKET = 3;
 };
+
 namespace TranslationalType
 {
 	static const unsigned int PRISMATIC = 1;
