@@ -22,6 +22,10 @@ namespace TranslationalType
 	static const unsigned int COORDS = 3;
 };
 
+/**
+ * \brief A single Joint in a Parent-Child structure. Each Joint has one parent and can have multiple children.
+ * \see RigLoader::LoadRig().
+ */
 class Joint : public std::enable_shared_from_this<Joint>
 {
 public:
@@ -73,6 +77,10 @@ public:
 	 */
 	glm::mat4x4 GetLocalTransform() const;
 
+	/**
+	 * \brief Sets a new Transform for this Joint.
+	 * \param _newTransform The new transform for this Joint.
+	 */
 	void SetLocalTransform(glm::mat4x4 _newTransform);
 
 	/**
