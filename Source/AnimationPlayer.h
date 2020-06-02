@@ -19,7 +19,7 @@ enum class PlaybackState
 };
 
 /**
- * \brief 
+ * \brief This class takes care of playing the selected animation. It can hold multiple animations that all share the same rig and model.
  */
 class AnimationPlayer
 {
