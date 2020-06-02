@@ -2,7 +2,6 @@
 #include <chrono>
 
 #include "imgui.h"
-#include "imgui_impl_glfw_gl3.h"
 
 #include "RigLoader.h"
 #include "AnimationLoader.h"
@@ -12,7 +11,7 @@
 #include "Renderer.h"
 #include "Scene.h"
 #include "Model.h"
-
+#include "InterfaceController.h"
 #include "AnimationPlayer.h"
 
 int main(int argc, char** argv)
@@ -28,8 +27,9 @@ int main(int argc, char** argv)
 
 	Window window;
 	Renderer renderer;
+	InterfaceController interfaceController;
+
 	auto scene = std::make_shared<Scene>();
-	
 
 	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/SkinningTest.fbx");
 	std::shared_ptr<AnimationClip> IdleAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
@@ -42,31 +42,27 @@ int main(int argc, char** argv)
 	player.AddAnimation(capAnim);
 	player.AddAnimation(sambaAnim);
 
-
 	window.create("Skeletal Animator", 800, 800);
+	interfaceController.Setup(window);
 
 	scene->GetModel().Upload();
 	renderer.Initialize(assetPath);
-
-	ImGui::CreateContext();
-	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
-	ImGui::StyleColorsDark();
 
 	auto time = std::chrono::high_resolution_clock::now();
 	double dt = 0.016;
 	while (window.isOpen())
 	{
+		// Create begin frame method
+		interfaceController.Begin();
+
 		player.Update(dt);
 		renderer.Update(*scene);
 		
-		ImGui_ImplGlfwGL3_NewFrame();
+		// ImGui rendering
+		player.ImGuiRender();
 		ImGui::ShowDemoWindow();
 
-		player.ImGuiRender();
-
-		ImGui::Render();
-		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-
+		interfaceController.End();
 		window.render();
 		window.update();
 
@@ -76,7 +72,7 @@ int main(int argc, char** argv)
 		time = std::chrono::high_resolution_clock::now();
 	}
 
-	ImGui_ImplGlfwGL3_Shutdown();
+	interfaceController.ShutDown();
 
 	return 0;
 }

@@ -14,14 +14,20 @@ set(BASE_SOURCES
     ${DIR}/Scene.cpp
     ${DIR}/imgui.cpp
     ${DIR}/imgui.h
-    ${DIR}/imgui_demo.cpp
+    ${DIR}/imconfig.h
     ${DIR}/imgui_draw.cpp
-    ${DIR}/imgui_impl_glfw_gl3.cpp
-    ${DIR}/imgui_impl_glfw_gl3.h
+    ${DIR}/imgui_impl_glfw.cpp
+    ${DIR}/imgui_impl_glfw.h
+    ${DIR}/imgui_impl_opengl3.cpp
+    ${DIR}/imgui_impl_opengl3.h
+    ${DIR}/InterfaceController.h
+    ${DIR}/InterfaceController.cpp
+    ${DIR}/imgui_widgets.cpp
+    ${DIR}/imgui_demo.cpp
     ${DIR}/imgui_internal.h
-    ${DIR}/stb_rect_pack.h
-    ${DIR}/stb_textedit.h
-    ${DIR}/stb_truetype.h
+    ${DIR}/imstb_rectpack.h
+    ${DIR}/imstb_textedit.h
+    ${DIR}/imstb_truetype.h
     PARENT_SCOPE
 )
 
