@@ -6,7 +6,6 @@
 
 void InterfaceController::Setup(Window window)
 {
-	// TODO replace to own class.
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
@@ -28,7 +27,6 @@ void InterfaceController::Setup(Window window)
 
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	// End todo
 }
 
 void InterfaceController::Begin()
