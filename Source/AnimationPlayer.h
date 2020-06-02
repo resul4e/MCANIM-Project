@@ -18,11 +18,14 @@ enum class PlaybackState
 	PAUSED			///< The animation is paused (time will resume from wherever it is set)
 };
 
+/**
+ * \brief 
+ */
 class AnimationPlayer
 {
 public:
 	AnimationPlayer() = delete;
-	AnimationPlayer(std::shared_ptr<Scene> _scene, std::shared_ptr<Model> _model, std::shared_ptr<Rig> _rig);
+	AnimationPlayer(std::shared_ptr<Scene> _scene);
 	~AnimationPlayer() = default;
 
 	/**
@@ -54,15 +57,23 @@ public:
 
 private:
 
+	//The current time of the playback. Will be reset to 0 once the animation has been fully played.
 	float time;
-
-	bool m_isGuiOpen;
-
+	//What the current state of the playback is.
 	PlaybackState m_state;
 	
-	std::shared_ptr<AnimationClip> m_currentAnim;	
+	//If we should have the GUI open
+	bool m_isGuiOpen;
+
+	//The current animation that is being played
+	std::shared_ptr<AnimationClip> m_currentAnim;
+	//A list of all animations
 	std::vector<std::shared_ptr<AnimationClip>> m_animations;
-	std::shared_ptr<Rig> m_rig;
-	std::shared_ptr<Model> m_model;
+
+	//The rig that is currently being manipulated by the animation.
+	Rig& m_rig;
+	//The model that is associated with the Rig.
+	Model& m_model;
+	//The class that holds all of the information of the current Scene.
 	std::shared_ptr<Scene> m_scene;
 };

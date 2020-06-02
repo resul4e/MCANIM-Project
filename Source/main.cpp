@@ -36,7 +36,10 @@ int main(int argc, char** argv)
 	std::shared_ptr<AnimationClip> capAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Capoeira.fbx");
 	std::shared_ptr<AnimationClip> sambaAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Samba Dancing.fbx");
 
-	AnimationPlayer player(scene, ModelLoader::LoadModel(assetPath.string() + "/SkinningTest.fbx"), RigLoader::LoadRig(assetPath.string() + "/SkinningTest.fbx"));
+	scene->SetRig(RigLoader::LoadRig(assetPath.string() + "/SkinningTest.fbx"));
+	scene->SetModel(ModelLoader::LoadModel(assetPath.string() + "/SkinningTest.fbx"));
+
+	AnimationPlayer player(scene);
 	player.AddAnimation(IdleAnim);
 	player.AddAnimation(anim);
 	player.AddAnimation(capAnim);
