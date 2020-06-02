@@ -63,7 +63,6 @@ int main(int argc, char** argv)
 		
 		// ImGui rendering
 		player.ImGuiRender();
-		ImGui::ShowDemoWindow();
 
 		interfaceController.End();
 		window.render();
