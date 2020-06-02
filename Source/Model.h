@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include <vector>
+#include <string>
 
 struct Face
 {
@@ -21,6 +22,18 @@ struct Mesh
 	unsigned int vao;
 	unsigned int pbo;
 	unsigned int nbo;
+};
+
+struct VertexWeight
+{
+	size_t m_vertexIndex;
+	float m_weight;
+};
+
+struct Bone
+{
+	std::string m_name;
+	std::vector<VertexWeight> m_weights;
 };
 
 class Model
