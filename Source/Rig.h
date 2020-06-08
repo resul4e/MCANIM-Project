@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
 class Joint;
 
@@ -30,6 +31,7 @@ public:
 	 * \return A list of all of the Joints.
 	 */
 	std::vector<std::shared_ptr<Joint>> GetAllJoints();
+	std::shared_ptr<Joint> GetJoint(std::string _jointName) const;
 	
 private:
 

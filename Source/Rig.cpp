@@ -33,3 +33,16 @@ void Rig::GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared
 		GetAllJoints(_joints, child);
 	}
 }
+
+std::shared_ptr<Joint> Rig::GetJoint(std::string _jointName) const
+{
+	std::vector<std::shared_ptr<Joint>> allJoints = GetAllJoints();
+	for(auto joint : allJoints)
+	{
+		if(joint->GetName() == _jointName)
+		{
+			return joint;
+		}
+	}
+	return nullptr;
+}
