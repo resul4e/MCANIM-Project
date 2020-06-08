@@ -16,7 +16,7 @@ std::shared_ptr<Joint> Rig::GetRootJoint() const
 	return m_root;
 }
 
-std::vector<std::shared_ptr<Joint>> Rig::GetAllJoints()
+std::vector<std::shared_ptr<Joint>> Rig::GetAllJoints() const
 {
 	std::vector<std::shared_ptr<Joint>> joints;
 
@@ -25,7 +25,7 @@ std::vector<std::shared_ptr<Joint>> Rig::GetAllJoints()
 	return joints;
 }
 
-void Rig::GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared_ptr<Joint> _parent)
+void Rig::GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared_ptr<Joint> _parent) const
 {
 	for(auto child : _parent->GetChildren())
 	{

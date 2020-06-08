@@ -30,12 +30,13 @@ public:
 	 * \brief Recursively goes through all Joints in the Root Joint and returns it as a list.
 	 * \return A list of all of the Joints.
 	 */
-	std::vector<std::shared_ptr<Joint>> GetAllJoints();
+	std::vector<std::shared_ptr<Joint>> GetAllJoints() const;
+
 	std::shared_ptr<Joint> GetJoint(std::string _jointName) const;
 	
 private:
 
-	void GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared_ptr<Joint> _parent);
+	void GetAllJoints(std::vector<std::shared_ptr<Joint>>& _joints, std::shared_ptr<Joint> _parent) const;
 	
 	std::shared_ptr<Joint> m_root;
 };
