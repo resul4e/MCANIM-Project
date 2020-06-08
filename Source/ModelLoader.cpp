@@ -9,6 +9,16 @@
 #include <limits>
 #include <iostream>
 
+glm::mat4 convertMatrix(const aiMatrix4x4& aiMat)
+{
+	return {
+		aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1,
+		aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2,
+		aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3,
+		aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4
+	};
+}
+
 std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 {
 	Assimp::Importer importer;
@@ -55,6 +65,30 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 		{
 			for (unsigned int v = 0; v < 3; v++)
 				mesh.faces[i].indices[v] = aiMesh->mFaces[i].mIndices[v];
+		}
+
+		// If the model has bone weights
+		if (aiMesh->HasBones())
+		{
+			mesh.m_bones.resize(aiMesh->mNumBones);
+			for (int i = 0; i < aiMesh->mNumBones; i++)
+			{
+				aiBone* aiBone = aiMesh->mBones[i];
+				Bone& bone = mesh.m_bones[i];
+				bone.m_name = aiBone->mName.C_Str();
+				bone.m_offsetMatrix = convertMatrix(aiBone->mOffsetMatrix);
+
+				if (aiBone->mNumWeights > 0)
+				{
+					bone.m_weights.resize(aiBone->mNumWeights);
+					for (int j = 0; j < aiBone->mNumWeights; j++)
+					{
+						VertexWeight& weight = bone.m_weights[j];
+						weight.m_vertexIndex = aiBone->mWeights[j].mVertexId;
+						weight.m_weight = aiBone->mWeights[j].mWeight;
+					}
+				}
+			}
 		}
 
 		// Compute model bounds
