@@ -62,7 +62,7 @@ glm::mat4x4 Joint::GetGlobalTransform() const
 	{
 		return glm::mat4(1.0f);
 	}
-	return  m_localTransform * m_parent->GetGlobalTransform();
+	return  m_parent->GetGlobalTransform() * m_localTransform;
 }
 
 std::string Joint::GetName() const

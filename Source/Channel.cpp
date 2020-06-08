@@ -43,15 +43,15 @@ glm::mat4x4 Channel::GetLocalTransform(size_t _prev, size_t _current, double _a)
 	scaleMatrix[1][1] = lerpScale.y;
 	scaleMatrix[2][2] = lerpScale.z;
 
-	posMatrix[0][3] = lerpPos.x;
-	posMatrix[1][3] = lerpPos.y;
-	posMatrix[2][3] = lerpPos.z;
+	posMatrix[3][0] = lerpPos.x;
+	posMatrix[3][1] = lerpPos.y;
+	posMatrix[3][2] = lerpPos.z;
 
 	glm::mat4x4 rotTransform = RotToMat4(lerpRot);
 
-	localTransform *= scaleMatrix;
-	localTransform *= rotTransform;
 	localTransform *= posMatrix;
+	localTransform *= rotTransform;
+	localTransform *= scaleMatrix;
 
 	return localTransform;
 }
@@ -70,13 +70,13 @@ glm::mat4x4 Channel::RotToMat4(glm::quat _rotation)
 
 	glm::mat4x4 rotMatrix{ 1 };
 	rotMatrix[0][0] = 1 - 2 * (yy + zz);
-	rotMatrix[0][1] = 2 * (xy - zw);
-	rotMatrix[0][2] = 2 * (xz + yw);
-	rotMatrix[1][0] = 2 * (xy + zw);
+	rotMatrix[1][0] = 2 * (xy - zw);
+	rotMatrix[2][0] = 2 * (xz + yw);
+	rotMatrix[0][1] = 2 * (xy + zw);
 	rotMatrix[1][1] = 1 - 2 * (xx + zz);
-	rotMatrix[1][2] = 2 * (yz - xw);
-	rotMatrix[2][0] = 2 * (xz - yw);
-	rotMatrix[2][1] = 2 * (yz + xw);
+	rotMatrix[2][1] = 2 * (yz - xw);
+	rotMatrix[0][2] = 2 * (xz - yw);
+	rotMatrix[1][2] = 2 * (yz + xw);
 	rotMatrix[2][2] = 1 - 2 * (xx + yy);
 
 	return rotMatrix;

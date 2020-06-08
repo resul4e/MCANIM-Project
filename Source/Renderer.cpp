@@ -134,7 +134,7 @@ void Renderer::RenderRig(Scene& scene)
 
 	for (auto& joint : scene.GetRig().GetAllJoints())
 	{
-		glm::mat4 transform = glm::transpose(joint->GetGlobalTransform());
+		glm::mat4 transform = joint->GetGlobalTransform();
 		transform = glm::scale(transform, glm::vec3(20.0f));
 		shader->SetMatrix4("modelMatrix", transform);
 		glBindVertexArray(m_bone->meshes[0].vao);

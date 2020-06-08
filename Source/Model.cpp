@@ -20,7 +20,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 		{
 			for (VertexWeight& vertexWeight : bone.m_weights)
 			{
-				glm::mat4 globalTransform = glm::transpose(joint->GetGlobalTransform());
+				glm::mat4 globalTransform = joint->GetGlobalTransform();
 				glm::mat4 offsetMatrix = bone.m_offsetMatrix;
 				
 				glm::vec4 v = glm::vec4(positions[vertexWeight.m_vertexIndex], 1);
