@@ -23,9 +23,12 @@ struct Bone
 	glm::mat4 m_offsetMatrix;
 };
 
+class Rig;
+
 struct Mesh
 {
 	void Upload();
+	void UpdateVertices(const Rig& rig);
 
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texCoords;
@@ -42,6 +45,7 @@ class Model
 {
 public:
 	void Upload();
+	void UpdateVertices(const Rig& rig);
 
 	std::vector<Mesh> meshes;
 	glm::vec3 minBounds;

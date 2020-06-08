@@ -94,6 +94,7 @@ void Renderer::SetupQuad()
 
 void Renderer::RenderModel(Scene& scene)
 {
+	scene.GetModel().UpdateVertices(scene.GetRig());
 	shader->Bind();
 
 	glm::mat4 projMatrix(1);
