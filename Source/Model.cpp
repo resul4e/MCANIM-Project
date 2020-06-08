@@ -31,7 +31,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
-	std::cout << faces.size() << std::endl;
+	
 	for (int i = 0; i < faces.size(); i++)
 	{
 		Face& face = faces[i];
