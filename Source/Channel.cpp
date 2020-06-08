@@ -34,24 +34,13 @@ glm::mat4x4 Channel::GetLocalTransform(size_t _prev, size_t _current, double _a)
 	glm::vec3 lerpPos = mix(m_keyFrames[_prev]->GetPosition(), m_keyFrames[_current]->GetPosition(), _a);
 	glm::dquat lerpRot = slerp(m_keyFrames[_prev]->GetRotation(), m_keyFrames[_current]->GetRotation(), _a);
 	glm::vec3 lerpScale = mix(m_keyFrames[_prev]->GetScale(), m_keyFrames[_current]->GetScale(), _a);
-	
-	glm::mat4x4 localTransform{ 1 };
-	glm::mat4x4 posMatrix{ 1 };
-	glm::mat4x4 scaleMatrix{ 1 };
-
-	scaleMatrix[0][0] = lerpScale.x;
-	scaleMatrix[1][1] = lerpScale.y;
-	scaleMatrix[2][2] = lerpScale.z;
-
-	posMatrix[3][0] = lerpPos.x;
-	posMatrix[3][1] = lerpPos.y;
-	posMatrix[3][2] = lerpPos.z;
 
 	glm::mat4x4 rotTransform = RotToMat4(lerpRot);
 
-	localTransform *= posMatrix;
+	glm::mat4x4 localTransform{ 1 };
+	localTransform = glm::translate(localTransform, lerpPos);
 	localTransform *= rotTransform;
-	localTransform *= scaleMatrix;
+	localTransform = glm::scale(localTransform, lerpScale);
 
 	return localTransform;
 }
