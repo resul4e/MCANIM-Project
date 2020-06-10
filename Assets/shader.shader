@@ -37,7 +37,7 @@ void main()
 {
 	vec3 N = v_Normal;
 	vec3 L = normalize(lightPos - v_Position);
-	//vec4 texColor = texture(u_Texture, v_TexCoord);
+	vec4 texColor = texture(u_Texture, v_TexCoord);
 	float NdotL = max(0, dot(N, L));
-	color = vec4(vec3(NdotL), 1);
+	color = texColor * vec4(vec3(NdotL), 1);
 };
