@@ -27,4 +27,6 @@ private:
 
 	std::filesystem::path m_FilePath;
 	unsigned char* m_LocalBuffer;
+
+	friend class Renderer;
 };
