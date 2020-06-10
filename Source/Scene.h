@@ -12,6 +12,7 @@ public:
 	Camera& GetCamera();
 	Model& GetModel();
 	Rig& GetRig();
+	Texture& GetTexture();
 	void SetModel(std::shared_ptr<Model> model);
 	void SetRig(std::shared_ptr<Rig> rig);
 	void SetTexture(std::shared_ptr<Texture> texture);

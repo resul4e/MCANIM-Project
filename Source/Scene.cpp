@@ -24,6 +24,11 @@ Rig& Scene::GetRig()
 	return *m_rig;
 }
 
+Texture& Scene::GetTexture()
+{
+	return *m_texture;
+}
+
 void Scene::SetModel(std::shared_ptr<Model> model)
 {
 	m_model = model;
@@ -42,5 +47,4 @@ void Scene::SetRig(std::shared_ptr<Rig> rig)
 void Scene::SetTexture(std::shared_ptr<Texture> texture)
 {
 	m_texture = texture;
-	m_texture->Bind();
 }

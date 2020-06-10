@@ -130,6 +130,8 @@ void Renderer::RenderModel(Scene& scene)
 	shader->SetMatrix4("viewMatrix", viewMatrix);
 	shader->SetMatrix4("modelMatrix", modelMatrix);
 
+	scene.GetTexture().Bind(0);
+	shader->SetUniform1i("u_Texture", 0);
 	for (Mesh& mesh : scene.GetModel().meshes)
 	{
 		glBindVertexArray(mesh.vao);
