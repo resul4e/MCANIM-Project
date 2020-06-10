@@ -35,16 +35,22 @@ int main(int argc, char** argv)
 	std::shared_ptr<AnimationClip> IdleAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
 	std::shared_ptr<AnimationClip> capAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Capoeira.fbx");
 	std::shared_ptr<AnimationClip> sambaAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Samba Dancing.fbx");
+	std::shared_ptr<AnimationClip> hitReaction = AnimationLoader::LoadAnimation(assetPath.string() + "/Hit Reaction.fbx");
+	std::shared_ptr<AnimationClip> proneLeft = AnimationLoader::LoadAnimation(assetPath.string() + "/Prone Left Turn.fbx");
+	std::shared_ptr<AnimationClip> turnRight = AnimationLoader::LoadAnimation(assetPath.string() + "/Turn Right.fbx");
 
-	scene->SetRig(RigLoader::LoadRig(assetPath.string() + "/SkinningTest.fbx"));
-	scene->SetModel(ModelLoader::LoadModel(assetPath.string() + "/SkinningTest.fbx"));
+	scene->SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
+	scene->SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 
 	AnimationPlayer player(scene);
 	player.AddAnimation(IdleAnim);
 	player.AddAnimation(anim);
 	player.AddAnimation(capAnim);
 	player.AddAnimation(sambaAnim);
-
+	player.AddAnimation(hitReaction);
+	player.AddAnimation(proneLeft);
+	player.AddAnimation(turnRight);
+	
 	window.create("Skeletal Animator", 800, 800);
 	interfaceController.Setup(window);
 
