@@ -21,6 +21,8 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	glEnable(GL_DEPTH_TEST);
 
 	shader = new Shader(_assetPath.string() + "/shader.shader");
+	rigShader = new Shader(_assetPath.string() + "/rig.shader");
+
 	m_bone = ModelLoader::LoadModel(_assetPath.string() + "/Bone.obj"); // Temp
 	m_bone->Upload();
 }
@@ -130,7 +132,7 @@ void Renderer::RenderModel(Scene& scene)
 
 void Renderer::RenderRig(Scene& scene)
 {
-	shader->Bind();
+	rigShader->Bind();
 
 	glm::mat4 projMatrix(1);
 	camera.loadProjectionMatrix(projMatrix);
@@ -138,17 +140,20 @@ void Renderer::RenderRig(Scene& scene)
 	glm::mat4 viewMatrix(1);
 	viewMatrix = glm::translate(viewMatrix, -scene.GetCamera().position);
 	
-	shader->SetMatrix4("projMatrix", projMatrix);
-	shader->SetMatrix4("viewMatrix", viewMatrix);
+	rigShader->SetMatrix4("projMatrix", projMatrix);
+	rigShader->SetMatrix4("viewMatrix", viewMatrix);
 
+	glDisable(GL_DEPTH_TEST);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	for (auto& joint : scene.GetRig().GetAllJoints())
 	{
 		glm::mat4 transform = joint->GetGlobalTransform();
 		transform = glm::scale(transform, glm::vec3(20.0f));
-		shader->SetMatrix4("modelMatrix", transform);
+		rigShader->SetMatrix4("modelMatrix", transform);
 		glBindVertexArray(m_bone->meshes[0].vao);
 		glDrawArrays(GL_TRIANGLES, 0, m_bone->meshes[0].faces.size() * 3);
 	}
-
-	shader->UnBind();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_DEPTH_TEST);
+	rigShader->UnBind();
 }

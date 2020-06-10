@@ -24,6 +24,7 @@ private:
 	
 	Camera camera;
 	Shader* shader;
+	Shader* rigShader;
 	Texture* texture;
 	std::shared_ptr<Model> m_bone;
 };
