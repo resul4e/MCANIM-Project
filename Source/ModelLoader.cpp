@@ -53,6 +53,12 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 		{
 			mesh.texCoords.resize(aiMesh->mNumVertices);
 			std::memcpy(mesh.texCoords.data(), aiMesh->mTextureCoords[0], aiMesh->mNumVertices * sizeof(glm::vec2));
+
+			mesh.texCoords.resize(aiMesh->mNumVertices);
+			// We want to copy the 0th element from every vertex, since this is strided memory we can't use memcpy
+			for (unsigned int j = 0; j < aiMesh->mNumVertices; j++) {
+				mesh.texCoords[j] = glm::vec2(aiMesh->mTextureCoords[0][j].x, aiMesh->mTextureCoords[0][j].y);
+			}
 		}
 
 		if (aiMesh->HasNormals())
