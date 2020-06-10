@@ -10,7 +10,8 @@
 
 Renderer::Renderer() :
 	camera(glm::radians(60.0f), 800.0f/800, 1.0f, 10000.0f),
-	renderRig(true)
+	renderRig(true),
+	skyTexture(0)
 {
 
 }
@@ -22,6 +23,7 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 
 	shader = new Shader(_assetPath.string() + "/shader.shader");
 	rigShader = new Shader(_assetPath.string() + "/rig.shader");
+	skyShader = new Shader(_assetPath.string() + "/sky.shader");
 
 	// Generate a VAO and VBO for the armature drawing
 	glGenVertexArrays(1, &m_armatureVao);
@@ -31,82 +33,52 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	glBindBuffer(GL_ARRAY_BUFFER, m_armaturePbo);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
+
+	// Set up dummy VAO for vertex-less rendering
+	glGenVertexArrays(1, &m_dummyVao);
 }
 
 void Renderer::Update(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	RenderSky(scene);
 	RenderModel(scene);
-	if(renderRig)
-	{
-		RenderRig(scene);
-	}
+	RenderRig(scene);
 }
 
-void Renderer::SetupQuad()
+void Renderer::SetBackgroundTexture(std::shared_ptr<Texture> texture)
 {
-
-	texture = new Texture("../Assets/image.png");
-
-	float vertices[20];
-	int indices[6];
-
-	unsigned int VBO, VAO, EBO;
-
-	vertices[0] = 0.5f;
-	vertices[1] = 0.75f;
-	vertices[2] = 0.0f;
-	vertices[3] = 1.0f;
-	vertices[4] = 1.0f;
-
-	vertices[5] = 0.5f;
-	vertices[6] = -0.75f;
-	vertices[7] = 0.0f;
-	vertices[8] = 1.0f;
-	vertices[9] = -.0f;
-
-	vertices[10] = -0.5f;
-	vertices[11] = -0.75f;
-	vertices[12] = 0.0f;
-	vertices[13] = -.0f;
-	vertices[14] = -.0f;
-
-	vertices[15] = -0.5f;
-	vertices[16] = 0.75f;
-	vertices[17] = 0.0f;
-	vertices[18] = 0.0f;
-	vertices[19] = 1.0f;
-
-	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = 3;
-	indices[3] = 1;
-	indices[4] = 2;
-	indices[5] = 3;
-
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	skyTexture = texture.get();
 }
 
 void Renderer::ToggleRigRendering()
 {
 	renderRig = !renderRig;
+}
+
+void Renderer::RenderSky(Scene& scene)
+{
+	if (skyTexture == nullptr) return;
+	
+	skyShader->Bind();
+	skyTexture->Bind(0);
+
+	glm::mat4 projMatrix(1);
+	camera.loadProjectionMatrix(projMatrix);
+
+	glm::mat4 yawMatrix = glm::rotate(0.0f, glm::vec3(0, 1, 0));
+	glm::mat4 pitchMatrix = glm::rotate(0.0f, glm::vec3(1, 0, 0));
+
+	glm::mat4 cameraBasis(1);
+	cameraBasis[2][2] = -1;
+	cameraBasis = yawMatrix * pitchMatrix * cameraBasis;
+
+	skyShader->SetUniform1i("tex", 0);
+	skyShader->SetVec2("persp", glm::vec2(1.0f / projMatrix[0][0], 1.0f / projMatrix[1][1]));
+	skyShader->SetMatrix4("cameraBasis", cameraBasis);
+	glBindVertexArray(m_dummyVao);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void Renderer::RenderModel(Scene& scene)
@@ -165,6 +137,8 @@ void ComputeArmature(std::vector<Line>& lines, const Joint& joint)
 
 void Renderer::RenderRig(Scene& scene)
 {
+	if (!renderRig) return;
+
 	// Draw without considering z-buffer depth
 	glDisable(GL_DEPTH_TEST);
 

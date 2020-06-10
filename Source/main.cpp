@@ -60,6 +60,9 @@ int main(int argc, char** argv)
 	std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");
 	scene->SetTexture(texture);
 
+	std::shared_ptr<Texture> skyTexture = std::make_shared<Texture>(assetPath.string() + "/Background.jpg");
+	renderer.SetBackgroundTexture(skyTexture);
+
 	auto time = std::chrono::high_resolution_clock::now();
 	double dt = 0.016;
 	while (window.isOpen())

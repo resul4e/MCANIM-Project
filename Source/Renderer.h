@@ -13,10 +13,11 @@ public:
 	Renderer();
 	void Initialize(std::filesystem::path _assetPath);
 	void Update(Scene& scene);
-	void SetupQuad();
+	void SetBackgroundTexture(std::shared_ptr<Texture> texture);
 	void ToggleRigRendering();
 
 private:
+	void RenderSky(Scene& scene);
 	void RenderModel(Scene& scene);
 	void RenderRig(Scene& scene);
 
@@ -25,9 +26,11 @@ private:
 	Camera camera;
 	Shader* shader;
 	Shader* rigShader;
-	Texture* texture;
+	Shader* skyShader;
+	Texture* skyTexture;
 	std::shared_ptr<Model> m_bone;
 
+	unsigned int m_dummyVao;
 	unsigned int m_armatureVao;
 	unsigned int m_armaturePbo;
 };
