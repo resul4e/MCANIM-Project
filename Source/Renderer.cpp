@@ -23,8 +23,14 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	shader = new Shader(_assetPath.string() + "/shader.shader");
 	rigShader = new Shader(_assetPath.string() + "/rig.shader");
 
-	m_bone = ModelLoader::LoadModel(_assetPath.string() + "/Bone.obj"); // Temp
-	m_bone->Upload();
+	// Generate a VAO and VBO for the armature drawing
+	glGenVertexArrays(1, &m_armatureVao);
+	glBindVertexArray(m_armatureVao);
+
+	glGenBuffers(1, &m_armaturePbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_armaturePbo);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
 }
 
 void Renderer::Update(Scene& scene)
@@ -105,6 +111,9 @@ void Renderer::ToggleRigRendering()
 
 void Renderer::RenderModel(Scene& scene)
 {
+	// Enable testing against z-buffer depth
+	glEnable(GL_DEPTH_TEST);
+
 	scene.GetModel().UpdateVertices(scene.GetRig());
 	shader->Bind();
 
@@ -130,8 +139,33 @@ void Renderer::RenderModel(Scene& scene)
 	shader->UnBind();
 }
 
+struct Line
+{
+	glm::vec4 start;
+	glm::vec4 end;
+};
+
+void ComputeArmature(std::vector<Line>& lines, const Joint& joint)
+{
+	glm::mat4 transform = joint.GetGlobalTransform();
+	glm::vec4 startPosition = transform * glm::vec4(0, 0, 0, 1);
+	
+	std::vector<std::shared_ptr<Joint>>& children = joint.GetChildren();
+	for (auto child : children)
+	{
+		glm::mat4 childTransform = child->GetGlobalTransform();
+		glm::vec4 endPosition = childTransform * glm::vec4(0, 0, 0, 1);
+		lines.push_back(Line{ startPosition, endPosition });
+
+		ComputeArmature(lines, *child);
+	}
+}
+
 void Renderer::RenderRig(Scene& scene)
 {
+	// Draw without considering z-buffer depth
+	glDisable(GL_DEPTH_TEST);
+
 	rigShader->Bind();
 
 	glm::mat4 projMatrix(1);
@@ -143,17 +177,16 @@ void Renderer::RenderRig(Scene& scene)
 	rigShader->SetMatrix4("projMatrix", projMatrix);
 	rigShader->SetMatrix4("viewMatrix", viewMatrix);
 
-	glDisable(GL_DEPTH_TEST);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	for (auto& joint : scene.GetRig().GetAllJoints())
-	{
-		glm::mat4 transform = joint->GetGlobalTransform();
-		transform = glm::scale(transform, glm::vec3(20.0f));
-		rigShader->SetMatrix4("modelMatrix", transform);
-		glBindVertexArray(m_bone->meshes[0].vao);
-		glDrawArrays(GL_TRIANGLES, 0, m_bone->meshes[0].faces.size() * 3);
-	}
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glEnable(GL_DEPTH_TEST);
+	// Compute the armature lines
+	const Rig& rig = scene.GetRig();
+	std::vector<Line> bones;
+	ComputeArmature(bones, *rig.GetRootJoint());
+
+	// Render the armature
+	glBindVertexArray(m_armatureVao);
+	glBindBuffer(GL_ARRAY_BUFFER, m_armaturePbo);
+	glBufferData(GL_ARRAY_BUFFER, bones.size() * sizeof(Line), bones.data(), GL_STREAM_DRAW);
+	glDrawArrays(GL_LINES, 0, bones.size() * 2);
+
 	rigShader->UnBind();
 }

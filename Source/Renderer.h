@@ -27,4 +27,7 @@ private:
 	Shader* rigShader;
 	Texture* texture;
 	std::shared_ptr<Model> m_bone;
+
+	unsigned int m_armatureVao;
+	unsigned int m_armaturePbo;
 };
