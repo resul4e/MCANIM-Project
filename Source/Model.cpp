@@ -40,11 +40,6 @@ void Mesh::UpdateVertices(const Rig& rig)
 		{
 			linearPositions[i * 3 + v] = animatedPositions[face.indices[v]];
 			linearNormals[i * 3 + v] = normals[face.indices[v]];
-
-			if (texCoords.size() != 0)
-			{
-				linearTextureCoords[i * 3 + v] = texCoords[face.indices[v]];
-			}
 		}
 	}
 
@@ -53,12 +48,6 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glBufferData(GL_ARRAY_BUFFER, linearNormals.size() * sizeof(glm::vec3), linearNormals.data(), GL_DYNAMIC_DRAW);
-
-	if (texCoords.size() != 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, tbo);
-		glBufferData(GL_ARRAY_BUFFER, linearTextureCoords.size() * sizeof(glm::vec2), linearTextureCoords.data(), GL_DYNAMIC_DRAW);
-	}
 }
 
 void Mesh::Upload()
