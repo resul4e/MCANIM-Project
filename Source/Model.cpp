@@ -31,7 +31,8 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
-	
+	std::vector<glm::vec2> linearTextureCoords(faces.size() * 3);
+
 	for (int i = 0; i < faces.size(); i++)
 	{
 		Face& face = faces[i];
@@ -39,6 +40,11 @@ void Mesh::UpdateVertices(const Rig& rig)
 		{
 			linearPositions[i * 3 + v] = animatedPositions[face.indices[v]];
 			linearNormals[i * 3 + v] = normals[face.indices[v]];
+
+			if (texCoords.size() != 0)
+			{
+				linearTextureCoords[i * 3 + v] = texCoords[face.indices[v]];
+			}
 		}
 	}
 
@@ -47,6 +53,12 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glBufferData(GL_ARRAY_BUFFER, linearNormals.size() * sizeof(glm::vec3), linearNormals.data(), GL_DYNAMIC_DRAW);
+
+	if (texCoords.size() != 0)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, tbo);
+		glBufferData(GL_ARRAY_BUFFER, linearTextureCoords.size() * sizeof(glm::vec2), linearTextureCoords.data(), GL_DYNAMIC_DRAW);
+	}
 }
 
 void Mesh::Upload()
@@ -56,6 +68,8 @@ void Mesh::Upload()
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
+	std::vector<glm::vec2> linearTextureCoords(faces.size() * 3);
+
 	std::cout << faces.size() << std::endl;
 	for (int i = 0; i < faces.size(); i++)
 	{
@@ -64,6 +78,10 @@ void Mesh::Upload()
 		{
 			linearPositions[i * 3 + v] = positions[face.indices[v]];
 			linearNormals[i * 3 + v] = normals[face.indices[v]];
+
+			if (texCoords.size() != 0) {
+				linearTextureCoords[i * 3 + v] = texCoords[face.indices[v]];
+			}
 		}
 	}
 
@@ -78,6 +96,14 @@ void Mesh::Upload()
 	glBufferData(GL_ARRAY_BUFFER, linearNormals.size() * sizeof(glm::vec3), linearNormals.data(), GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(1);
+
+	if (texCoords.size() != 0) {
+		glGenBuffers(1, &tbo);
+		glBindBuffer(GL_ARRAY_BUFFER, tbo);
+		glBufferData(GL_ARRAY_BUFFER, linearTextureCoords.size() * sizeof(glm::vec2), linearTextureCoords.data(), GL_DYNAMIC_DRAW);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(2);
+	}
 }
 
 void Model::Upload()

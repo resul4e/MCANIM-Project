@@ -39,6 +39,7 @@ struct Mesh
 	unsigned int vao;
 	unsigned int pbo;
 	unsigned int nbo;
+	unsigned int tbo;
 };
 
 class Model
