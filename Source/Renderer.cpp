@@ -9,7 +9,8 @@
 #include <glad/glad.h>
 
 Renderer::Renderer() :
-	camera(glm::radians(60.0f), 800.0f/800, 1.0f, 10000.0f)
+	camera(glm::radians(60.0f), 800.0f/800, 1.0f, 10000.0f),
+	renderRig(true)
 {
 
 }
@@ -28,7 +29,10 @@ void Renderer::Update(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	RenderModel(scene);
-	RenderRig(scene);
+	if(renderRig)
+	{
+		RenderRig(scene);
+	}
 }
 
 void Renderer::SetupQuad()
@@ -90,6 +94,11 @@ void Renderer::SetupQuad()
 	// texture coord attribute
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+}
+
+void Renderer::ToggleRigRendering()
+{
+	renderRig = !renderRig;
 }
 
 void Renderer::RenderModel(Scene& scene)

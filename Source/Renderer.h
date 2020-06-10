@@ -14,11 +14,14 @@ public:
 	void Initialize(std::filesystem::path _assetPath);
 	void Update(Scene& scene);
 	void SetupQuad();
+	void ToggleRigRendering();
 
 private:
 	void RenderModel(Scene& scene);
 	void RenderRig(Scene& scene);
 
+	bool renderRig;
+	
 	Camera camera;
 	Shader* shader;
 	Texture* texture;

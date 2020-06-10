@@ -55,11 +55,17 @@ int main(int argc, char** argv)
 	double dt = 0.016;
 	while (window.isOpen())
 	{
+		
 		// Create begin frame method
 		interfaceController.Begin();
 
 		player.Update(dt);
 		renderer.Update(*scene);
+
+		if (ImGui::IsKeyPressed('J' /*J*/))
+		{
+			renderer.ToggleRigRendering();
+		}
 		
 		// ImGui rendering
 		player.ImGuiRender();
