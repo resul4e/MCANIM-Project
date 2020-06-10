@@ -38,3 +38,9 @@ void Scene::SetRig(std::shared_ptr<Rig> rig)
 {
 	m_rig = rig;
 }
+
+void Scene::SetTexture(std::shared_ptr<Texture> texture)
+{
+	m_texture = texture;
+	m_texture->Bind();
+}

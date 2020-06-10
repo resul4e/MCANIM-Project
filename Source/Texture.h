@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
-
+#include <filesystem>
 class Texture
 {
 public:
-	Texture(const std::string& path);
+	Texture(std::filesystem::path _filePath);
 	~Texture();
 
 	void Bind(unsigned int slot = 0) const;
@@ -25,6 +25,6 @@ private:
 	float offsetX;
 	float offsetY;
 
-	std::string m_FilePath;
+	std::filesystem::path m_FilePath;
 	unsigned char* m_LocalBuffer;
 };

@@ -25,8 +25,6 @@ void AnimationPlayer::AddAnimation(std::shared_ptr<AnimationClip> _anim)
 	}
 	
 	m_animations.push_back(_anim);
-
-	
 }
 
 void AnimationPlayer::Update(float _dt)

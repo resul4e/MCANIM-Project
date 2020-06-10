@@ -57,6 +57,9 @@ int main(int argc, char** argv)
 	scene->GetModel().Upload();
 	renderer.Initialize(assetPath);
 
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");
+	scene->SetTexture(texture);
+
 	auto time = std::chrono::high_resolution_clock::now();
 	double dt = 0.016;
 	while (window.isOpen())
