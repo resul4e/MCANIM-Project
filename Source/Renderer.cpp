@@ -49,7 +49,7 @@ void Renderer::Update(Scene& scene)
 
 void Renderer::SetBackgroundTexture(std::shared_ptr<Texture> texture)
 {
-	skyTexture = texture.get();
+	skyTexture = texture;
 }
 
 void Renderer::ToggleRigRendering()

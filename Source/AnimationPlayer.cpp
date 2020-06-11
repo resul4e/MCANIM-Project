@@ -7,10 +7,7 @@
 #include "Channel.h"
 #include "imgui.h"
 
-AnimationPlayer::AnimationPlayer(std::shared_ptr<Scene> _scene) :
-	m_scene(_scene),
-	m_model(_scene->GetModel()),
-	m_rig(_scene->GetRig()),
+AnimationPlayer::AnimationPlayer() :
 	time(0),
 	m_state(PlaybackState::STOPPED),
 	m_isGuiOpen(true)
@@ -27,7 +24,7 @@ void AnimationPlayer::AddAnimation(std::shared_ptr<AnimationClip> _anim)
 	m_animations.push_back(_anim);
 }
 
-void AnimationPlayer::Update(float _dt)
+void AnimationPlayer::Update(Scene& scene, float _dt)
 {
 	if(m_state == PlaybackState::PLAYING)
 	{
@@ -39,7 +36,7 @@ void AnimationPlayer::Update(float _dt)
 		}
 	}
 	
-	for(auto j :m_rig.GetAllJoints())
+	for(auto j : scene.GetRig().GetAllJoints())
 	{
 		if(!m_currentAnim->HasChannel(j->GetName()))
 		{

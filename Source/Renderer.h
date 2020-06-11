@@ -6,6 +6,7 @@
 #include "Texture.h"
 
 #include <filesystem>
+#include <memory>
 
 class Renderer
 {
@@ -27,7 +28,7 @@ private:
 	Shader* shader;
 	Shader* rigShader;
 	Shader* skyShader;
-	Texture* skyTexture;
+	std::shared_ptr<Texture> skyTexture;
 	std::shared_ptr<Model> m_bone;
 
 	unsigned int m_dummyVao;
