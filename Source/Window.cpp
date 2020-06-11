@@ -11,7 +11,7 @@ void glfwOnResizeEvent(GLFWwindow* window, int width, int height)
 	w->OnResizeEvent(width, height);
 }
 
-void Window::create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
+void Window::Create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
 {
 	if (!glfwInit())
 	{
@@ -48,12 +48,12 @@ void Window::create(std::string title, unsigned int width, unsigned int height, 
 	glfwSetWindowSizeCallback(window, glfwOnResizeEvent);
 }
 
-void Window::update()
+void Window::Update()
 {
 	glfwPollEvents();
 }
 
-void Window::render()
+void Window::Render()
 {
 	glfwSwapBuffers(window);
 }
@@ -71,7 +71,7 @@ void Window::OnResizeEvent(int width, int height)
 	}
 }
 
-bool Window::isOpen()
+bool Window::IsOpen()
 {
 	return !glfwWindowShouldClose(window);
 }

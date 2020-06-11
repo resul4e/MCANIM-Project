@@ -14,16 +14,16 @@ public:
 class Window
 {
 public:
-	void create(std::string title, unsigned int width, unsigned int height, bool fullScreen = false);
-	void update();
-	void render();
+	void Create(std::string title, unsigned int width, unsigned int height, bool fullScreen = false);
+	void Update();
+	void Render();
 
 	GLFWwindow* GetWindow() { return window; }
 
 	void AddResizeListener(ResizeListener* resizeListener);
 	void OnResizeEvent(int width, int height);
 
-	bool isOpen();
+	bool IsOpen();
 
 private:
 	GLFWwindow* window;

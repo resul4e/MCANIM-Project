@@ -43,7 +43,7 @@ public:
 			player.AddAnimation(anim);
 		}
 
-		window.create("Skeletal Animator", 800, 800);
+		window.Create("Skeletal Animator", 800, 800);
 		window.AddResizeListener(this);
 		interfaceController.Setup(window);
 
@@ -62,7 +62,7 @@ public:
 	{
 		auto time = std::chrono::high_resolution_clock::now();
 		double dt = 0.016;
-		while (window.isOpen())
+		while (window.IsOpen())
 		{
 
 			// Create begin frame method
@@ -80,8 +80,8 @@ public:
 			player.ImGuiRender();
 
 			interfaceController.End();
-			window.render();
-			window.update();
+			window.Render();
+			window.Update();
 
 			//get deltatime
 			std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - time;
