@@ -93,7 +93,7 @@ public:
 
 	void OnResize(int width, int height) override
 	{
-		renderer.Resize(width, height);
+		renderer.Resize(scene, width, height);
 	}
 
 private:

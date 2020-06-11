@@ -9,7 +9,6 @@
 #include <glad/glad.h>
 
 Renderer::Renderer() :
-	camera(glm::radians(60.0f), 1.0, 1.0f, 10000.0f),
 	renderRig(true),
 	skyTexture(0)
 {
@@ -38,9 +37,9 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	glGenVertexArrays(1, &m_dummyVao);
 }
 
-void Renderer::Resize(unsigned int width, unsigned int height)
+void Renderer::Resize(Scene& scene, unsigned int width, unsigned int height)
 {
-	camera.SetAspectRatio((float) width / height);
+	scene.GetCamera().SetAspectRatio((float) width / height);
 	renderWidth = width;
 	renderHeight = height;
 }
@@ -73,7 +72,7 @@ void Renderer::RenderSky(Scene& scene)
 	skyTexture->Bind(0);
 
 	glm::mat4 projMatrix(1);
-	camera.loadProjectionMatrix(projMatrix);
+	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 yawMatrix = glm::rotate(0.0f, glm::vec3(0, 1, 0));
 	glm::mat4 pitchMatrix = glm::rotate(0.0f, glm::vec3(1, 0, 0));
@@ -98,7 +97,7 @@ void Renderer::RenderModel(Scene& scene)
 	shader->Bind();
 
 	glm::mat4 projMatrix(1);
-	camera.loadProjectionMatrix(projMatrix);
+	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
 	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
@@ -156,7 +155,7 @@ void Renderer::RenderRig(Scene& scene)
 	rigShader->Bind();
 
 	glm::mat4 projMatrix(1);
-	camera.loadProjectionMatrix(projMatrix);
+	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
 	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;

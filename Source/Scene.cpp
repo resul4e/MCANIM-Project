@@ -4,7 +4,7 @@
 #include <glm/gtx/component_wise.hpp>
 
 Scene::Scene() :
-	m_camera(glm::radians(60.0f), 1, 1.0f, 10000.0f)
+	m_camera(glm::radians(60.0f), 1.0, 1.0f, 10000.0f)
 {
 
 }
