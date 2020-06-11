@@ -112,6 +112,9 @@ void Renderer::RenderModel(Scene& scene)
 
 	scene.GetTexture().Bind(0);
 	shader->SetUniform1i("u_Texture", 0);
+	skyTexture->Bind(1);
+	shader->SetUniform1i("u_EnvTexture", 1);
+	shader->SetVec3("u_CamPos", scene.GetCamera().position);
 	for (Mesh& mesh : scene.GetModel().meshes)
 	{
 		glBindVertexArray(mesh.vao);

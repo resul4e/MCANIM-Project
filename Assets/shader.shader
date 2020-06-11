@@ -15,10 +15,10 @@ out vec2 v_TexCoord;
 
 void main()
 {
-	gl_Position = projMatrix * viewMatrix * modelMatrix * position;
-	v_Position = (modelMatrix * position).xyz;
-	v_Normal = normal;
-	v_TexCoord = texCoord;
+    gl_Position = projMatrix * viewMatrix * modelMatrix * position;
+    v_Position = (modelMatrix * position).xyz;
+    v_Normal = normal;
+    v_TexCoord = texCoord;
 };
 
 #shader fragment
@@ -30,6 +30,15 @@ in vec3 v_Position;
 in vec3 v_Normal;
 in vec2 v_TexCoord;
 uniform sampler2D u_Texture;
+uniform sampler2D u_EnvTexture;
+uniform vec3 u_CamPos;
+
+const float PI = 3.141592653589793;
+const float PI_OVER_TWO = PI / 2.0;
+const float TWO_PI = PI * 2.0;
+
+const float ONE_OVER_PI = 1.0 / PI;
+const float ONE_OVER_TWO_PI = 1.0 / TWO_PI;
 
 vec3 lightPos = vec3(0, 400, 1500);
 vec3 lightIntensity = vec3(3);
@@ -44,11 +53,21 @@ vec3 reinhardToneMapping(vec3 color, float exposure)
     return color;
 }
 
+vec2 toUV(vec3 dir) {
+    float phi = atan(dir.z, dir.x) + TWO_PI;
+    float theta = asin(-dir.y) + PI_OVER_TWO;
+    return vec2(phi * ONE_OVER_TWO_PI, 1-theta * ONE_OVER_PI);
+}
+
 void main()
 {
-	vec3 N = v_Normal;
-	vec3 L = normalize(lightPos - v_Position);
-	vec3 texColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
-	vec3 Radiance = texColor * max(0, dot(N, L)) * lightIntensity;
-	color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
+    vec3 N = v_Normal;
+    vec3 L = normalize(lightPos - v_Position);
+    vec3 V = normalize(u_CamPos - v_Position);
+    vec3 R = reflect(-V, N);
+    vec3 envColor = texture(u_EnvTexture, toUV(R)).rgb;
+    vec3 diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
+    vec3 Radiance = diffuseColor * max(0, dot(N, L)) * lightIntensity;
+    Radiance += envColor * 0.1;
+    color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
 };
