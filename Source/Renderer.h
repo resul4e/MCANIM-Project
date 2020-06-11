@@ -35,4 +35,8 @@ private:
 	unsigned int m_dummyVao;
 	unsigned int m_armatureVao;
 	unsigned int m_armaturePbo;
+
+	// The screen size at which we should render
+	int renderWidth;
+	int renderHeight;
 };

@@ -9,7 +9,7 @@
 #include <glad/glad.h>
 
 Renderer::Renderer() :
-	camera(glm::radians(60.0f), 800.0f/800, 1.0f, 10000.0f),
+	camera(glm::radians(60.0f), 1.0, 1.0f, 10000.0f),
 	renderRig(true),
 	skyTexture(0)
 {
@@ -41,11 +41,14 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 void Renderer::Resize(unsigned int width, unsigned int height)
 {
 	camera.SetAspectRatio((float) width / height);
+	renderWidth = width;
+	renderHeight = height;
 }
 
 void Renderer::Update(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, renderWidth, renderHeight);
 
 	RenderSky(scene);
 	RenderModel(scene);

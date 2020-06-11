@@ -44,6 +44,7 @@ public:
 		}
 
 		window.create("Skeletal Animator", 800, 800);
+		window.AddResizeListener(this);
 		interfaceController.Setup(window);
 
 		scene.GetModel().Upload();
