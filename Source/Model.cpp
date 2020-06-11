@@ -12,6 +12,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 	glBindVertexArray(vao);
 
 	std::vector<glm::vec3> animatedPositions(positions.size(), glm::vec3(0));
+	std::vector<glm::vec3> animatedNormals(normals.size(), glm::vec3(0));
 	for (Bone& bone : m_bones)
 	{
 		std::shared_ptr<Joint> joint = rig.GetJoint(bone.m_name);
@@ -25,6 +26,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 				
 				glm::vec4 v = glm::vec4(positions[vertexWeight.m_vertexIndex], 1);
 				animatedPositions[vertexWeight.m_vertexIndex] += glm::vec3(globalTransform * offsetMatrix * v) * vertexWeight.m_weight;
+				animatedNormals[vertexWeight.m_vertexIndex] += glm::mat3(globalTransform * offsetMatrix) * normals[vertexWeight.m_vertexIndex] * vertexWeight.m_weight;
 			}
 		}
 	}
@@ -39,7 +41,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 		for (int v = 0; v < 3; v++)
 		{
 			linearPositions[i * 3 + v] = animatedPositions[face.indices[v]];
-			linearNormals[i * 3 + v] = normals[face.indices[v]];
+			linearNormals[i * 3 + v] = animatedNormals[face.indices[v]];
 		}
 	}
 
