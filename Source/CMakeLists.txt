@@ -12,22 +12,8 @@ set(BASE_SOURCES
     ${DIR}/ModelLoader.cpp
     ${DIR}/Scene.h
     ${DIR}/Scene.cpp
-    ${DIR}/imgui.cpp
-    ${DIR}/imgui.h
-    ${DIR}/imconfig.h
-    ${DIR}/imgui_draw.cpp
-    ${DIR}/imgui_impl_glfw.cpp
-    ${DIR}/imgui_impl_glfw.h
-    ${DIR}/imgui_impl_opengl3.cpp
-    ${DIR}/imgui_impl_opengl3.h
     ${DIR}/InterfaceController.h
     ${DIR}/InterfaceController.cpp
-    ${DIR}/imgui_widgets.cpp
-    ${DIR}/imgui_demo.cpp
-    ${DIR}/imgui_internal.h
-    ${DIR}/imstb_rectpack.h
-    ${DIR}/imstb_textedit.h
-    ${DIR}/imstb_truetype.h
     PARENT_SCOPE
 )
 
@@ -61,5 +47,23 @@ set(RENDERING_SOURCES
     ${DIR}/Texture.h
     ${DIR}/Texture.cpp
     ${DIR}/glad.c
+    PARENT_SCOPE
+)
+
+set(IMGUI_SOURCES
+    ${DIR}/imgui.cpp
+    ${DIR}/imgui.h
+    ${DIR}/imconfig.h
+    ${DIR}/imgui_draw.cpp
+    ${DIR}/imgui_impl_glfw.cpp
+    ${DIR}/imgui_impl_glfw.h
+    ${DIR}/imgui_impl_opengl3.cpp
+    ${DIR}/imgui_impl_opengl3.h
+    ${DIR}/imgui_widgets.cpp
+    ${DIR}/imgui_demo.cpp
+    ${DIR}/imgui_internal.h
+    ${DIR}/imstb_rectpack.h
+    ${DIR}/imstb_textedit.h
+    ${DIR}/imstb_truetype.h
     PARENT_SCOPE
 )
