@@ -13,21 +13,22 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	std::vector<glm::vec3> animatedPositions(positions.size(), glm::vec3(0));
 	std::vector<glm::vec3> animatedNormals(normals.size(), glm::vec3(0));
-	for (Bone& bone : m_bones)
+	for (const Bone& bone : m_bones)
 	{
 		std::shared_ptr<Joint> joint = rig.GetJoint(bone.m_name);
+		if (joint == nullptr) continue;
 
-		if (joint != nullptr)
+		const glm::mat4& offsetMatrix = bone.m_offsetMatrix;
+		glm::mat4 globalTransform = joint->GetGlobalTransform();
+		glm::mat4 finalTransform = globalTransform * offsetMatrix;
+
+		for (const VertexWeight& vertexWeight : bone.m_weights)
 		{
-			for (VertexWeight& vertexWeight : bone.m_weights)
-			{
-				glm::mat4 globalTransform = joint->GetGlobalTransform();
-				glm::mat4 offsetMatrix = bone.m_offsetMatrix;
-				
-				glm::vec4 v = glm::vec4(positions[vertexWeight.m_vertexIndex], 1);
-				animatedPositions[vertexWeight.m_vertexIndex] += glm::vec3(globalTransform * offsetMatrix * v) * vertexWeight.m_weight;
-				animatedNormals[vertexWeight.m_vertexIndex] += glm::mat3(globalTransform * offsetMatrix) * normals[vertexWeight.m_vertexIndex] * vertexWeight.m_weight;
-			}
+			const int& vIndex = vertexWeight.m_vertexIndex;
+			const float& vWeight = vertexWeight.m_weight;
+			glm::vec4 v = glm::vec4(positions[vIndex], 1);
+			animatedPositions[vIndex] += glm::vec3(finalTransform * v) * vWeight;
+			animatedNormals[vIndex] += glm::mat3(finalTransform) * normals[vertexWeight.m_vertexIndex] * vWeight;
 		}
 	}
 
