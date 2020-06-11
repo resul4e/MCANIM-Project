@@ -14,6 +14,20 @@
 #include "InterfaceController.h"
 #include "AnimationPlayer.h"
 
+#include <vector>
+#include <string>
+
+std::vector<std::string> animationPaths
+{
+	"Idle.fbx",
+	"SkinningTest.fbx",
+	"Capoeira.fbx",
+	"Samba Dancing.fbx",
+	"Hit Reaction.fbx",
+	"Prone Left Turn.fbx",
+	"Turn Right.fbx"
+};
+
 int main(int argc, char** argv)
 {
 	std::vector<std::string> cmdArgs(argv, argv + argc);
@@ -31,25 +45,16 @@ int main(int argc, char** argv)
 
 	auto scene = std::make_shared<Scene>();
 
-	std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/SkinningTest.fbx");
-	std::shared_ptr<AnimationClip> IdleAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Idle.fbx");
-	std::shared_ptr<AnimationClip> capAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Capoeira.fbx");
-	std::shared_ptr<AnimationClip> sambaAnim = AnimationLoader::LoadAnimation(assetPath.string() + "/Samba Dancing.fbx");
-	std::shared_ptr<AnimationClip> hitReaction = AnimationLoader::LoadAnimation(assetPath.string() + "/Hit Reaction.fbx");
-	std::shared_ptr<AnimationClip> proneLeft = AnimationLoader::LoadAnimation(assetPath.string() + "/Prone Left Turn.fbx");
-	std::shared_ptr<AnimationClip> turnRight = AnimationLoader::LoadAnimation(assetPath.string() + "/Turn Right.fbx");
-
 	scene->SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
 	scene->SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 
 	AnimationPlayer player(scene);
-	player.AddAnimation(IdleAnim);
-	player.AddAnimation(anim);
-	player.AddAnimation(capAnim);
-	player.AddAnimation(sambaAnim);
-	player.AddAnimation(hitReaction);
-	player.AddAnimation(proneLeft);
-	player.AddAnimation(turnRight);
+	// Load all animations from file and add them to the player
+	for (std::string animationPath : animationPaths)
+	{
+		std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/" + animationPath);
+		player.AddAnimation(anim);
+	}
 	
 	window.create("Skeletal Animator", 800, 800);
 	interfaceController.Setup(window);
