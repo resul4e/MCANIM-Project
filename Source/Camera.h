@@ -9,6 +9,7 @@ public:
 
 	void SetAspectRatio(float aspect);
 	void loadProjectionMatrix(glm::mat4& projMatrix);
+	void LookAt(glm::mat4& m, const glm::vec3& eye, const glm::vec3& center, const glm::vec3& top);
 
 	glm::vec3 position;
 	float distance;

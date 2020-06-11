@@ -101,10 +101,10 @@ void Renderer::RenderModel(Scene& scene)
 	camera.loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	viewMatrix = glm::translate(viewMatrix, -scene.GetCamera().position);
+	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
+	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
 
 	glm::mat4 modelMatrix(1);
-	//modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f));
 
 	shader->SetMatrix4("projMatrix", projMatrix);
 	shader->SetMatrix4("viewMatrix", viewMatrix);
@@ -159,7 +159,8 @@ void Renderer::RenderRig(Scene& scene)
 	camera.loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	viewMatrix = glm::translate(viewMatrix, -scene.GetCamera().position);
+	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
+	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
 	
 	rigShader->SetMatrix4("projMatrix", projMatrix);
 	rigShader->SetMatrix4("viewMatrix", viewMatrix);

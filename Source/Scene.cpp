@@ -31,12 +31,13 @@ Texture& Scene::GetTexture()
 
 void Scene::SetModel(std::shared_ptr<Model> model)
 {
-	m_model = model;
 	m_camera.position.x = (model->maxBounds.x + model->minBounds.x) / 2;
 	m_camera.position.y = (model->maxBounds.y + model->minBounds.y) / 2;
 	glm::vec3 bounds = model->maxBounds - model->minBounds;
 	float dist = glm::compMax(bounds);
 	m_camera.position.z = dist * 1.5f;
+
+	m_model = model;
 }
 
 void Scene::SetRig(std::shared_ptr<Rig> rig)
