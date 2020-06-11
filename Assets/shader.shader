@@ -31,13 +31,24 @@ in vec3 v_Normal;
 in vec2 v_TexCoord;
 uniform sampler2D u_Texture;
 
-vec3 lightPos = vec3(0, 250, 50);
+vec3 lightPos = vec3(0, 400, 1500);
+vec3 lightIntensity = vec3(3);
+
+vec3 toLinear(vec3 gammaColor) {
+    return pow(gammaColor, vec3(2.2));
+}
+
+vec3 reinhardToneMapping(vec3 color, float exposure)
+{
+    color *= exposure / ((color / exposure) + 1);
+    return color;
+}
 
 void main()
 {
 	vec3 N = v_Normal;
 	vec3 L = normalize(lightPos - v_Position);
-	vec4 texColor = texture(u_Texture, v_TexCoord);
-	float NdotL = max(0, dot(N, L));
-	color = texColor * vec4(vec3(NdotL), 1);
+	vec3 texColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
+	vec3 Radiance = texColor * max(0, dot(N, L)) * lightIntensity;
+	color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
 };
