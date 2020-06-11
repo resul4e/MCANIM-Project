@@ -14,19 +14,19 @@ public:
 class Window
 {
 public:
-    void create(std::string title, unsigned int width, unsigned int height, bool fullScreen = false);
-    void update();
-    void render();
+	void create(std::string title, unsigned int width, unsigned int height, bool fullScreen = false);
+	void update();
+	void render();
 
 	GLFWwindow* GetWindow() { return window; }
 
 	void AddResizeListener(ResizeListener* resizeListener);
 	void OnResizeEvent(int width, int height);
 
-    bool isOpen();
+	bool isOpen();
 
 private:
-    GLFWwindow* window;
+	GLFWwindow* window;
 
 	std::vector<ResizeListener*> resizeListeners;
 };
