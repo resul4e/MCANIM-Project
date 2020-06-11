@@ -1,8 +1,15 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 struct GLFWwindow;
+
+class ResizeListener
+{
+public:
+	virtual void OnResize(int width, int height) = 0;
+};
 
 class Window
 {
@@ -13,8 +20,13 @@ public:
 
 	GLFWwindow* GetWindow() { return window; }
 
+	void AddResizeListener(ResizeListener* resizeListener);
+	void OnResizeEvent(int width, int height);
+
     bool isOpen();
 
 private:
     GLFWwindow* window;
+
+	std::vector<ResizeListener*> resizeListeners;
 };

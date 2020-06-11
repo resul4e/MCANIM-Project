@@ -11,6 +11,11 @@ Camera::Camera(float _fov, float _aspect, float _zNear, float _zFar) :
 
 }
 
+void Camera::SetAspectRatio(float aspect)
+{
+	m_aspect = aspect;
+}
+
 void Camera::loadProjectionMatrix(glm::mat4& projMatrix)
 {
 	projMatrix = glm::perspective(m_fov, m_aspect, m_zNear, m_zFar);

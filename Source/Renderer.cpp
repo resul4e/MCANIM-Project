@@ -38,6 +38,11 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	glGenVertexArrays(1, &m_dummyVao);
 }
 
+void Renderer::Resize(unsigned int width, unsigned int height)
+{
+	camera.SetAspectRatio((float) width / height);
+}
+
 void Renderer::Update(Scene& scene)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -13,6 +13,7 @@ class Renderer
 public:
 	Renderer();
 	void Initialize(std::filesystem::path _assetPath);
+	void Resize(unsigned int width, unsigned int height);
 	void Update(Scene& scene);
 	void SetBackgroundTexture(std::shared_ptr<Texture> texture);
 	void ToggleRigRendering();

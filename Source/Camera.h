@@ -7,6 +7,7 @@ class Camera
 public:
 	Camera(float _fov, float _aspect, float _zNear, float _zFar);
 
+	void SetAspectRatio(float aspect);
 	void loadProjectionMatrix(glm::mat4& projMatrix);
 
 	glm::vec3 position;

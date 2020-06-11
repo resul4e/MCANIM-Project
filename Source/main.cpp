@@ -28,7 +28,7 @@ std::vector<std::string> animationPaths
 	"Turn Right.fbx"
 };
 
-class Application
+class Application : public ResizeListener
 {
 public:
 	void Initialize(std::filesystem::path assetPath)
@@ -91,10 +91,10 @@ public:
 		interfaceController.ShutDown();
 	}
 
-	//void OnResize(int width, int height) override
-	//{
-	//	
-	//}
+	void OnResize(int width, int height) override
+	{
+		renderer.Resize(width, height);
+	}
 
 private:
 	Window window;

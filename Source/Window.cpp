@@ -5,6 +5,12 @@
 
 #include <iostream>
 
+void glfwOnResizeEvent(GLFWwindow* window, int width, int height)
+{
+	Window* w = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+	w->OnResizeEvent(width, height);
+}
+
 void Window::create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
 {
     if (!glfwInit())
@@ -37,6 +43,9 @@ void Window::create(std::string title, unsigned int width, unsigned int height, 
     }
 
     glfwSwapInterval(1);
+
+	glfwSetWindowUserPointer(window, this);
+	glfwSetWindowSizeCallback(window, glfwOnResizeEvent);
 }
 
 void Window::update()
@@ -47,6 +56,19 @@ void Window::update()
 void Window::render()
 {
     glfwSwapBuffers(window);
+}
+
+void Window::AddResizeListener(ResizeListener* resizeListener)
+{
+	resizeListeners.push_back(resizeListener);
+}
+
+void Window::OnResizeEvent(int width, int height)
+{
+	for (ResizeListener* listener : resizeListeners)
+	{
+		listener->OnResize(width, height);
+	}
 }
 
 bool Window::isOpen()
