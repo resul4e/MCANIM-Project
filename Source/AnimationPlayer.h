@@ -24,8 +24,7 @@ enum class PlaybackState
 class AnimationPlayer
 {
 public:
-	AnimationPlayer() = delete;
-	AnimationPlayer(std::shared_ptr<Scene> _scene);
+	AnimationPlayer();
 	~AnimationPlayer() = default;
 
 	/**
@@ -39,7 +38,7 @@ public:
 	 * \brief Play the selected animation.	
 	 * \param _dt How many seconds to advance the playback.
 	 */
-	void Update(float _dt);
+	void Update(Scene& scene, float _dt);
 
 	void Play();
 	void Pause();
@@ -69,11 +68,4 @@ private:
 	std::shared_ptr<AnimationClip> m_currentAnim;
 	//A list of all animations
 	std::vector<std::shared_ptr<AnimationClip>> m_animations;
-
-	//The rig that is currently being manipulated by the animation.
-	Rig& m_rig;
-	//The model that is associated with the Rig.
-	Model& m_model;
-	//The class that holds all of the information of the current Scene.
-	std::shared_ptr<Scene> m_scene;
 };
