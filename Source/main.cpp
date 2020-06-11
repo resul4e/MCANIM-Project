@@ -91,10 +91,10 @@ public:
 		interfaceController.ShutDown();
 	}
 
-	void OnResize(int width, int height) override
-	{
-		
-	}
+	//void OnResize(int width, int height) override
+	//{
+	//	
+	//}
 
 private:
 	Window window;
