@@ -173,7 +173,8 @@ void Renderer::RenderRig(Scene& scene)
 	glBindVertexArray(m_armatureVao);
 	glBindBuffer(GL_ARRAY_BUFFER, m_armaturePbo);
 	glBufferData(GL_ARRAY_BUFFER, bones.size() * sizeof(Line), bones.data(), GL_STREAM_DRAW);
-	glDrawArrays(GL_LINES, 0, bones.size() * 2);
+	// Ignore the root bone drawing
+	glDrawArrays(GL_LINES, 2, bones.size() * 2);
 
 	rigShader->UnBind();
 }
