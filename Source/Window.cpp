@@ -11,6 +11,21 @@ void glfwOnResizeEvent(GLFWwindow* window, int width, int height)
 	w->OnResizeEvent(width, height);
 }
 
+void glfwOnMouseClick(GLFWwindow* window, int button, int action, int mods)
+{
+	Window* w = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+	if (action == GLFW_PRESS)
+		w->OnMouseClickedEvent(button, mods);
+	if (action == GLFW_RELEASE)
+		w->OnMouseReleasedEvent(button, mods);
+}
+
+void glfwOnMouseMovement(GLFWwindow* window, double xpos, double ypos)
+{
+	Window* w = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+	w->OnMouseMoveEvent(xpos, ypos);
+}
+
 void Window::Create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
 {
 	if (!glfwInit())
@@ -46,6 +61,8 @@ void Window::Create(std::string title, unsigned int width, unsigned int height, 
 
 	glfwSetWindowUserPointer(window, this);
 	glfwSetWindowSizeCallback(window, glfwOnResizeEvent);
+	glfwSetMouseButtonCallback(window, glfwOnMouseClick);
+	glfwSetCursorPosCallback(window, glfwOnMouseMovement);
 }
 
 void Window::Update()
@@ -68,6 +85,30 @@ void Window::OnResizeEvent(int width, int height)
 	for (ResizeListener* listener : resizeListeners)
 	{
 		listener->OnResize(width, height);
+	}
+}
+
+void Window::OnMouseClickedEvent(int button, int mods)
+{
+	for (MouseListener* listener : mouseListeners)
+	{
+		listener->OnMouseClicked(button, mods);
+	}
+}
+
+void Window::OnMouseReleasedEvent(int button, int mods)
+{
+	for (MouseListener* listener : mouseListeners)
+	{
+		listener->OnMouseReleased(button, mods);
+	}
+}
+
+void Window::OnMouseMoveEvent(float x, float y)
+{
+	for (MouseListener* listener : mouseListeners)
+	{
+		listener->OnMouseMove(x, y);
 	}
 }
 

@@ -11,6 +11,14 @@ public:
 	virtual void OnResize(int width, int height) = 0;
 };
 
+class MouseListener
+{
+public:
+	virtual void OnMouseClicked(int button, int mods) = 0;
+	virtual void OnMouseReleased(int button, int mods) = 0;
+	virtual void OnMouseMove(float x, float y) = 0;
+};
+
 class Window
 {
 public:
@@ -22,6 +30,9 @@ public:
 
 	void AddResizeListener(ResizeListener* resizeListener);
 	void OnResizeEvent(int width, int height);
+	void OnMouseClickedEvent(int button, int mods);
+	void OnMouseReleasedEvent(int button, int mods);
+	void OnMouseMoveEvent(float x, float y);
 
 	bool IsOpen();
 
@@ -29,4 +40,5 @@ private:
 	GLFWwindow* window;
 
 	std::vector<ResizeListener*> resizeListeners;
+	std::vector<MouseListener*> mouseListeners;
 };
