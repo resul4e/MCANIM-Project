@@ -33,8 +33,13 @@ class Application : public ResizeListener
 public:
 	void Initialize(std::filesystem::path assetPath)
 	{
+		window.Create("Skeletal Animator", 800, 800);
+		window.AddResizeListener(this);
+		interfaceController.Setup(window);
+
 		scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
 		scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
+		scene.GetModel().Upload();
 
 		// Load all animations from file and add them to the player
 		for (const std::string& animationPath : animationPaths)
@@ -42,14 +47,8 @@ public:
 			std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/" + animationPath);
 			player.AddAnimation(anim);
 		}
-
-		window.Create("Skeletal Animator", 800, 800);
-		window.AddResizeListener(this);
-		interfaceController.Setup(window);
-
-		scene.GetModel().Upload();
+		
 		renderer.Initialize(assetPath);
-		//renderer.Resize(window.)
 
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");
 		scene.SetTexture(texture);
