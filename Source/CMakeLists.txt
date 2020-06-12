@@ -24,6 +24,11 @@ set(ANIMATION_BASE_SOURCES
     ${DIR}/AnimationClip.cpp
     ${DIR}/Channel.h
     ${DIR}/Channel.cpp
+    ${DIR}/Skinning.h
+    ${DIR}/Skinning.cpp
+    ${DIR}/DQS.h
+    ${DIR}/DQS.cpp
+    ${DIR}/glmConversion.h
     ${DIR}/KeyFrame.h
     ${DIR}/KeyFrame.cpp
     ${DIR}/Joint.h

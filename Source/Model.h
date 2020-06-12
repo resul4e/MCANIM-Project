@@ -30,17 +30,15 @@ struct Mesh
 {
 	void Upload();
 	void UpdateVertices(const Rig& rig);
-	void DualQuaternionBlending(std::vector<glm::vec3>& out_verts,
-		std::vector<glm::vec3>& out_normals,
-		const std::vector<glm::dualquat>& dual_quat,
-		const std::vector< std::vector<float> >& weights,
-		const std::vector< std::vector<int> >& joints_id);
 
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texCoords;
 	std::vector<glm::vec3> normals;
 	std::vector<Face> faces;
 	std::vector<Bone> m_bones;
+
+	std::vector<glm::vec3> animatedPositions;  
+	std::vector<glm::vec3> animatedNormals;
 
 	unsigned int vao;
 	unsigned int pbo;
