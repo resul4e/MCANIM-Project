@@ -2,16 +2,11 @@
 
 #include "Rig.h"
 #include "Joint.h"
+#include "DQS.h"
 
 #include <glad/glad.h>
 #include <iostream>
-#include <glm/gtx/string_cast.hpp>
-#include <glm/gtx/dual_quaternion.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-#include <assimp/Importer.hpp>
-#include "glm/ext.hpp"
-#include "DQS.h"
+
 
 
 void Mesh::UpdateVertices(const Rig& rig)
