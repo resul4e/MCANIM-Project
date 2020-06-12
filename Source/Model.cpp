@@ -84,42 +84,6 @@ void dual_quat_deformer(const std::vector<Point3>& in_verts,
 	}
 }
 
-
-//glm::dualquat IndentityDualQuat()
-//{
-//	return glm::dualquat(glm::quat(1.f, 0.f, 0.f, 0.f),
-//		glm::vec3(0.f, 0.f, 0.f));
-//}
-//
-//glm::dualquat dual_quat_from(const glm::quat& q, const glm::vec3& t)
-//{
-//	float w = -0.5f * (t.x * q.y + t.y * q.z + t.z * q.w);
-//	float i = 0.5f * (t.x * q.x + t.y * q.w - t.z * q.z);
-//	float j = 0.5f * (-t.x * q.w + t.y * q.x + t.z * q.y);
-//	float k = 0.5f * (t.x * q.z - t.y * q.y + t.z * q.x);
-//
-//	return glm::dualquat(q, glm::quat(w, i, j, k));
-//}
-//
-//glm::vec3 transform(const glm::dualquat& q, const glm::vec3& p)
-//{
-//	// As the dual quaternions may be the results from a
-//	// linear blending we have to normalize it :
-//	float norm = glm::length(q.real);
-//	glm::quat qblend_0 = q.real / norm;
-//	glm::quat qblend_e = q.dual / norm;
-//
-//	// Translation from the normalized dual quaternion equals :
-//	// 2.f * qblend_e * conjugate(qblend_0)
-//	glm::vec3 v0 = glm::vec3(qblend_0.x, qblend_0.y, qblend_0.z);
-//	glm::vec3 ve = glm::vec3(qblend_e.x, qblend_e.y, qblend_e.z);
-//	glm::vec3 trans = (ve * qblend_0.w - v0 * qblend_e.w + glm::cross(v0,ve)) * 2.f;
-//
-//	// Rotate
-//	return qblend_0 * p * glm::inverse(qblend_0) + trans;
-//}
-
-
 void Mesh::UpdateVertices(const Rig& rig)
 {
 	glBindVertexArray(vao);
