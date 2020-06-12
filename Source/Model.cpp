@@ -10,89 +10,77 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
+#include "glm/ext.hpp"
 
-#include <vector>
-#include "DQB/dual_quat_cu.hpp" 
-
-using namespace Tbx;
-
-/**
- * Function to deform a mesh with dual quaternions.
- *
- * @note Originally this was CUDA code. Aside from this deformer function
- * which uses std::vector every other classes and methods should be readily
- * convertible to CUDA code just by adding __host__ __device__ flags before
- * their definitions.
- *
- * @param in_verts : vector of mesh vertices
- * @param in_normals : vector of mesh normals (same order as 'in_verts')
- * @param out_verts : deformed vertices with dual quaternions
- * @param out_normals : deformed normals with dual quaternions
- * @param dual_quat : list of dual quaternions transformations per joints
- * @param weights : list of influence weights for each vertex
- * @param joints_id : list of joints influence fore each vertex (same order as 'weights')
- */
-void dual_quat_deformer(const std::vector<Point3>& in_verts,
-	const std::vector<Vec3>& in_normals,
-	std::vector<Vec3>& out_verts,
-	std::vector<Vec3>& out_normals,
-	const std::vector<Dual_quat_cu>& dual_quat,
-	const std::vector< std::vector<float> >& weights,
-	const std::vector< std::vector<int> >& joints_id)
+glm::quat Mat4ToQuat(glm::mat4 _m)
 {
-	for (unsigned v = 0; v < in_verts.size(); ++v)
+	// Compute trace of matrix 't'
+	float T = 1 + _m[0][0] + _m[1][1] + _m[2][2];
+
+	float S, X, Y, Z, W;
+
+	if (T > 0.00000001f) // to avoid large distortions!
 	{
-		const int nb_joints = weights[v].size(); // Number of joints influencing vertex p
-
-		// Init dual quaternion with first joint transformation
-		int   k0 = -1;
-		float w0 = 0.f;
-		Dual_quat_cu dq_blend;
-		Quat_cu q0;
-
-		if (nb_joints != 0)
+		S = sqrt(T) * 2.f;
+		X = (_m[2][1] - _m[1][2]) / S;
+		Y = (_m[0][2] - _m[2][0]) / S;
+		Z = (_m[1][0] - _m[0][1]) / S;
+		W = 0.25f * S;
+	}
+	else
+	{
+		if (_m[0][0] > _m[1][1] && _m[0][0] > _m[1][1])
 		{
-			k0 = joints_id[v][0];
-			w0 = weights[v][0];
+			// Column 0 :
+			S = sqrt(1.0f + _m[0][0] - _m[1][1] - _m[2][2]) * 2.f;
+			X = 0.25f * S;
+			Y = (_m[1][0] + _m[0][1]) / S;
+			Z = (_m[0][2] + _m[2][0]) / S;
+			W = (_m[2][1] - _m[1][2]) / S;
+		}
+		else if (_m[1][1] > _m[2][2])
+		{
+			// Column 1 :
+			S = sqrt(1.0f + _m[1][1] - _m[0][0] - _m[2][2]) * 2.f;
+			X = (_m[1][0] + _m[0][1]) / S;
+			Y = 0.25f * S;
+			Z = (_m[2][1] + _m[1][2]) / S;
+			W = (_m[0][2] - _m[2][0]) / S;
 		}
 		else
-			dq_blend = Dual_quat_cu::identity();
-
-		if (k0 != -1) dq_blend = dual_quat[k0] * w0;
-
-		int pivot = k0;
-
-		q0 = dual_quat[pivot].rotation();
-		// Look up the other joints influencing 'p' if any
-		for (int j = 1; j < nb_joints; j++)
-		{
-			const int k = joints_id[v][j];
-			float w = weights[v][j];
-			const Dual_quat_cu& dq = (k == -1) ? Dual_quat_cu::identity() : dual_quat[k];
-
-			if (dq.rotation().dot(q0) < 0.f)
-				w *= -1.f;
-
-			dq_blend = dq_blend + dq * w;
+		{   // Column 2 :
+			S = sqrt(1.0f + _m[2][2] - _m[0][0] - _m[1][1]) * 2.f;
+			X = (_m[0][2] + _m[2][0]) / S;
+			Y = (_m[2][1] + _m[1][2]) / S;
+			Z = 0.25f * S;
+			W = (_m[1][0] - _m[0][1]) / S;
 		}
-
-		// Compute animated position
-		Vec3 vi = dq_blend.transform(in_verts[v]).to_vec3();
-		out_verts[v] = vi;
-		// Compute animated normal
-		out_normals[v] = dq_blend.rotate(in_normals[v]);
 	}
+	
+	return glm::quat(W, -X, -Y, -Z);
+}
+
+glm::dualquat dual_quat_from(const glm::quat& q, const glm::vec3& t)
+{
+	float w = -0.5f * (t.x * q.x + t.y * q.y + t.z * q.z);
+	float i = 0.5f * (t.x * q.w + t.y * q.z - t.z * q.y);
+	float j = 0.5f * (-t.x * q.z + t.y * q.w + t.z * q.x);
+	float k = 0.5f * (t.x * q.y - t.y * q.x + t.z * q.w);
+
+	return glm::dualquat(q, glm::quat(w, i, j, k));
 }
 
 void Mesh::UpdateVertices(const Rig& rig)
 {
 	glBindVertexArray(vao);
-
-	std::vector<Dual_quat_cu> dquats;
+	
+	std::vector<glm::dualquat> dquats;
+	std::vector<glm::vec3> animatedPositions(positions.size(), glm::vec3(0));
+	std::vector<glm::vec3> animatedNormals(normals.size(), glm::vec3(0));
+	
 	std::vector<std::vector<float>> weights(positions.size(), std::vector<float>());
 	std::vector<std::vector<int>> jointsID(positions.size(), std::vector<int>());
-	std::vector<Vec3> animatedPositions(positions.size(), Vec3(0));
-	std::vector<Vec3> animatedNormals(normals.size(), Vec3(0));
+
 	for (int i = 0; i < m_bones.size(); i++)
 	{
 		const Bone& bone = m_bones[i];
@@ -103,13 +91,13 @@ void Mesh::UpdateVertices(const Rig& rig)
 		glm::mat4 globalTransform = joint->GetGlobalTransform();
 		glm::mat4 finalTransform = globalTransform * offsetMatrix;
 
-		Transfo mat(finalTransform[0][0], finalTransform[1][0], finalTransform[2][0], finalTransform[3][0],
-			finalTransform[0][1], finalTransform[1][1], finalTransform[2][1], finalTransform[3][1],
-			finalTransform[0][2], finalTransform[1][2], finalTransform[2][2], finalTransform[3][2],
-			finalTransform[0][3], finalTransform[1][3], finalTransform[2][3], finalTransform[3][3]);
+		auto trans = Mat4ToQuat(finalTransform);
+
+
+
+		auto dq = dual_quat_from(trans, glm::vec3(finalTransform[3][0], finalTransform[3][1], finalTransform[3][2]));
 		
-		auto dquat = Dual_quat_cu(mat);
-		dquats.push_back(dquat);
+		dquats.push_back(dq);
 
 		for (const VertexWeight& vertexWeight : bone.m_weights)
 		{
@@ -124,15 +112,7 @@ void Mesh::UpdateVertices(const Rig& rig)
 		}
 	}
 
-	std::vector<Point3> in_verts(positions.size());
-	std::vector<Vec3> in_norms(positions.size());
-	for (int i = 0; i < positions.size(); i++)
-	{
-		in_verts[i] = Point3(positions[i].x, positions[i].y, positions[i].z);
-		in_norms[i] = Vec3(normals[i].x, normals[i].y, normals[i].z);
-	}
-
-	dual_quat_deformer(in_verts, in_norms, animatedPositions, animatedNormals, dquats, weights, jointsID);
+	DualQuaternionBlending(animatedPositions, animatedNormals, dquats, weights, jointsID);
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
@@ -153,6 +133,92 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glBufferData(GL_ARRAY_BUFFER, linearNormals.size() * sizeof(glm::vec3), linearNormals.data(), GL_DYNAMIC_DRAW);
+}
+
+glm::vec3 RotatePoint(glm::quat q, const glm::vec3& v)
+{
+
+	// The conventionnal way to rotate a vector
+	/*
+	Quat_cu tmp = *this;
+	tmp.normalize();
+	// Compute the quaternion inverse with
+	Quat_cu inv = tmp.conjugate();
+	// Compute q * v * inv; in order to rotate the vector v
+	// to do so v must be expressed as the quaternion q(0, v.x, v.y, v.z)
+	return (Vec3)(*this * Quat_cu(0, v) * inv);
+	*/
+
+	// An optimized way to compute rotation
+	glm::vec3 q_vec = glm::vec3(q.x, q.y, q.z);
+	return v + glm::cross((q_vec * 2.f), (glm::cross(q_vec, (v))) + v * q.w);
+}
+
+glm::vec3 TransformPoint(glm::dualquat dq, glm::vec3 p)
+{
+	// As the dual quaternions may be the results from a
+// linear blending we have to normalize it :
+	float norm = glm::length(dq.real);
+	glm::quat qblend_0 = dq.real / norm;
+	glm::quat qblend_e = dq.dual / norm;
+
+	// Translation from the normalized dual quaternion equals :
+	// 2.f * qblend_e * conjugate(qblend_0)
+	glm::vec3 v0 = glm::vec3(qblend_0.x, qblend_0.y, qblend_0.z);
+	glm::vec3 ve = glm::vec3(qblend_e.x, qblend_e.y, qblend_e.z);
+	glm::vec3 trans = (ve * qblend_0.w - v0 * qblend_e.w + cross(v0, ve)) * 2.f;
+
+	// Rotate
+	return RotatePoint(qblend_0, p) + trans;
+}
+
+void Mesh::DualQuaternionBlending(std::vector<glm::vec3>& out_verts, std::vector<glm::vec3>& out_normals,
+	const std::vector<glm::dualquat>& dual_quat, const std::vector<std::vector<float>>& weights,
+	const std::vector<std::vector<int>>& joints_id)
+{
+	for (unsigned v = 0; v < positions.size(); ++v)
+	{
+		const int nb_joints = weights[v].size(); // Number of joints influencing vertex p
+
+		// Init dual quaternion with first joint transformation
+		int   k0 = -1;
+		float w0 = 0.f;
+		glm::dualquat dq_blend;
+		glm::quat q0;
+
+		if (nb_joints != 0)
+		{
+			k0 = joints_id[v][0];
+			w0 = weights[v][0];
+		}
+		else
+			dq_blend = glm::dualquat(glm::quat(1,0,0,0), glm::vec3(0,0,0));
+
+		if (k0 != -1) dq_blend = dual_quat[k0] * w0;
+
+		int pivot = k0;
+
+		q0 = dual_quat[pivot].real;
+		// Look up the other joints influencing 'p' if any
+		for (int j = 1; j < nb_joints; j++)
+		{
+			const int k = joints_id[v][j];
+			float w = weights[v][j];
+			const glm::dualquat& dq = (k == -1) ? glm::dualquat(glm::quat(1, 0, 0, 0), glm::vec3(0, 0, 0)) : dual_quat[k];
+
+			if (glm::dot(dq.real, q0) < 0.f)
+				w *= -1.f;
+
+			dq_blend = dq_blend + dq * w;
+		}
+
+		// Compute animated position
+		glm::vec3 vi = TransformPoint(dq_blend, positions[v]);
+		out_verts[v] = vi;
+		
+		// Compute animated normal
+		out_normals[v] = RotatePoint(glm::normalize(dq_blend.real), normals[v]);
+	}
 }
 
 void Mesh::Upload()
