@@ -24,6 +24,14 @@ set(ANIMATION_BASE_SOURCES
     ${DIR}/AnimationClip.cpp
     ${DIR}/Channel.h
     ${DIR}/Channel.cpp
+    
+    ${DIR}/DQB/dual_quat_cu.hpp
+    ${DIR}/DQB/mat3.hpp
+    ${DIR}/DQB/point3.hpp
+    ${DIR}/DQB/quat_cu.hpp
+    ${DIR}/DQB/transfo.hpp
+    ${DIR}/DQB/vec3.hpp
+
     ${DIR}/KeyFrame.h
     ${DIR}/KeyFrame.cpp
     ${DIR}/Joint.h
