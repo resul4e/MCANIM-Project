@@ -69,29 +69,29 @@ void DQS::Skin(const std::vector<glm::vec3>& i_verts, const std::vector<glm::vec
 {
 	for (unsigned v = 0; v < i_verts.size(); ++v)
 	{
-		const int nb_joints = _weights[v].size(); // Number of joints influencing vertex p
+		const int nbJoints = _weights[v].size(); // Number of joints influencing vertex p
 
 		// Init dual quaternion with first joint transformation
 		int   k0 = -1;
 		float w0 = 0.f;
-		glm::dualquat dq_blend;
+		glm::dualquat dqBlend;
 		glm::quat q0;
 
-		if (nb_joints != 0)
+		if (nbJoints != 0)
 		{
 			k0 = _jointIDs[v][0];
 			w0 = _weights[v][0];
 		}
 		else
-			dq_blend = glm::dualquat(glm::quat(1, 0, 0, 0), glm::vec3(0, 0, 0));
+			dqBlend = glm::dualquat(glm::quat(1, 0, 0, 0), glm::vec3(0, 0, 0));
 
-		if (k0 != -1) dq_blend = _dualQuat[k0] * w0;
+		if (k0 != -1) dqBlend = _dualQuat[k0] * w0;
 
 		int pivot = k0;
 
 		q0 = _dualQuat[pivot].real;
 		// Look up the other joints influencing 'p' if any
-		for (int j = 1; j < nb_joints; j++)
+		for (int j = 1; j < nbJoints; j++)
 		{
 			const int k = _jointIDs[v][j];
 			float w = _weights[v][j];
@@ -100,14 +100,14 @@ void DQS::Skin(const std::vector<glm::vec3>& i_verts, const std::vector<glm::vec
 			if (glm::dot(dq.real, q0) < 0.f)
 				w *= -1.f;
 
-			dq_blend = dq_blend + dq * w;
+			dqBlend = dqBlend + dq * w;
 		}
 
 		// Compute animated position
-		glm::vec3 vi = TransformPoint(dq_blend, i_verts[v]);
+		const glm::vec3 vi = TransformPoint(dqBlend, i_verts[v]);
 		o_verts[v] = vi;
 
 		// Compute animated normal
-		o_normals[v] = RotatePoint(glm::normalize(dq_blend.real), i_normals[v]);
+		o_normals[v] = RotatePoint(glm::normalize(dqBlend.real), i_normals[v]);
 	}
 }
