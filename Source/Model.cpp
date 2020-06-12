@@ -137,11 +137,10 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 		const glm::mat4& offsetMatrix = bone.m_offsetMatrix;
 		glm::mat4 globalTransform = joint->GetGlobalTransform();
-		glm::mat4 finalTransform = glm::inverse(globalTransform * offsetMatrix);
-
+		glm::mat4 finalTransform = globalTransform * offsetMatrix;
 
 		Transfo mat(finalTransform[0][0], finalTransform[1][0], finalTransform[2][0], finalTransform[3][0],
-			finalTransform[0][1], finalTransform[1][1], finalTransform[0][1], finalTransform[0][1],
+			finalTransform[0][1], finalTransform[1][1], finalTransform[2][1], finalTransform[3][1],
 			finalTransform[0][2], finalTransform[1][2], finalTransform[2][2], finalTransform[3][2],
 			finalTransform[0][3], finalTransform[1][3], finalTransform[2][3], finalTransform[3][3]);
 		
