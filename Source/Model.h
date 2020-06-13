@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <glm/gtx/dual_quaternion.hpp>
 
 struct Face
 {
@@ -35,6 +36,9 @@ struct Mesh
 	std::vector<glm::vec3> normals;
 	std::vector<Face> faces;
 	std::vector<Bone> m_bones;
+
+	std::vector<glm::vec3> animatedPositions;  
+	std::vector<glm::vec3> animatedNormals;
 
 	unsigned int vao;
 	unsigned int pbo;

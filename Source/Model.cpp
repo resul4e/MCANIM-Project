@@ -2,35 +2,22 @@
 
 #include "Rig.h"
 #include "Joint.h"
+#include "DQS.h"
 
 #include <glad/glad.h>
 #include <iostream>
-#include <glm/gtx/string_cast.hpp>
+
+
 
 void Mesh::UpdateVertices(const Rig& rig)
 {
 	glBindVertexArray(vao);
 
-	std::vector<glm::vec3> animatedPositions(positions.size(), glm::vec3(0));
-	std::vector<glm::vec3> animatedNormals(normals.size(), glm::vec3(0));
-	for (const Bone& bone : m_bones)
-	{
-		std::shared_ptr<Joint> joint = rig.GetJoint(bone.m_name);
-		if (joint == nullptr) continue;
-
-		const glm::mat4& offsetMatrix = bone.m_offsetMatrix;
-		glm::mat4 globalTransform = joint->GetGlobalTransform();
-		glm::mat4 finalTransform = globalTransform * offsetMatrix;
-
-		for (const VertexWeight& vertexWeight : bone.m_weights)
-		{
-			const int& vIndex = vertexWeight.m_vertexIndex;
-			const float& vWeight = vertexWeight.m_weight;
-			glm::vec4 v = glm::vec4(positions[vIndex], 1);
-			animatedPositions[vIndex] += glm::vec3(finalTransform * v) * vWeight;
-			animatedNormals[vIndex] += glm::mat3(finalTransform) * normals[vertexWeight.m_vertexIndex] * vWeight;
-		}
-	}
+	animatedPositions = std::vector<glm::vec3>(positions.size(), glm::vec3(0));
+	animatedNormals = std::vector<glm::vec3>(normals.size(), glm::vec3(0));
+	
+	std::shared_ptr<Skinning> skinner = std::make_shared<DQS>();
+	skinner->Skin(rig, *this);
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
@@ -41,8 +28,8 @@ void Mesh::UpdateVertices(const Rig& rig)
 		Face& face = faces[i];
 		for (int v = 0; v < 3; v++)
 		{
-			linearPositions[i * 3 + v] = animatedPositions[face.indices[v]];
-			linearNormals[i * 3 + v] = animatedNormals[face.indices[v]];
+			linearPositions[i * 3 + v] = glm::vec3(animatedPositions[face.indices[v]].x, animatedPositions[face.indices[v]].y, animatedPositions[face.indices[v]].z);
+			linearNormals[i * 3 + v] = glm::vec3(animatedNormals[face.indices[v]].x, animatedNormals[face.indices[v]].y, animatedNormals[face.indices[v]].z);
 		}
 	}
 
