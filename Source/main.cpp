@@ -41,12 +41,12 @@ public:
 		scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
 		scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 		scene.GetModel().Upload();
-
+		
+		AnimationLoader::assetPath = assetPath.string();
 		// Load all animations from file and add them to the player
-		for (const std::string& animationPath : animationPaths)
+		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew())
 		{
-			std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(assetPath.string() + "/" + animationPath);
-			player.AddAnimation(anim);
+			player.AddAnimation(animation);
 		}
 		
 		renderer.Initialize(assetPath);

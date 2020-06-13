@@ -2,6 +2,7 @@
 #include "AnimationClip.h"
 #include "Channel.h"
 #include "KeyFrame.h"
+#include <windows.h>
 
 #include <cassert>
 
@@ -9,6 +10,8 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
+
+std::map<std::string, std::shared_ptr<AnimationClip>> AnimationLoader::loadedAnimationClips;
 
 std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::path _filePath)
 {
@@ -52,4 +55,46 @@ std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::p
 	}
 
 	return animation;
+}
+
+std::vector<std::shared_ptr<AnimationClip>> AnimationLoader::ScanNew() {
+	std::vector<std::string> fileNames;
+	std::vector<std::shared_ptr<AnimationClip>> animations;
+
+	HANDLE dir;
+	WIN32_FIND_DATA file_data;
+
+	if ((dir = FindFirstFile((AnimationLoader::assetPath + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
+		return animations; /* No files found */
+
+	do {
+		const std::string file_name = file_data.cFileName;
+		const std::string full_file_name = AnimationLoader::assetPath + "/" + file_name;
+		const bool is_directory = (file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+
+		if (file_name[0] == '.')
+			continue;
+
+		if (is_directory)
+			continue;
+
+		if (file_name.substr(file_name.find_last_of(".") + 1) == "fbx") {
+			fileNames.push_back(full_file_name);
+		}
+	} while (FindNextFile(dir, &file_data));
+
+	FindClose(dir);
+
+
+	for (std::string animationPath : fileNames) {
+		// Only add if not found in loaded Animation Clips
+		if (AnimationLoader::loadedAnimationClips.find(animationPath) == AnimationLoader::loadedAnimationClips.end()) {
+			printf("Adding fbx: %s\n", animationPath.c_str());
+			std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(animationPath);
+			AnimationLoader::loadedAnimationClips.insert(std::make_pair(animationPath, anim));
+			animations.push_back(anim);
+		}
+	}
+
+	return animations;
 }

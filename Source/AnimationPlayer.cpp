@@ -1,4 +1,5 @@
 #include "AnimationPlayer.h"
+#include "AnimationLoader.h"
 #include "Rig.h"
 #include "Joint.h"
 #include "Model.h"
@@ -103,6 +104,14 @@ void AnimationPlayer::ImGuiRender()
 		}
 		ImGui::EndCombo();
 	}
+
+	//Animation loading button
+	if (ImGui::Button("Rescan Animations")) {
+		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew()) {
+			AddAnimation(animation);
+		}
+	}
+
 
 	//Play/pause button.
 	bool playing = m_state == PlaybackState::PLAYING;
