@@ -3,6 +3,7 @@
 #include "Rig.h"
 #include "Joint.h"
 #include "DQS.h"
+#include "LinearBlendSkinning.h"
 
 #include <glad/glad.h>
 #include <iostream>

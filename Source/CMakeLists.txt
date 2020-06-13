@@ -37,6 +37,8 @@ set(ANIMATION_BASE_SOURCES
 set(ANIMATION_SKINNING_SOURCES
     ${DIR}/Skinning.h
     ${DIR}/Skinning.cpp
+    ${DIR}/LinearBlendSkinning.h
+    ${DIR}/LinearBlendSkinning.cpp
     ${DIR}/DQS.h
     ${DIR}/DQS.cpp
     PARENT_SCOPE
