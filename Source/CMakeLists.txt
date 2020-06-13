@@ -24,10 +24,6 @@ set(ANIMATION_BASE_SOURCES
     ${DIR}/AnimationClip.cpp
     ${DIR}/Channel.h
     ${DIR}/Channel.cpp
-    ${DIR}/Skinning.h
-    ${DIR}/Skinning.cpp
-    ${DIR}/DQS.h
-    ${DIR}/DQS.cpp
     ${DIR}/glmConversion.h
     ${DIR}/KeyFrame.h
     ${DIR}/KeyFrame.cpp
@@ -35,6 +31,14 @@ set(ANIMATION_BASE_SOURCES
     ${DIR}/Joint.cpp
     ${DIR}/Rig.h
     ${DIR}/Rig.cpp
+    PARENT_SCOPE
+)
+
+set(ANIMATION_SKINNING_SOURCES
+    ${DIR}/Skinning.h
+    ${DIR}/Skinning.cpp
+    ${DIR}/DQS.h
+    ${DIR}/DQS.cpp
     PARENT_SCOPE
 )
 
@@ -51,6 +55,8 @@ set(RENDERING_SOURCES
     ${DIR}/stb_image.cpp
     ${DIR}/Texture.h
     ${DIR}/Texture.cpp
+    ${DIR}/ArcBall.h
+    ${DIR}/ArcBall.cpp
     ${DIR}/glad.c
     PARENT_SCOPE
 )

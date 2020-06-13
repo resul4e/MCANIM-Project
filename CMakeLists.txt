@@ -25,12 +25,14 @@ add_subdirectory(Source)
 add_executable(${AnimationProject}
     ${BASE_SOURCES}
     ${ANIMATION_BASE_SOURCES}
+    ${ANIMATION_SKINNING_SOURCES}
     ${RENDERING_SOURCES}
     ${IMGUI_SOURCES}
 )
 
 source_group(Source FILES ${BASE_SOURCES})
-source_group(Source\\AnimationBase FILES ${ANIMATION_BASE_SOURCES})
+source_group(Source\\Animation FILES ${ANIMATION_BASE_SOURCES})
+source_group(Source\\Animation\\Skinning FILES ${ANIMATION_SKINNING_SOURCES})
 source_group(Source\\Rendering FILES ${RENDERING_SOURCES})
 source_group(Source\\ImGui FILES ${IMGUI_SOURCES})
 
