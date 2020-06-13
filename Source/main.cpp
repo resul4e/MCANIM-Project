@@ -19,13 +19,14 @@
 
 std::vector<std::string> animationPaths
 {
-	"Idle.fbx",
+	"Idle.fbx",	
 	"SkinningTest.fbx",
 	"Capoeira.fbx",
 	"Samba Dancing.fbx",
 	"Hit Reaction.fbx",
 	"Prone Left Turn.fbx",
-	"Turn Right.fbx"
+	"Turn Right.fbx",
+	"DQBTest.fbx"
 };
 
 class Application : public ResizeListener
