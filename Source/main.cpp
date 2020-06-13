@@ -17,18 +17,6 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> animationPaths
-{
-	"Idle.fbx",	
-	"SkinningTest.fbx",
-	"Capoeira.fbx",
-	"Samba Dancing.fbx",
-	"Hit Reaction.fbx",
-	"Prone Left Turn.fbx",
-	"Turn Right.fbx",
-	"DQBTest.fbx"
-};
-
 class Application : public ResizeListener
 {
 public:
@@ -42,10 +30,9 @@ public:
 		scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 		scene.GetModel().Upload();
 		
-		AnimationLoader::assetPath = assetPath.string();
 		// Load all animations from file and add them to the player
-		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew())
-		{
+		AnimationLoader::assetPath = assetPath.string();
+		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew()){
 			player.AddAnimation(animation);
 		}
 		
