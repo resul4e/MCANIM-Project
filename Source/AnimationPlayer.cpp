@@ -7,6 +7,7 @@
 #include "AnimationClip.h"
 #include "Channel.h"
 #include "imgui.h"
+#include "FBXLoader.h"
 
 AnimationPlayer::AnimationPlayer() :
 	time(0),
@@ -107,8 +108,11 @@ void AnimationPlayer::ImGuiRender()
 
 	//Animation loading button
 	if (ImGui::Button("Rescan Animations")) {
-		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew()) {
-			AddAnimation(animation);
+		FBXLoader::ScanNew();
+		for (std::shared_ptr<AnimationClip> animation : FBXLoader::fbxAnimations) {
+			if (std::find(m_animations.begin(), m_animations.end(), animation) == m_animations.end()){
+				AddAnimation(animation);
+			}
 		}
 	}
 

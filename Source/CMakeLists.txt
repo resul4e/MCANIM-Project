@@ -14,6 +14,10 @@ set(BASE_SOURCES
     ${DIR}/Scene.cpp
     ${DIR}/InterfaceController.h
     ${DIR}/InterfaceController.cpp
+    ${DIR}/FBXLoader.h
+    ${DIR}/FBXLoader.cpp
+    ${DIR}/ModelSelector.h
+    ${DIR}/ModelSelector.cpp
     PARENT_SCOPE
 )
 

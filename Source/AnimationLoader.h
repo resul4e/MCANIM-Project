@@ -12,9 +12,6 @@ class AnimationLoader
 public:
 	AnimationLoader() = delete;
 	~AnimationLoader() = delete;
-	
-	inline static std::string assetPath;
-	static std::map<std::string, std::shared_ptr<AnimationClip>> loadedAnimationClips;
 
 	/**
 	 * \brief Loads an AnimationClip, the associated Channels and its KeyFrames and returns the pointer to the AnimationClip.
@@ -22,7 +19,4 @@ public:
 	 * \return The AnimationClip that stores all data.
 	 */
 	static std::shared_ptr<AnimationClip> LoadAnimation(std::filesystem::path _filePath);
-
-	static std::vector<std::shared_ptr<AnimationClip>> ScanNew();
-
 };

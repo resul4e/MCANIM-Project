@@ -13,6 +13,8 @@
 #include "Model.h"
 #include "InterfaceController.h"
 #include "AnimationPlayer.h"
+#include "FBXLoader.h"
+#include "ModelSelector.h"
 
 #include <vector>
 #include <string>
@@ -26,16 +28,19 @@ public:
 		window.AddResizeListener(this);
 		interfaceController.Setup(window);
 
+		// Load all fbx files
+		FBXLoader::assetPath = assetPath.string();
+		FBXLoader::ScanNew();
+		for (std::shared_ptr<AnimationClip> animation : FBXLoader::fbxAnimations){
+			player.AddAnimation(animation);
+		}
+
+		modelSelector.setScene(&scene);
+
 		scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
 		scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
 		scene.GetModel().Upload();
-		
-		// Load all animations from file and add them to the player
-		AnimationLoader::assetPath = assetPath.string();
-		for (std::shared_ptr<AnimationClip> animation : AnimationLoader::ScanNew()){
-			player.AddAnimation(animation);
-		}
-		
+
 		renderer.Initialize(assetPath);
 
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");
@@ -77,6 +82,7 @@ public:
 
 			// ImGui rendering
 			player.ImGuiRender();
+			modelSelector.ImGuiRender();
 
 			interfaceController.End();
 			window.Render();
@@ -102,6 +108,7 @@ private:
 	Scene scene;
 	InterfaceController interfaceController;
 	AnimationPlayer player;
+	ModelSelector modelSelector;
 };
 
 int main(int argc, char** argv)
