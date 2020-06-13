@@ -57,8 +57,6 @@ set(RENDERING_SOURCES
     ${DIR}/stb_image.cpp
     ${DIR}/Texture.h
     ${DIR}/Texture.cpp
-    ${DIR}/ArcBall.h
-    ${DIR}/ArcBall.cpp
     ${DIR}/glad.c
     PARENT_SCOPE
 )
