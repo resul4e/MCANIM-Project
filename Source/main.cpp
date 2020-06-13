@@ -64,6 +64,13 @@ public:
 			{
 				renderer.ToggleRigRendering();
 			}
+			if (ImGui::IsKeyPressed('S' /*S*/))
+			{
+				for(Mesh& m : scene.GetModel().meshes)
+				{
+					m.ToggleSkinning();
+				}
+			}
 
 			// ImGui rendering
 			player.ImGuiRender();

@@ -5,6 +5,9 @@
 #include <vector>
 #include <string>
 #include <glm/gtx/dual_quaternion.hpp>
+#include <memory>
+
+class Skinning;
 
 struct Face
 {
@@ -28,8 +31,11 @@ class Rig;
 
 struct Mesh
 {
+	Mesh();
+
 	void Upload();
 	void UpdateVertices(const Rig& rig);
+	void ToggleSkinning();
 
 	std::vector<glm::vec3> positions;
 	std::vector<glm::vec2> texCoords;
@@ -40,10 +46,14 @@ struct Mesh
 	std::vector<glm::vec3> animatedPositions;  
 	std::vector<glm::vec3> animatedNormals;
 
+	std::shared_ptr<Skinning> skinner;
+
 	unsigned int vao;
 	unsigned int pbo;
 	unsigned int nbo;
 	unsigned int tbo;
+
+	bool m_dqb = true;
 };
 
 class Model

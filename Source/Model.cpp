@@ -8,7 +8,11 @@
 #include <glad/glad.h>
 #include <iostream>
 
+Mesh::Mesh() :
+	skinner(std::make_shared<DQS>())
+{
 
+}
 
 void Mesh::UpdateVertices(const Rig& rig)
 {
@@ -17,7 +21,6 @@ void Mesh::UpdateVertices(const Rig& rig)
 	animatedPositions = std::vector<glm::vec3>(positions.size(), glm::vec3(0));
 	animatedNormals = std::vector<glm::vec3>(normals.size(), glm::vec3(0));
 	
-	std::shared_ptr<Skinning> skinner = std::make_shared<DQS>();
 	skinner->Skin(rig, *this);
 
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
@@ -39,6 +42,19 @@ void Mesh::UpdateVertices(const Rig& rig)
 
 	glBindBuffer(GL_ARRAY_BUFFER, nbo);
 	glBufferData(GL_ARRAY_BUFFER, linearNormals.size() * sizeof(glm::vec3), linearNormals.data(), GL_DYNAMIC_DRAW);
+}
+
+void Mesh::ToggleSkinning()
+{
+	m_dqb = !m_dqb;
+	if (m_dqb)
+	{
+		skinner = std::make_shared<DQS>();
+	}
+	else
+	{
+		skinner = std::make_shared<LinearBlendSkinning>();
+	}
 }
 
 void Mesh::Upload()
