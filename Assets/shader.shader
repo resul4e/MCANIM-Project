@@ -31,6 +31,7 @@ in vec3 v_Normal;
 in vec2 v_TexCoord;
 uniform sampler2D u_Texture;
 uniform sampler2D u_EnvTexture;
+uniform sampler2D u_specular;
 uniform vec3 u_CamPos;
 
 const float PI = 3.141592653589793;
@@ -69,5 +70,6 @@ void main()
     vec3 diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
     vec3 Radiance = diffuseColor * max(0, dot(N, L)) * lightIntensity;
     Radiance += envColor * 0.1;
-    color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
+    vec3 specular = lightIntensity * 0.1 * vec3(texture(u_specular, v_TexCoord));
+    color = vec4(reinhardToneMapping(Radiance, 1.5) + specular, 1);
 };

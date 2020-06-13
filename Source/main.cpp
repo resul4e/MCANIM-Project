@@ -41,6 +41,9 @@ public:
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");
 		scene.SetTexture(texture);
 
+		std::shared_ptr<Texture> specularMap = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__specular.png");
+		scene.SetSpecularMap(specularMap);
+
 		std::shared_ptr<Texture> skyTexture = std::make_shared<Texture>(assetPath.string() + "/Background.jpg");
 		renderer.SetBackgroundTexture(skyTexture);
 

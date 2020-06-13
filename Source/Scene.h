@@ -13,13 +13,16 @@ public:
 	Model& GetModel();
 	Rig& GetRig();
 	Texture& GetTexture();
+	Texture& GetSpecularMap();
 	void SetModel(std::shared_ptr<Model> model);
 	void SetRig(std::shared_ptr<Rig> rig);
 	void SetTexture(std::shared_ptr<Texture> texture);
+	void SetSpecularMap(std::shared_ptr<Texture> texture);
 
 private:
 	Camera m_camera;
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Rig> m_rig;
 	std::shared_ptr<Texture> m_texture;
+	std::shared_ptr<Texture> m_specularMap;
 };

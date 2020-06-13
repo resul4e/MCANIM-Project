@@ -29,6 +29,11 @@ Texture& Scene::GetTexture()
 	return *m_texture;
 }
 
+Texture& Scene::GetSpecularMap()
+{
+	return *m_specularMap;
+}
+
 void Scene::SetModel(std::shared_ptr<Model> model)
 {
 	m_camera.position.x = (model->maxBounds.x + model->minBounds.x) / 2;
@@ -48,4 +53,9 @@ void Scene::SetRig(std::shared_ptr<Rig> rig)
 void Scene::SetTexture(std::shared_ptr<Texture> texture)
 {
 	m_texture = texture;
+}
+
+void Scene::SetSpecularMap(std::shared_ptr<Texture> texture)
+{
+	m_specularMap = texture;
 }
