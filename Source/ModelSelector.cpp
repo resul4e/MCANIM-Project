@@ -13,8 +13,8 @@ void ModelSelector::setScene(Scene* _scene) {
 }
 
 void ModelSelector::ImGuiRender() {
-	if (ImGui::IsKeyPressed(71 /*G*/)) {
-		m_isGuiOpen = !m_isGuiOpen;
+	if (ImGui::IsKeyPressed('M' /*G*/)) {
+		ToggleImguiWindow();
 	}
 
 	if (!m_isGuiOpen) {
@@ -41,4 +41,9 @@ void ModelSelector::ImGuiRender() {
 	}
 
 	ImGui::End();
+}
+
+void ModelSelector::ToggleImguiWindow()
+{
+	m_isGuiOpen = !m_isGuiOpen;
 }

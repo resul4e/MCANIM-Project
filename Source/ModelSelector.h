@@ -19,6 +19,10 @@ public:
 	 */
 	void ImGuiRender();
 
+	void ToggleImguiWindow();
+
+	bool IsGuiOpen() { return m_isGuiOpen; }
+	
 private:
 
 	//If we should have the GUI open

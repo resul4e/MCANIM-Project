@@ -74,9 +74,9 @@ void AnimationPlayer::Reset()
 
 void AnimationPlayer::ImGuiRender()
 {
-	if(ImGui::IsKeyPressed(71 /*G*/))
+	if(ImGui::IsKeyPressed('G' /*G*/))
 	{
-		m_isGuiOpen = !m_isGuiOpen;
+		ToggleImguiWindow();
 	}
 	
 	if(!m_isGuiOpen)
@@ -146,4 +146,9 @@ void AnimationPlayer::ImGuiRender()
 	}
 
 	ImGui::End();
+}
+
+void AnimationPlayer::ToggleImguiWindow()
+{
+	m_isGuiOpen = !m_isGuiOpen;
 }

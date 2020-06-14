@@ -17,6 +17,7 @@ public:
 	void Update(Scene& scene);
 	void SetBackgroundTexture(std::shared_ptr<Texture> texture);
 	void ToggleRigRendering();
+	bool IsRenderingRig() { return renderRig; }
 
 private:
 	void RenderSky(Scene& scene);

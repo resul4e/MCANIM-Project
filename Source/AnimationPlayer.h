@@ -54,6 +54,10 @@ public:
 	 */
 	void ImGuiRender();
 
+	void ToggleImguiWindow();
+
+	bool IsGuiOpen() { return m_isGuiOpen; };
+
 private:
 
 	//The current time of the playback. Will be reset to 0 once the animation has been fully played.

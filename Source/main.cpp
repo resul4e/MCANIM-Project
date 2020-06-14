@@ -68,6 +68,8 @@ public:
 			player.Update(scene, dt);
 			renderer.Update(scene);
 
+			CreateMainMenuBar();
+			
 			if (ImGui::IsKeyPressed('J' /*J*/))
 			{
 				renderer.ToggleRigRendering();
@@ -103,6 +105,44 @@ public:
 	}
 
 private:
+
+	void CreateMainMenuBar()
+	{
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("Windows"))
+			{
+				if (ImGui::MenuItem("Animation Player", "G", player.IsGuiOpen()))
+				{
+					player.ToggleImguiWindow();
+				}
+				if (ImGui::MenuItem("Model Selector", "M", modelSelector.IsGuiOpen()))
+				{
+					modelSelector.ToggleImguiWindow();
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Settings"))
+			{
+				if (ImGui::MenuItem("Render Rig", "J", renderer.IsRenderingRig()))
+				{
+					renderer.ToggleRigRendering();
+				}
+				if (ImGui::MenuItem("Use Dual Quaternion Skinning", "S", scene.GetModel().meshes[0].m_dqb))
+				{
+					for (Mesh& m : scene.GetModel().meshes)
+					{
+						m.ToggleSkinning();
+					}
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+	}
+	
 	Window window;
 	Renderer renderer;
 	Scene scene;
