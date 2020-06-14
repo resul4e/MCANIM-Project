@@ -18,6 +18,7 @@ set(BASE_SOURCES
     ${DIR}/FBXLoader.cpp
     ${DIR}/ModelSelector.h
     ${DIR}/ModelSelector.cpp
+    ${DIR}/Options.h
     PARENT_SCOPE
 )
 

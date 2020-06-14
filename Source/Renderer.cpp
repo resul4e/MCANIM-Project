@@ -1,13 +1,15 @@
 #include "Renderer.h"
 
 #include "Joint.h"
-#include "ModelLoader.h" // Temp
+#include "Options.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
 #include <glad/glad.h>
+
+bool Options::RenderTextures = true;
 
 Renderer::Renderer() :
 	renderRig(true),
@@ -150,7 +152,7 @@ void Renderer::RenderModel(Scene& scene)
 	shader->SetMatrix4("viewMatrix", viewMatrix);
 	shader->SetMatrix4("modelMatrix", modelMatrix);
 
-	if (scene.GetTexture() != nullptr)
+	if (scene.GetTexture() != nullptr && Options::RenderTextures)
 	{
 		scene.GetTexture()->Bind(0);
 		shader->SetUniform1i("u_Texture", 0);

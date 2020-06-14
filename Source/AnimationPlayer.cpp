@@ -8,6 +8,7 @@
 #include "Channel.h"
 #include "imgui.h"
 #include "FBXLoader.h"
+#include "Options.h"
 
 AnimationPlayer::AnimationPlayer() :
 	time(0),
@@ -174,6 +175,9 @@ void AnimationPlayer::ImGuiRender()
 	{
 		Pause();
 	}
+
+	// Texture toggle
+	ImGui::Checkbox("Enable Textures", &Options::RenderTextures);
 
 	ImGui::End();
 }
