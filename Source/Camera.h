@@ -12,6 +12,7 @@ public:
 	void LookAt(glm::mat4& m, const glm::vec3& eye, const glm::vec3& center, const glm::vec3& top);
 
 	glm::vec3 position;
+	glm::vec3 rotation;
 	float distance;
 
 private:

@@ -23,7 +23,6 @@ public:
 	void SetTexture(std::shared_ptr<Texture> texture);
 	void SetSpecularMap(std::shared_ptr<Texture> texture);
 
-	glm::quat rot = glm::quat(1, 0, 0, 0);
 private:
 	Camera m_camera;
 	ArcBall m_arcball;

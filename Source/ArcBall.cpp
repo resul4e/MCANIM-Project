@@ -3,48 +3,6 @@
 #include "Scene.h"
 
 #include <glm/glm.hpp>
-#include <algorithm>
-
-glm::vec3 FindConstrainedPoint(glm::vec3 fp, glm::vec3 axis)
-{
-	float d = glm::dot(fp, axis);
-	glm::vec3 proj = fp - (axis * d);
-	float norm = glm::length(proj);
-	glm::vec3 P = fp;
-	if (norm > 0)
-	{
-		float s = 1 / norm;
-		if (proj.z < 0)
-			s = -s;
-		P = proj * s;
-	}
-	else if (axis.z == 1.0)
-	{
-		P = glm::vec3(1, 0, 0);
-	}
-	else
-		P = glm::normalize(glm::vec3(-axis.y, axis.x, 0));
-	return P;
-}
-
-glm::vec3 GetArcballVector(int width, int height, float x, float y)
-{
-	glm::vec3 P = glm::vec3(x / (width*2) * 2 - 1, y / (height*2) * 2 - 1, 0);
-	P.y = -P.y;
-	float opSqrt = P.x * P.x + P.y * P.y;
-	if (opSqrt < 1)
-		P.z = sqrt(1 - opSqrt);
-	else
-		P = glm::normalize(P);
-
-	glm::vec3 Yaxis(0, 1, 0);
-	glm::vec3 Xaxis(1, 0, 0);
-
-	glm::vec3 xp = FindConstrainedPoint(P, Xaxis);
-	glm::vec3 yp = FindConstrainedPoint(P, Yaxis);
-
-	return yp;
-}
 
 void ArcBall::Engage()
 {
@@ -61,11 +19,22 @@ void ArcBall::Move(Scene& scene, int width, int height, float x, float y)
 	mx = x;
 	my = y;
 
-	glm::vec3 A = GetArcballVector(width, height, prevX, prevY);
-	glm::vec3 B = GetArcballVector(width, height, mx, my);
-	glm::quat q = glm::quat(-glm::dot(A, B), glm::cross(A, B));
-	scene.rot = q * glm::quat(1, 0, 0, 0);
-	scene.GetCamera().position = glm::mat4_cast(scene.rot) * glm::vec4(scene.GetCamera().position, 1);
+	Camera& camera = scene.GetCamera();
+	float dx = x - prevX;
+	float dy = y - prevY;
+	camera.rotation.x -= dy * 0.01f;
+	camera.rotation.y -= dx * 0.01f;
+	if (camera.rotation.x > glm::radians(80.0f)) camera.rotation.x = glm::radians(80.0f);
+	if (camera.rotation.x < glm::radians(-80.0f)) camera.rotation.x = glm::radians(-80.0f);
+
+	glm::mat4 rotMat(1);
+	rotMat = glm::rotate(rotMat, camera.rotation.y, glm::vec3(0, 1, 0));
+	rotMat = glm::rotate(rotMat, camera.rotation.x, glm::vec3(1, 0, 0));
+
+	glm::vec3 modelCenter = scene.GetModel().m_bounds.getCenter();
+	glm::vec4 camPos(0, 0, camera.distance, 1);
+	glm::vec3 rotPos = modelCenter + glm::vec3(rotMat * camPos);
+	camera.position = rotPos;
 }
 
 void ArcBall::Release()

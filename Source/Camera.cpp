@@ -6,7 +6,8 @@ Camera::Camera(float _fov, float _aspect, float _zNear, float _zFar) :
 	m_fov(_fov),
 	m_aspect(_aspect),
 	m_zNear(_zNear),
-	m_zFar(_zFar)
+	m_zFar(_zFar),
+	rotation(0, 0, 0)
 {
 
 }
