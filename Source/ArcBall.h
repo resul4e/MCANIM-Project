@@ -6,7 +6,7 @@ class ArcBall
 {
 public:
 	void Engage();
-	void Move(Scene& scene, float x, float y);
+	void Move(Scene& scene, int width, int height, float x, float y);
 	void Release();
 
 private:
