@@ -13,6 +13,8 @@ public:
 	AnimationLoader() = delete;
 	~AnimationLoader() = delete;
 
+	static bool HasAnimation(std::filesystem::path _filePath);
+
 	/**
 	 * \brief Loads an AnimationClip, the associated Channels and its KeyFrames and returns the pointer to the AnimationClip.
 	 * \param _filePath The file that the animation is stored in.

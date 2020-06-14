@@ -12,12 +12,12 @@ public:
 	ModelSelector();
 	~ModelSelector() = default;
 
-	void setScene(Scene* _scene);
+	void SetModel(Scene & _scene, std::pair<std::string, std::shared_ptr<Model>> _model);
 
 	/**
 	 * \brief Renders the Gui for the model selector
 	 */
-	void ImGuiRender();
+	void ImGuiRender(Scene& _scene);
 
 	void ToggleImguiWindow();
 
@@ -27,9 +27,6 @@ private:
 
 	//If we should have the GUI open
 	bool m_isGuiOpen;
-
-	//Reference to the scene in order to change the model
-	Scene* scene;
 
 	std::pair<std::string, std::shared_ptr<Model>> m_currentModel;
 };

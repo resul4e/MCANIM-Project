@@ -29,9 +29,13 @@ std::vector<std::filesystem::path> FBXLoader::ScanNew() {
 			std::cout << "Adding fbx: " << fbxPath.filename().u8string() << std::endl;
 			files.push_back(fbxPath);
 
-			std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(fbxPath);
-			auto animFound = std::find(FBXLoader::fbxAnimations.begin(), FBXLoader::fbxAnimations.end(), anim);
-			if (animFound == FBXLoader::fbxAnimations.end()) FBXLoader::fbxAnimations.push_back(anim);
+			if (AnimationLoader::HasAnimation(fbxPath)) {
+				std::shared_ptr<AnimationClip> anim = AnimationLoader::LoadAnimation(fbxPath);
+				FBXLoader::fbxAnimations.push_back(anim);
+			}else{
+				std::cout << "Couln't find animation in " << fbxPath.filename().u8string() << std::endl;
+			}
+			
 
 			std::shared_ptr<Rig> rig = RigLoader::LoadRig(fbxPath);
 			FBXLoader::fbxRigs.push_back(std::make_pair(fbxPath.filename().u8string(), rig));

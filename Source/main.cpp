@@ -34,12 +34,7 @@ public:
 		for (std::shared_ptr<AnimationClip> animation : FBXLoader::fbxAnimations){
 			player.AddAnimation(animation);
 		}
-
-		modelSelector.setScene(&scene);
-
-		scene.SetRig(RigLoader::LoadRig(assetPath.string() + "/Idle.fbx"));
-		scene.SetModel(ModelLoader::LoadModel(assetPath.string() + "/Idle.fbx"));
-		scene.GetModel().Upload();
+		modelSelector.SetModel(scene, FBXLoader::fbxModels.front());
 
 		renderer.Initialize(assetPath);
 
@@ -84,7 +79,7 @@ public:
 
 			// ImGui rendering
 			player.ImGuiRender();
-			modelSelector.ImGuiRender();
+			modelSelector.ImGuiRender(scene);
 
 			interfaceController.End();
 			window.Render();

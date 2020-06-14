@@ -10,6 +10,15 @@
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 
+bool AnimationLoader::HasAnimation(std::filesystem::path _filePath) {
+	//Open the file in assimp.
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(_filePath.string(), aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+
+	return scene->mNumAnimations > 0;
+}
+
+
 std::shared_ptr<AnimationClip> AnimationLoader::LoadAnimation(std::filesystem::path _filePath)
 {
 	//Open the file in assimp.
