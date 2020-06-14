@@ -25,6 +25,7 @@ public:
 	void Initialize(std::filesystem::path assetPath)
 	{
 		window.Create("Skeletal Animator", 1024, 1024);
+		window.SetWindowIcon(assetPath.string() + "/Icon.png");
 		window.AddResizeListener(this);
 		interfaceController.Setup(window);
 

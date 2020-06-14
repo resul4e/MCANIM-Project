@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <filesystem>
 
 struct GLFWwindow;
 
@@ -30,6 +31,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 
+	void SetWindowIcon(std::filesystem::path _iconPath);
 	void AddResizeListener(ResizeListener* resizeListener);
 	void OnResizeEvent(int width, int height);
 	void OnMouseClickedEvent(int button, int mods);

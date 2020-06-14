@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "stb_image.h"
 
 #include <iostream>
 
@@ -87,6 +88,14 @@ int Window::GetHeight()
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	return height;
+}
+
+void Window::SetWindowIcon(std::filesystem::path _iconPath)
+{
+	GLFWimage images[1];
+	images[0].pixels = stbi_load(_iconPath.string().c_str(), &images[0].width, &images[0].height, 0, 4);
+	glfwSetWindowIcon(window, 1, images);
+	stbi_image_free(images[0].pixels);
 }
 
 void Window::AddResizeListener(ResizeListener* resizeListener)
