@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 #include <glad/glad.h>
 
@@ -79,9 +80,16 @@ void Renderer::RenderSky(Scene& scene)
 	glm::mat4 yawMatrix = glm::rotate(0.0f, glm::vec3(0, 1, 0));
 	glm::mat4 pitchMatrix = glm::rotate(0.0f, glm::vec3(1, 0, 0));
 
-	glm::mat4 cameraBasis(1);
-	cameraBasis[2][2] = -1;
-	cameraBasis = yawMatrix * pitchMatrix * cameraBasis;
+	glm::mat4 viewMatrix(1);
+	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
+	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
+
+	glm::mat4 cameraBasis = glm::mat4(glm::mat3(viewMatrix));
+	cameraBasis[3][3] = 1;
+	//cameraBasis[2][2] = -cameraBasis[2][2];
+	//cameraBasis = yawMatrix * pitchMatrix * cameraBasis;
+	float pitch, yaw, z;
+	glm::extractEulerAngleXYZ(cameraBasis, pitch, yaw, z);
 
 	skyShader->SetUniform1i("tex", 0);
 	skyShader->SetVec2("persp", glm::vec2(1.0f / projMatrix[0][0], 1.0f / projMatrix[1][1]));

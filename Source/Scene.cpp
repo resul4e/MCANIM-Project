@@ -14,6 +14,11 @@ Camera& Scene::GetCamera()
 	return m_camera;
 }
 
+ArcBall& Scene::GetArcBall()
+{
+	return m_arcball;
+}
+
 Model& Scene::GetModel()
 {
 	return *m_model;

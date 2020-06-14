@@ -63,6 +63,8 @@ set(RENDERING_SOURCES
     ${DIR}/Texture.cpp
     ${DIR}/Bounds.h
     ${DIR}/Bounds.cpp
+    ${DIR}/ArcBall.h
+    ${DIR}/ArcBall.cpp
     ${DIR}/glad.c
     PARENT_SCOPE
 )

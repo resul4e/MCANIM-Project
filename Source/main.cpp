@@ -19,7 +19,7 @@
 #include <vector>
 #include <string>
 
-class Application : public ResizeListener
+class Application : public ResizeListener, public MouseListener
 {
 public:
 	void Initialize(std::filesystem::path assetPath)
@@ -27,6 +27,8 @@ public:
 		window.Create("Skeletal Animator", 1024, 1024);
 		window.SetWindowIcon(assetPath.string() + "/Icon.png");
 		window.AddResizeListener(this);
+		window.AddMouseListener(this);
+
 		interfaceController.Setup(window);
 
 		// Load all fbx files
@@ -101,6 +103,21 @@ public:
 	void OnResize(int width, int height) override
 	{
 		renderer.Resize(scene, width, height);
+	}
+
+	void OnMouseClicked(int button, int mods) override
+	{
+		scene.GetArcBall().Engage();
+	}
+
+	void OnMouseReleased(int button, int mods) override
+	{
+		scene.GetArcBall().Release();
+	}
+
+	void OnMouseMove(float x, float y) override
+	{
+		scene.GetArcBall().Move(scene, x, y);
 	}
 
 private:

@@ -33,6 +33,8 @@ public:
 
 	void SetWindowIcon(std::filesystem::path _iconPath);
 	void AddResizeListener(ResizeListener* resizeListener);
+	void AddMouseListener(MouseListener* mouseListener);
+
 	void OnResizeEvent(int width, int height);
 	void OnMouseClickedEvent(int button, int mods);
 	void OnMouseReleasedEvent(int button, int mods);
