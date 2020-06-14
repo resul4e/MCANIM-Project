@@ -221,6 +221,7 @@ void Renderer::RenderRig(Scene& scene)
 	
 	rigShader->SetMatrix4("projMatrix", projMatrix);
 	rigShader->SetMatrix4("viewMatrix", viewMatrix);
+	rigShader->SetVec3("u_Color", Options::RenderModel ? glm::vec3(0.5, 1, 1) : glm::vec3(0, 0, 0));
 
 	// Compute the armature lines
 	const Rig& rig = scene.GetRig();
