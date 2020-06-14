@@ -21,10 +21,10 @@ void Renderer::Initialize(std::filesystem::path _assetPath)
 	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-	shader = new Shader(_assetPath.string() + "/shader.shader");
-	planeShader = new Shader(_assetPath.string() + "/plane.shader");
-	rigShader = new Shader(_assetPath.string() + "/rig.shader");
-	skyShader = new Shader(_assetPath.string() + "/sky.shader");
+	shader = new Shader(_assetPath.string() + "/Shaders/model.shader");
+	planeShader = new Shader(_assetPath.string() + "/Shaders/plane.shader");
+	rigShader = new Shader(_assetPath.string() + "/Shaders/rig.shader");
+	skyShader = new Shader(_assetPath.string() + "/Shaders/sky.shader");
 
 	// Generate a VAO and VBO for the armature drawing
 	glGenVertexArrays(1, &m_armatureVao);
