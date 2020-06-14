@@ -9,6 +9,7 @@
 
 #include <glad/glad.h>
 
+bool Options::RenderModel = true;
 bool Options::RenderTextures = true;
 
 Renderer::Renderer() :
@@ -134,6 +135,8 @@ void Renderer::RenderGroundPlane(Scene& scene)
 }
 void Renderer::RenderModel(Scene& scene)
 {
+	if (!Options::RenderModel) return;
+
 	// Enable testing against z-buffer depth
 	glEnable(GL_DEPTH_TEST);
 

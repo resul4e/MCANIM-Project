@@ -176,6 +176,9 @@ void AnimationPlayer::ImGuiRender()
 		Pause();
 	}
 
+	// Model toggle
+	ImGui::Checkbox("Enable Model", &Options::RenderModel);
+
 	// Texture toggle
 	ImGui::Checkbox("Enable Textures", &Options::RenderTextures);
 
