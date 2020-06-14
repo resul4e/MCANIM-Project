@@ -122,7 +122,6 @@ void Renderer::RenderGroundPlane(Scene& scene)
 	planeShader->SetMatrix4("viewMatrix", viewMatrix);
 	planeShader->SetMatrix4("modelMatrix", modelMatrix);
 
-	planeShader->SetVec3("u_CamPos", scene.GetCamera().position);
 	for (Mesh& mesh : scene.GetGroundPlane().meshes)
 	{
 		glBindVertexArray(mesh.vao);
@@ -166,8 +165,8 @@ void Renderer::RenderModel(Scene& scene)
 	
 	skyTexture->Bind(1);
 	shader->SetUniform1i("u_EnvTexture", 1);
-
 	shader->SetVec3("u_CamPos", scene.GetCamera().position);
+
 	for (Mesh& mesh : scene.GetModel().meshes)
 	{
 		glBindVertexArray(mesh.vao);
