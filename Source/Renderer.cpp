@@ -151,12 +151,22 @@ void Renderer::RenderModel(Scene& scene)
 	shader->SetMatrix4("viewMatrix", viewMatrix);
 	shader->SetMatrix4("modelMatrix", modelMatrix);
 
-	scene.GetTexture().Bind(0);
-	shader->SetUniform1i("u_Texture", 0);
+	if (scene.GetTexture() != nullptr)
+	{
+		scene.GetTexture()->Bind(0);
+		shader->SetUniform1i("u_Texture", 0);
+		shader->SetUniform1i("u_HasTexture", 1);
+		scene.GetSpecularMap()->Bind(2);
+		shader->SetUniform1i("u_specular", 2);
+	}
+	else
+	{
+		shader->SetUniform1i("u_HasTexture", 0);
+	}
+	
 	skyTexture->Bind(1);
 	shader->SetUniform1i("u_EnvTexture", 1);
-	scene.GetSpecularMap().Bind(2);
-	shader->SetUniform1i("u_specular", 2);
+
 	shader->SetVec3("u_CamPos", scene.GetCamera().position);
 	for (Mesh& mesh : scene.GetModel().meshes)
 	{

@@ -33,6 +33,7 @@ uniform sampler2D u_Texture;
 uniform sampler2D u_EnvTexture;
 uniform sampler2D u_specular;
 uniform vec3 u_CamPos;
+uniform bool u_HasTexture;
 
 const float PI = 3.141592653589793;
 const float PI_OVER_TWO = PI / 2.0;
@@ -67,7 +68,11 @@ void main()
     vec3 V = normalize(u_CamPos - v_Position);
     vec3 R = reflect(-V, N);
     vec3 envColor = texture(u_EnvTexture, toUV(R)).rgb;
-    vec3 diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
+
+    vec3 diffuseColor = vec3(1, 1, 1);
+    if (u_HasTexture)
+        diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
+
     vec3 Radiance = diffuseColor * max(0, dot(N, L)) * lightIntensity;
     Radiance += envColor * 0.1;
     vec3 specular = lightIntensity * 0.1 * vec3(texture(u_specular, v_TexCoord));
