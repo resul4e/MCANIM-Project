@@ -117,7 +117,7 @@ public:
 
 	void OnMouseMove(float x, float y) override
 	{
-		scene.GetArcBall().Move(scene, x, y);
+		scene.GetArcBall().Move(scene, window.GetWidth(), window.GetHeight(), x, y);
 	}
 
 private:
