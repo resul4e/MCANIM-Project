@@ -70,16 +70,20 @@ void main()
     vec3 L = normalize(lightPos - v_Position);
     vec3 V = normalize(u_CamPos - v_Position);
     vec3 R = reflect(-V, N);
-    vec3 envColor = texture(u_EnvTexture, toUV(R)).rgb;
+    vec3 H = normalize(L + V);
+    vec3 envColor = texture(u_EnvTexture, toUV(N)).rgb;
 
     vec3 diffuseColor = vec3(0.3, 0.3, 0.3);
     if (u_HasTexture)
         diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
 
-    vec3 specular = lightIntensity * 0.1 * vec3(texture(u_specular, v_TexCoord));
+    vec3 specularColor = toLinear(texture(u_EnvTexture, toUV(R)).rgb);
+    if (u_HasTexture)
+        specularColor *= texture(u_specular, v_TexCoord).rgb;
+    specularColor *= pow(max(0, dot(H, N)), 50) * 4;
 
-    vec3 Radiance = (diffuseColor + specular)  * max(0, dot(N, L)) * lightIntensity;
-    Radiance += envColor * 0.2;
+    vec3 Radiance = (diffuseColor + specularColor)  * max(0, dot(N, L)) * lightIntensity;
+    Radiance += envColor * 0.1;
     
     color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
 };
