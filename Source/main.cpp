@@ -24,7 +24,7 @@ class Application : public ResizeListener
 public:
 	void Initialize(std::filesystem::path assetPath)
 	{
-		window.Create("Skeletal Animator", 800, 800);
+		window.Create("Skeletal Animator", 1024, 1024);
 		window.AddResizeListener(this);
 		interfaceController.Setup(window);
 
