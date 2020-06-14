@@ -49,7 +49,7 @@ vec3 toLinear(vec3 gammaColor) {
 }
 
 vec2 toUV(vec3 dir) {
-    float phi = atan(dir.z, dir.x) + TWO_PI;
+    float phi = atan(dir.z, dir.x) + PI;
     float theta = asin(-dir.y) + PI_OVER_TWO;
     return vec2(phi * ONE_OVER_TWO_PI, 1-theta * ONE_OVER_PI);
 }

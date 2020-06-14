@@ -103,6 +103,11 @@ void Window::AddResizeListener(ResizeListener* resizeListener)
 	resizeListeners.push_back(resizeListener);
 }
 
+void Window::AddMouseListener(MouseListener* mouseListener)
+{
+	mouseListeners.push_back(mouseListener);
+}
+
 void Window::OnResizeEvent(int width, int height)
 {
 	for (ResizeListener* listener : resizeListeners)
