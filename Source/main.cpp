@@ -36,6 +36,9 @@ public:
 		}
 		modelSelector.SetModel(scene, FBXLoader::fbxModels.front());
 
+		scene.SetGroundPlane(ModelLoader::LoadModel(assetPath.string() + "/Plane.obj"));
+		scene.GetGroundPlane().Upload();
+
 		renderer.Initialize(assetPath);
 
 		std::shared_ptr<Texture> texture = std::make_shared<Texture>(assetPath.string() + "/FuzZombie__diffuse.png");

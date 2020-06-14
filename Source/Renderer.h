@@ -21,12 +21,14 @@ public:
 
 private:
 	void RenderSky(Scene& scene);
+	void RenderGroundPlane(Scene& scene);
 	void RenderModel(Scene& scene);
 	void RenderRig(Scene& scene);
 
 	bool renderRig;
 	
 	Shader* shader;
+	Shader* planeShader;
 	Shader* rigShader;
 	Shader* skyShader;
 	std::shared_ptr<Texture> skyTexture;

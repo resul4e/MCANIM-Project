@@ -11,10 +11,12 @@ public:
 	Scene();
 	Camera& GetCamera();
 	Model& GetModel();
+	Model& GetGroundPlane();
 	Rig& GetRig();
 	Texture& GetTexture();
 	Texture& GetSpecularMap();
 	void SetModel(std::shared_ptr<Model> model);
+	void SetGroundPlane(std::shared_ptr<Model> plane);
 	void SetRig(std::shared_ptr<Rig> rig);
 	void SetTexture(std::shared_ptr<Texture> texture);
 	void SetSpecularMap(std::shared_ptr<Texture> texture);
@@ -25,4 +27,5 @@ private:
 	std::shared_ptr<Rig> m_rig;
 	std::shared_ptr<Texture> m_texture;
 	std::shared_ptr<Texture> m_specularMap;
+	std::shared_ptr<Model> m_groundPlane;
 };

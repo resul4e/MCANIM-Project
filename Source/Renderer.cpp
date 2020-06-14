@@ -17,10 +17,11 @@ Renderer::Renderer() :
 
 void Renderer::Initialize(std::filesystem::path _assetPath)
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
 	shader = new Shader(_assetPath.string() + "/shader.shader");
+	planeShader = new Shader(_assetPath.string() + "/plane.shader");
 	rigShader = new Shader(_assetPath.string() + "/rig.shader");
 	skyShader = new Shader(_assetPath.string() + "/sky.shader");
 
@@ -49,7 +50,8 @@ void Renderer::Update(Scene& scene)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, renderWidth, renderHeight);
 
-	RenderSky(scene);
+	//RenderSky(scene);
+	RenderGroundPlane(scene);
 	RenderModel(scene);
 	RenderRig(scene);
 }
@@ -88,6 +90,39 @@ void Renderer::RenderSky(Scene& scene)
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
+void Renderer::RenderGroundPlane(Scene& scene)
+{
+	// Enable testing against z-buffer depth
+	glEnable(GL_DEPTH_TEST);
+
+	planeShader->Bind();
+
+	glm::mat4 projMatrix(1);
+	scene.GetCamera().loadProjectionMatrix(projMatrix);
+
+	glm::mat4 viewMatrix(1);
+	glm::vec3 modelCenter = scene.GetModel().m_bounds.getCenter();
+
+	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
+
+	glm::mat4 modelMatrix(1);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, scene.GetModel().m_bounds.getMin().y, 0));
+	float maxDimension = scene.GetModel().m_bounds.getMaxDimension();
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(maxDimension*8, 1, maxDimension*8));
+
+	planeShader->SetMatrix4("projMatrix", projMatrix);
+	planeShader->SetMatrix4("viewMatrix", viewMatrix);
+	planeShader->SetMatrix4("modelMatrix", modelMatrix);
+
+	planeShader->SetVec3("u_CamPos", scene.GetCamera().position);
+	for (Mesh& mesh : scene.GetGroundPlane().meshes)
+	{
+		glBindVertexArray(mesh.vao);
+		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
+	}
+
+	planeShader->UnBind();
+}
 void Renderer::RenderModel(Scene& scene)
 {
 	// Enable testing against z-buffer depth

@@ -19,6 +19,11 @@ Model& Scene::GetModel()
 	return *m_model;
 }
 
+Model& Scene::GetGroundPlane()
+{
+	return *m_groundPlane;
+}
+
 Rig& Scene::GetRig()
 {
 	return *m_rig;
@@ -44,6 +49,11 @@ void Scene::SetModel(std::shared_ptr<Model> model)
 	m_camera.position.z = maxDimension * 1.5f;
 
 	m_model = model;
+}
+
+void Scene::SetGroundPlane(std::shared_ptr<Model> plane)
+{
+	m_groundPlane = plane;
 }
 
 void Scene::SetRig(std::shared_ptr<Rig> rig)
