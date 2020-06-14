@@ -24,7 +24,7 @@ class Application : public ResizeListener, public MouseListener
 public:
 	void Initialize(std::filesystem::path assetPath)
 	{
-		window.Create("Skeletal Animator", 1024, 1024);
+		window.Create("Skeletal Animator", 1440, 1080);
 		window.SetWindowIcon(assetPath.string() + "/Icon.png");
 		window.AddResizeListener(this);
 		window.AddMouseListener(this);
