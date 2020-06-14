@@ -27,6 +27,12 @@ void glfwOnMouseMovement(GLFWwindow* window, double xpos, double ypos)
 	w->OnMouseMoveEvent(xpos, ypos);
 }
 
+void glfwOnMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
+{
+	Window* w = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+	w->OnMouseScrollEvent(xoffset, yoffset);
+}
+
 void Window::Create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
 {
 	if (!glfwInit())
@@ -64,6 +70,7 @@ void Window::Create(std::string title, unsigned int width, unsigned int height, 
 	glfwSetWindowSizeCallback(window, glfwOnResizeEvent);
 	glfwSetMouseButtonCallback(window, glfwOnMouseClick);
 	glfwSetCursorPosCallback(window, glfwOnMouseMovement);
+	glfwSetScrollCallback(window, glfwOnMouseScroll);
 }
 
 void Window::Update()
@@ -137,6 +144,14 @@ void Window::OnMouseMoveEvent(float x, float y)
 	for (MouseListener* listener : mouseListeners)
 	{
 		listener->OnMouseMove(x, y);
+	}
+}
+
+void Window::OnMouseScrollEvent(float xOffset, float yOffset)
+{
+	for (MouseListener* listener : mouseListeners)
+	{
+		listener->OnMouseScroll(xOffset, yOffset);
 	}
 }
 

@@ -120,6 +120,12 @@ public:
 		scene.GetArcBall().Move(scene, window.GetWidth(), window.GetHeight(), x, y);
 	}
 
+	void OnMouseScroll(float xOffset, float yOffset) override
+	{
+		scene.GetCamera().distance -= yOffset * scene.GetCamera().distance * 0.06f;
+		scene.GetCamera().RecomputePosition();
+	}
+
 private:
 
 	void CreateMainMenuBar()

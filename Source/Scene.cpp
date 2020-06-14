@@ -52,7 +52,8 @@ void Scene::SetModel(std::shared_ptr<Model> model)
 	float maxDimension = model->m_bounds.getMaxDimension();
 
 	m_camera.distance = maxDimension * 2.0f;
-	m_camera.position.z = m_camera.distance;
+	m_camera.center = model->m_bounds.getCenter();
+	m_camera.RecomputePosition();
 
 	m_model = model;
 }

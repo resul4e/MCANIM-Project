@@ -18,6 +18,7 @@ public:
 	virtual void OnMouseClicked(int button, int mods) = 0;
 	virtual void OnMouseReleased(int button, int mods) = 0;
 	virtual void OnMouseMove(float x, float y) = 0;
+	virtual void OnMouseScroll(float xOffset, float yOffset) = 0;
 };
 
 class Window
@@ -39,6 +40,7 @@ public:
 	void OnMouseClickedEvent(int button, int mods);
 	void OnMouseReleasedEvent(int button, int mods);
 	void OnMouseMoveEvent(float x, float y);
+	void OnMouseScrollEvent(float xOffset, float yOffset);
 
 	bool IsOpen();
 
