@@ -34,8 +34,9 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 
 	std::shared_ptr<Model> model = std::make_shared<Model>();
 	model->meshes.resize(scene->mNumMeshes);
-	model->minBounds = glm::vec3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
-	model->maxBounds = glm::vec3(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+	glm::vec3 minBounds = glm::vec3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+	glm::vec3 maxBounds = glm::vec3(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+
 
 	for (int i = 0; i < scene->mNumMeshes; i++)
 	{
@@ -103,10 +104,12 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 			aiVector3D& v = aiMesh->mVertices[i];
 			for (int d = 0; d < 3; d++)
 			{
-				model->minBounds[d] = v[d] < model->minBounds[d] ? v[d] : model->minBounds[d];
-				model->maxBounds[d] = v[d] > model->maxBounds[d] ? v[d] : model->maxBounds[d];
+				minBounds[d] = v[d] < minBounds[d] ? v[d] : minBounds[d];
+				maxBounds[d] = v[d] > maxBounds[d] ? v[d] : maxBounds[d];
 			}
 		}
 	}
+
+	model->m_bounds = Bounds(minBounds, maxBounds);
 	return model;
 }

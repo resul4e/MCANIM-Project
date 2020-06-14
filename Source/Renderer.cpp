@@ -100,7 +100,7 @@ void Renderer::RenderModel(Scene& scene)
 	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
+	glm::vec3 modelCenter = scene.GetModel().m_bounds.getCenter();
 	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
 
 	glm::mat4 modelMatrix(1);
@@ -160,7 +160,7 @@ void Renderer::RenderRig(Scene& scene)
 	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	glm::vec3 modelCenter = (scene.GetModel().maxBounds + scene.GetModel().minBounds) * 0.5f;
+	glm::vec3 modelCenter = scene.GetModel().m_bounds.getCenter();
 	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
 	
 	rigShader->SetMatrix4("projMatrix", projMatrix);

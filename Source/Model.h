@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Bounds.h"
+
 #include <glm/glm.hpp>
 
 #include <vector>
@@ -63,6 +65,5 @@ public:
 	void UpdateVertices(const Rig& rig);
 
 	std::vector<Mesh> meshes;
-	glm::vec3 minBounds;
-	glm::vec3 maxBounds;
+	Bounds m_bounds;
 };

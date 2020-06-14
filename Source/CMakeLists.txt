@@ -61,6 +61,8 @@ set(RENDERING_SOURCES
     ${DIR}/stb_image.cpp
     ${DIR}/Texture.h
     ${DIR}/Texture.cpp
+    ${DIR}/Bounds.h
+    ${DIR}/Bounds.cpp
     ${DIR}/glad.c
     PARENT_SCOPE
 )
