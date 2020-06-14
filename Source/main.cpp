@@ -50,7 +50,7 @@ public:
 		std::shared_ptr<Texture> skyTexture = std::make_shared<Texture>(assetPath.string() + "/Background.jpg");
 		renderer.SetBackgroundTexture(skyTexture);
 
-		OnResize(800, 800);
+		OnResize(window.GetWidth(), window.GetHeight());
 	}
 
 	void Update()

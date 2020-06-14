@@ -27,6 +27,8 @@ public:
 	void Render();
 
 	GLFWwindow* GetWindow() { return window; }
+	int GetWidth();
+	int GetHeight();
 
 	void AddResizeListener(ResizeListener* resizeListener);
 	void OnResizeEvent(int width, int height);

@@ -75,6 +75,20 @@ void Window::Render()
 	glfwSwapBuffers(window);
 }
 
+int Window::GetWidth()
+{
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	return width;
+}
+
+int Window::GetHeight()
+{
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	return height;
+}
+
 void Window::AddResizeListener(ResizeListener* resizeListener)
 {
 	resizeListeners.push_back(resizeListener);
