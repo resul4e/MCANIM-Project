@@ -68,6 +68,10 @@ private:
 
 	//The current time of the playback. Will be reset to 0 once the animation has been fully played.
 	float time;
+	
+	// The speed multiplier of the playback
+	float playbackSpeed;
+
 	//What the current state of the playback is.
 	PlaybackState m_state;
 	

@@ -33,7 +33,7 @@ void AnimationPlayer::Update(Scene& scene, float _dt)
 	if(m_state == PlaybackState::PLAYING)
 	{
 		//Advance and reset timer if necessary.
-		time += _dt * m_currentAnim->GetFPS();
+		time += _dt * playbackSpeed * m_currentAnim->GetFPS();
 		if (time > m_currentAnim->GetDuration())
 		{
 			time -= m_currentAnim->GetDuration();
@@ -175,6 +175,9 @@ void AnimationPlayer::ImGuiRender()
 	{
 		Pause();
 	}
+
+	// Playback speed slider
+	ImGui::SliderFloat("Playback Speed", &playbackSpeed, 0, 1);
 
 	// Model toggle
 	ImGui::Checkbox("Enable Model", &Options::RenderModel);
