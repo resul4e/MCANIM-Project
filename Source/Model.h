@@ -10,6 +10,7 @@
 #include <memory>
 
 class Skinning;
+enum class SkinningMethod;
 
 struct Face
 {
@@ -36,7 +37,7 @@ struct Mesh
 	Mesh();
 
 	void Upload();
-	void UpdateVertices(const Rig& rig);
+	void UpdateVertices(const Rig& rig, SkinningMethod skinningMethod);
 	void ToggleSkinning();
 
 	std::vector<glm::vec3> positions;
@@ -62,7 +63,7 @@ class Model
 {
 public:
 	void Upload();
-	void UpdateVertices(const Rig& rig);
+	void UpdateVertices(const Rig& rig, SkinningMethod skinningMethod);
 
 	std::vector<Mesh> meshes;
 	Bounds m_bounds;

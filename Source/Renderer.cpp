@@ -136,7 +136,6 @@ void Renderer::RenderModel(Scene& scene)
 	// Enable testing against z-buffer depth
 	glEnable(GL_DEPTH_TEST);
 
-	scene.GetModel().UpdateVertices(scene.GetRig());
 	shader->Bind();
 
 	glm::mat4 projMatrix(1);

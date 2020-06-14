@@ -2,6 +2,7 @@
 
 #include "Rig.h"
 #include "Joint.h"
+#include "SkinningMethod.h"
 #include "DQS.h"
 #include "LinearBlendSkinning.h"
 
@@ -14,8 +15,13 @@ Mesh::Mesh() :
 
 }
 
-void Mesh::UpdateVertices(const Rig& rig)
+void Mesh::UpdateVertices(const Rig& rig, SkinningMethod skinningMethod)
 {
+	if (skinningMethod == SkinningMethod::LINEAR_BLEND)
+		skinner = std::make_shared<LinearBlendSkinning>();
+	else if (skinningMethod == SkinningMethod::DUAL_QUATERNION)
+		skinner = std::make_shared<DQS>();
+
 	glBindVertexArray(vao);
 
 	animatedPositions = std::vector<glm::vec3>(positions.size(), glm::vec3(0));
@@ -110,10 +116,10 @@ void Model::Upload()
 	}
 }
 
-void Model::UpdateVertices(const Rig& rig)
+void Model::UpdateVertices(const Rig& rig, SkinningMethod skinningMethod)
 {
 	for (Mesh& mesh : meshes)
 	{
-		mesh.UpdateVertices(rig);
+		mesh.UpdateVertices(rig, skinningMethod);
 	}
 }

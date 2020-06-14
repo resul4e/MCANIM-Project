@@ -1,4 +1,7 @@
 #pragma once
+
+#include "SkinningMethod.h"
+
 #include <memory>
 #include <vector>
 
@@ -72,4 +75,7 @@ private:
 	std::shared_ptr<AnimationClip> m_currentAnim;
 	//A list of all animations
 	std::vector<std::shared_ptr<AnimationClip>> m_animations;
+	
+	//The method by which we smooth skin the mesh to the bones
+	SkinningMethod m_skinningMethod;
 };

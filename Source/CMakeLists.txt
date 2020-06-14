@@ -39,6 +39,7 @@ set(ANIMATION_BASE_SOURCES
 )
 
 set(ANIMATION_SKINNING_SOURCES
+    ${DIR}/SkinningMethod.h
     ${DIR}/Skinning.h
     ${DIR}/Skinning.cpp
     ${DIR}/LinearBlendSkinning.h

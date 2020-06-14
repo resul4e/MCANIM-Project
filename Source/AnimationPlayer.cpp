@@ -12,7 +12,8 @@
 AnimationPlayer::AnimationPlayer() :
 	time(0),
 	m_state(PlaybackState::STOPPED),
-	m_isGuiOpen(true)
+	m_isGuiOpen(true),
+	m_skinningMethod(SkinningMethod::DUAL_QUATERNION)
 {
 }
 
@@ -48,6 +49,9 @@ void AnimationPlayer::Update(Scene& scene, float _dt)
 		auto channel = m_currentAnim->GetChannel(j->GetName());
 		j->SetLocalTransform(channel->GetValue(time));
 	}
+
+	// Perform skinning on the model
+	scene.GetModel().UpdateVertices(scene.GetRig(), m_skinningMethod);
 }
 
 void AnimationPlayer::Play()
@@ -116,6 +120,32 @@ void AnimationPlayer::ImGuiRender()
 		}
 	}
 
+	// Dropdown for skinning algorithms
+	{
+		const std::string currentSelection = m_skinningMethod == SkinningMethod::DUAL_QUATERNION ? "Dual Quaternion" : "Linear Blend";
+		std::vector<std::string> options{ "Dual Quaternion", "Linear Blend" };
+		if (ImGui::BeginCombo("Skin blending", currentSelection.c_str()))
+		{
+			for (auto anim : options)
+			{
+				bool is_selected = currentSelection == anim;
+				if (ImGui::Selectable(anim.c_str(), is_selected))
+				{
+					if (anim == "Dual Quaternion")
+						m_skinningMethod = SkinningMethod::DUAL_QUATERNION;
+					else if (anim == "Linear Blend")
+						m_skinningMethod = SkinningMethod::LINEAR_BLEND;
+
+					Reset();
+				}
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+	}
 
 	//Play/pause button.
 	bool playing = m_state == PlaybackState::PLAYING;
