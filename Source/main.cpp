@@ -37,7 +37,7 @@ public:
 		for (std::shared_ptr<AnimationClip> animation : FBXLoader::fbxAnimations){
 			player.AddAnimation(animation);
 		}
-		modelSelector.SetModel(scene, FBXLoader::fbxModels.front());
+		player.SetModel(scene, FBXLoader::fbxModels.front());
 
 		scene.SetGroundPlane(ModelLoader::LoadModel(assetPath.string() + "/Plane.obj"));
 		scene.GetGroundPlane().Upload();
@@ -84,8 +84,7 @@ public:
 			}
 
 			// ImGui rendering
-			player.ImGuiRender();
-			modelSelector.ImGuiRender(scene);
+			player.ImGuiRender(scene);
 
 			interfaceController.End();
 			window.Render();
@@ -141,10 +140,6 @@ private:
 				{
 					player.ToggleImguiWindow();
 				}
-				if (ImGui::MenuItem("Model Selector", "M", modelSelector.IsGuiOpen()))
-				{
-					modelSelector.ToggleImguiWindow();
-				}
 				ImGui::EndMenu();
 			}
 
@@ -170,7 +165,6 @@ private:
 	Scene scene;
 	InterfaceController interfaceController;
 	AnimationPlayer player;
-	ModelSelector modelSelector;
 };
 
 int main(int argc, char** argv)

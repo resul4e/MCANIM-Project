@@ -29,9 +29,9 @@ Model& Scene::GetGroundPlane()
 	return *m_groundPlane;
 }
 
-Rig& Scene::GetRig()
+std::shared_ptr<Rig> Scene::GetRig()
 {
-	return *m_rig;
+	return m_rig;
 }
 
 std::shared_ptr<Texture> Scene::GetTexture()

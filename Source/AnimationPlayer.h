@@ -3,6 +3,7 @@
 #include "SkinningMethod.h"
 
 #include <memory>
+#include <string>
 #include <vector>
 
 class Model;
@@ -37,6 +38,8 @@ public:
 	 */
 	void AddAnimation(std::shared_ptr<AnimationClip> _anim);
 
+	void SetModel(Scene& _scene, std::pair<std::string, std::shared_ptr<Model>> _model);
+
 	/**
 	 * \brief Play the selected animation.	
 	 * \param _dt How many seconds to advance the playback.
@@ -55,7 +58,7 @@ public:
 	/**
 	 * \brief Renders the Gui for the animation player.
 	 */
-	void ImGuiRender();
+	void ImGuiRender(Scene& scene);
 
 	void ToggleImguiWindow();
 
@@ -77,6 +80,9 @@ private:
 	
 	//If we should have the GUI open
 	bool m_isGuiOpen;
+
+	// The current model that is shown
+	std::pair<std::string, std::shared_ptr<Model>> m_currentModel;
 
 	//The current animation that is being played
 	std::shared_ptr<AnimationClip> m_currentAnim;

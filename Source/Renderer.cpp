@@ -112,9 +112,7 @@ void Renderer::RenderGroundPlane(Scene& scene)
 	scene.GetCamera().loadProjectionMatrix(projMatrix);
 
 	glm::mat4 viewMatrix(1);
-	glm::vec3 modelCenter = scene.GetModel().m_bounds.getCenter();
-
-	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, modelCenter, glm::vec3(0, 1, 0));
+	scene.GetCamera().LookAt(viewMatrix, scene.GetCamera().position, scene.GetCamera().center, glm::vec3(0, 1, 0));
 
 	glm::mat4 modelMatrix(1);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, scene.GetModel().m_bounds.getMin().y, 0));
@@ -224,7 +222,7 @@ void Renderer::RenderRig(Scene& scene)
 	rigShader->SetVec3("u_Color", Options::RenderModel ? glm::vec3(0.5, 1, 1) : glm::vec3(0, 0, 0));
 
 	// Compute the armature lines
-	const Rig& rig = scene.GetRig();
+	const Rig& rig = *scene.GetRig();
 	std::vector<Line> bones;
 	ComputeArmature(bones, *rig.GetRootJoint());
 

@@ -14,7 +14,7 @@ public:
 	ArcBall& GetArcBall();
 	Model& GetModel();
 	Model& GetGroundPlane();
-	Rig& GetRig();
+	std::shared_ptr<Rig> GetRig();
 	std::shared_ptr<Texture> GetTexture();
 	std::shared_ptr<Texture> GetSpecularMap();
 	void SetModel(std::shared_ptr<Model> model);
