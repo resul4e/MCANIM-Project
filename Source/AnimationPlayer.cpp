@@ -12,6 +12,7 @@
 
 AnimationPlayer::AnimationPlayer() :
 	time(0),
+	playbackSpeed(1),
 	m_state(PlaybackState::STOPPED),
 	m_isGuiOpen(true),
 	m_skinningMethod(SkinningMethod::DUAL_QUATERNION)
