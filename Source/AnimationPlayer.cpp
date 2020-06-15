@@ -182,3 +182,19 @@ void AnimationPlayer::ToggleImguiWindow()
 {
 	m_isGuiOpen = !m_isGuiOpen;
 }
+
+void AnimationPlayer::SwitchSkinning()
+{
+	switch (m_skinningMethod)
+	{
+	case SkinningMethod::LINEAR_BLEND:
+		m_skinningMethod = SkinningMethod::DUAL_QUATERNION;
+		break;
+	case SkinningMethod::DUAL_QUATERNION:
+		m_skinningMethod = SkinningMethod::LINEAR_BLEND;
+		break;
+	default:
+		throw std::exception("Please implement switch to other skinning method!");
+		break;
+	}
+}

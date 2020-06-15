@@ -59,7 +59,10 @@ public:
 
 	void ToggleImguiWindow();
 
-	bool IsGuiOpen() { return m_isGuiOpen; };
+	bool IsGuiOpen() const { return m_isGuiOpen; };
+
+	void SwitchSkinning();
+	SkinningMethod GetSkinningMethod() const { return m_skinningMethod; }
 
 private:
 

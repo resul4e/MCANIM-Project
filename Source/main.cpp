@@ -151,12 +151,9 @@ private:
 				{
 					renderer.ToggleRigRendering();
 				}
-				if (ImGui::MenuItem("Use Dual Quaternion Skinning", "S", scene.GetModel().meshes[0].m_dqb))
+				if (ImGui::MenuItem("Use Dual Quaternion Skinning", "S", player.GetSkinningMethod() == SkinningMethod::DUAL_QUATERNION))
 				{
-					for (Mesh& m : scene.GetModel().meshes)
-					{
-						m.ToggleSkinning();
-					}
+					player.SwitchSkinning();
 				}
 				ImGui::EndMenu();
 			}
