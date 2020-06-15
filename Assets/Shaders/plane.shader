@@ -41,7 +41,7 @@ float checker(vec2 uv, float repeats)
 void main()
 {
     vec2 uv = v_TexCoord;
-    float fog = length(uv * 2 - 1);
+    float fog = min(1, length(uv * 2 - 1));
     uv *= 40;
     float a = sign(mod(floor(uv.x) + floor(uv.y), 2.0));
     float c = mix(1.0, 0.9, a);
