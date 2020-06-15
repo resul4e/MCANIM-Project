@@ -3,14 +3,14 @@
 #include "Rig.h"
 #include "Joint.h"
 #include "SkinningMethod.h"
-#include "DQS.h"
 #include "LinearBlendSkinning.h"
+#include "DualQuaternionSkinning.h"
 
 #include <glad/glad.h>
 #include <iostream>
 
 Mesh::Mesh() :
-	skinner(std::make_shared<DQS>())
+	skinner(std::make_shared<DualQuaternionSkinning>())
 {
 
 }
@@ -20,7 +20,7 @@ void Mesh::UpdateVertices(const Rig& rig, SkinningMethod skinningMethod)
 	if (skinningMethod == SkinningMethod::LINEAR_BLEND)
 		skinner = std::make_shared<LinearBlendSkinning>();
 	else if (skinningMethod == SkinningMethod::DUAL_QUATERNION)
-		skinner = std::make_shared<DQS>();
+		skinner = std::make_shared<DualQuaternionSkinning>();
 
 	glBindVertexArray(vao);
 
@@ -55,7 +55,7 @@ void Mesh::ToggleSkinning()
 	m_dqb = !m_dqb;
 	if (m_dqb)
 	{
-		skinner = std::make_shared<DQS>();
+		skinner = std::make_shared<DualQuaternionSkinning>();
 	}
 	else
 	{

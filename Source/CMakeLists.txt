@@ -44,8 +44,8 @@ set(ANIMATION_SKINNING_SOURCES
     ${DIR}/Skinning.cpp
     ${DIR}/LinearBlendSkinning.h
     ${DIR}/LinearBlendSkinning.cpp
-    ${DIR}/DQS.h
-    ${DIR}/DQS.cpp
+    ${DIR}/DualQuaternionSkinning.h
+    ${DIR}/DualQuaternionSkinning.cpp
     PARENT_SCOPE
 )
 

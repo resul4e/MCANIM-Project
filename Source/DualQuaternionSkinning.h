@@ -3,11 +3,11 @@
 #pragma once
 #include "Skinning.h"
 
-class DQS : public Skinning
+class DualQuaternionSkinning : public Skinning
 {
 public:
-	DQS() = default;
-	~DQS() = default;
+	DualQuaternionSkinning() = default;
+	~DualQuaternionSkinning() = default;
 
 	/** \see Skinning::Skin()
 	 */

@@ -1,4 +1,4 @@
-#include "DQS.h"
+#include "DualQuaternionSkinning.h"
 #include "Joint.h"
 #include "Rig.h"
 #include "Model.h"
@@ -28,7 +28,7 @@ glm::vec3 TransformPoint(glm::dualquat dq, glm::vec3 p)
 	return RotatePoint(qblend_0, p) + trans;
 }
 
-void DQS::Skin(const Rig& _rig, Mesh& _mesh)
+void DualQuaternionSkinning::Skin(const Rig& _rig, Mesh& _mesh)
 {
 	std::vector<glm::dualquat> dquats;
 
@@ -63,7 +63,7 @@ void DQS::Skin(const Rig& _rig, Mesh& _mesh)
 	Skin(_mesh.positions, _mesh.normals, _mesh.animatedPositions, _mesh.animatedNormals, dquats, weights, jointsID);
 }
 
-void DQS::Skin(const std::vector<glm::vec3>& i_verts, const std::vector<glm::vec3>& i_normals,
+void DualQuaternionSkinning::Skin(const std::vector<glm::vec3>& i_verts, const std::vector<glm::vec3>& i_normals,
                std::vector<glm::vec3>& o_verts, std::vector<glm::vec3>& o_normals, const std::vector<glm::dualquat>& _dualQuat,
                const std::vector<std::vector<float>>& _weights, const std::vector<std::vector<int>>& _jointIDs)
 {
