@@ -18,15 +18,31 @@ void Channel::AddKeyFrame(std::unique_ptr<KeyFrame> _keyFrame)
 
 glm::mat4x4 Channel::GetValue(float _time)
 {
-	const int index = static_cast<int>(std::ceil(_time));
-	const int prevIndex = index == 0 ? index : index - 1;
-	
-	if(m_keyFrames.size() <= index || m_keyFrames.size() < 2)
+	int index = 0;
+	for(int i = 0; i < m_keyFrames.size(); i++)
+	{
+		if(m_keyFrames[i]->GetTime() > _time)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if (m_keyFrames.size() <= index || m_keyFrames.size() < 2)
 	{
 		return GetLocalTransform(m_keyFrames.size() - 1, m_keyFrames.size() - 1, 0);
 	}
 	
-	return GetLocalTransform(prevIndex, index, static_cast<double>(_time) - prevIndex);
+	const int prevIndex = index == 0 ? index : index - 1;
+
+	float diffTime = m_keyFrames[index]->GetTime() - m_keyFrames[prevIndex]->GetTime();
+	if(prevIndex == index)
+	{
+		diffTime = 1;
+	}
+
+	
+	return GetLocalTransform(prevIndex, index, (_time - m_keyFrames[prevIndex]->GetTime()) / diffTime);
 }
 
 glm::mat4x4 Channel::GetLocalTransform(size_t _prev, size_t _current, double _a) const
