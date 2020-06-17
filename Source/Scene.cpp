@@ -34,14 +34,14 @@ Rig& Scene::GetRig()
 	return *m_rig;
 }
 
-Texture& Scene::GetTexture()
+std::shared_ptr<Texture> Scene::GetTexture()
 {
-	return *m_texture;
+	return m_texture;
 }
 
-Texture& Scene::GetSpecularMap()
+std::shared_ptr<Texture> Scene::GetSpecularMap()
 {
-	return *m_specularMap;
+	return m_specularMap;
 }
 
 void Scene::SetModel(std::shared_ptr<Model> model)
@@ -56,6 +56,7 @@ void Scene::SetModel(std::shared_ptr<Model> model)
 	m_camera.RecomputePosition();
 
 	m_model = model;
+	SetTexture(nullptr);
 }
 
 void Scene::SetGroundPlane(std::shared_ptr<Model> plane)

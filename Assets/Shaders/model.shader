@@ -24,15 +24,19 @@ void main()
 #shader fragment
 #version 330 core
 
+uniform sampler2D u_Texture;
+uniform sampler2D u_specular;
+uniform bool u_HasTexture;
+
+uniform sampler2D u_EnvTexture;
+
+uniform vec3 u_CamPos;
+
 layout(location = 0) out vec4 color;
 
 in vec3 v_Position;
 in vec3 v_Normal;
 in vec2 v_TexCoord;
-uniform sampler2D u_Texture;
-uniform sampler2D u_EnvTexture;
-uniform sampler2D u_specular;
-uniform vec3 u_CamPos;
 
 const float PI = 3.141592653589793;
 const float PI_OVER_TWO = PI / 2.0;
@@ -55,7 +59,7 @@ vec3 reinhardToneMapping(vec3 color, float exposure)
 }
 
 vec2 toUV(vec3 dir) {
-    float phi = atan(dir.z, dir.x) + TWO_PI;
+    float phi = atan(dir.z, dir.x) + PI;
     float theta = asin(-dir.y) + PI_OVER_TWO;
     return vec2(phi * ONE_OVER_TWO_PI, 1-theta * ONE_OVER_PI);
 }
@@ -66,10 +70,20 @@ void main()
     vec3 L = normalize(lightPos - v_Position);
     vec3 V = normalize(u_CamPos - v_Position);
     vec3 R = reflect(-V, N);
-    vec3 envColor = texture(u_EnvTexture, toUV(R)).rgb;
-    vec3 diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
-    vec3 Radiance = diffuseColor * max(0, dot(N, L)) * lightIntensity;
+    vec3 H = normalize(L + V);
+    vec3 envColor = texture(u_EnvTexture, toUV(N)).rgb;
+
+    vec3 diffuseColor = vec3(0.3, 0.3, 0.3);
+    if (u_HasTexture)
+        diffuseColor = toLinear(texture(u_Texture, v_TexCoord).rgb);
+
+    vec3 specularColor = toLinear(texture(u_EnvTexture, toUV(R)).rgb);
+    if (u_HasTexture)
+        specularColor *= texture(u_specular, v_TexCoord).rgb;
+    specularColor *= pow(max(0, dot(H, N)), 50) * 4;
+
+    vec3 Radiance = (diffuseColor + specularColor)  * max(0, dot(N, L)) * lightIntensity;
     Radiance += envColor * 0.1;
-    vec3 specular = lightIntensity * 0.1 * vec3(texture(u_specular, v_TexCoord));
-    color = vec4(reinhardToneMapping(Radiance, 1.5) + specular, 1);
+    
+    color = vec4(reinhardToneMapping(Radiance, 1.5), 1);
 };

@@ -15,8 +15,8 @@ public:
 	Model& GetModel();
 	Model& GetGroundPlane();
 	Rig& GetRig();
-	Texture& GetTexture();
-	Texture& GetSpecularMap();
+	std::shared_ptr<Texture> GetTexture();
+	std::shared_ptr<Texture> GetSpecularMap();
 	void SetModel(std::shared_ptr<Model> model);
 	void SetGroundPlane(std::shared_ptr<Model> plane);
 	void SetRig(std::shared_ptr<Rig> rig);
