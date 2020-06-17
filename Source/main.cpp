@@ -117,7 +117,10 @@ public:
 
 	void OnMouseMove(float x, float y) override
 	{
-		scene.GetArcBall().Move(scene, window.GetWidth(), window.GetHeight(), x, y);
+		if(!ImGui::IsAnyItemHovered() && !ImGui::IsAnyWindowHovered())
+		{
+			scene.GetArcBall().Move(scene, window.GetWidth(), window.GetHeight(), x, y);
+		}
 	}
 
 	void OnMouseScroll(float xOffset, float yOffset) override
