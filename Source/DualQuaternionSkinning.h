@@ -1,8 +1,12 @@
-//DQS code inspired by http://rodolphe-vaillant.fr/?e=29
-
 #pragma once
 #include "Skinning.h"
 
+
+/**
+ * \brief Class that is resposible of attaching the Mesh to the Rig using the Dual Quaternion method first described in
+ * https://www.cs.utah.edu/~ladislav/kavan07skinning/kavan07skinning.pdf.
+ * \remark DQS code inspired by http://rodolphe-vaillant.fr/?e=29.
+ */
 class DualQuaternionSkinning : public Skinning
 {
 public:
