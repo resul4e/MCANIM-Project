@@ -36,12 +36,15 @@ std::vector<std::filesystem::path> FBXLoader::ScanNew() {
 				std::cout << "Couln't find animation in " << fbxPath.filename().u8string() << std::endl;
 			}
 			
+			std::string fileName = fbxPath.filename().string();
+			std::string modelPrefix = "Model";
+			if (fileName.rfind(modelPrefix, 0) == 0) {
+				std::shared_ptr<Rig> rig = RigLoader::LoadRig(fbxPath);
+				FBXLoader::fbxRigs.push_back(std::make_pair(fbxPath.filename().u8string(), rig));
 
-			std::shared_ptr<Rig> rig = RigLoader::LoadRig(fbxPath);
-			FBXLoader::fbxRigs.push_back(std::make_pair(fbxPath.filename().u8string(), rig));
-
-			std::shared_ptr<Model> model = ModelLoader::LoadModel(fbxPath);
-			FBXLoader::fbxModels.push_back(std::make_pair(fbxPath.filename().u8string(), model));
+				std::shared_ptr<Model> model = ModelLoader::LoadModel(fbxPath);
+				FBXLoader::fbxModels.push_back(std::make_pair(fbxPath.filename().u8string(), model));
+			}
 		}
 	}
 	return fbxFiles;

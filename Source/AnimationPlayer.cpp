@@ -10,11 +10,15 @@
 #include "FBXLoader.h"
 #include "Options.h"
 
+#include <iostream>
+
 AnimationPlayer::AnimationPlayer() :
 	time(0),
+	playbackSpeed(1),
 	m_state(PlaybackState::STOPPED),
 	m_isGuiOpen(true),
-	m_skinningMethod(SkinningMethod::DUAL_QUATERNION)
+	m_skinningMethod(SkinningMethod::DUAL_QUATERNION),
+	m_currentModel("", nullptr)
 {
 }
 
@@ -26,6 +30,23 @@ void AnimationPlayer::AddAnimation(std::shared_ptr<AnimationClip> _anim)
 	}
 	
 	m_animations.push_back(_anim);
+}
+
+void AnimationPlayer::SetModel(Scene& _scene, std::pair<std::string, std::shared_ptr<Model>> _model) {
+	m_currentModel = _model;
+	//Also use corresponding rig
+	auto it = std::find_if(FBXLoader::fbxRigs.begin(), FBXLoader::fbxRigs.end(),
+		[_model](const std::pair<std::string, std::shared_ptr<Rig>> elem) {
+		return elem.first == _model.first;
+	});
+	if (it != FBXLoader::fbxRigs.end()) {
+		_scene.SetRig(it->second);
+	}
+	else {
+		std::cout << "Cannot find rig for " << it->first << std::endl;
+	}
+	_scene.SetModel(m_currentModel.second);
+	_scene.GetModel().Upload();
 }
 
 void AnimationPlayer::Update(Scene& scene, float _dt)
@@ -40,7 +61,9 @@ void AnimationPlayer::Update(Scene& scene, float _dt)
 		}
 	}
 	
-	for(auto j : scene.GetRig().GetAllJoints())
+	if (scene.GetRig() == nullptr) return;
+
+	for(auto j : scene.GetRig()->GetAllJoints())
 	{
 		if(!m_currentAnim->HasChannel(j->GetName()))
 		{
@@ -52,7 +75,7 @@ void AnimationPlayer::Update(Scene& scene, float _dt)
 	}
 
 	// Perform skinning on the model
-	scene.GetModel().UpdateVertices(scene.GetRig(), m_skinningMethod);
+	scene.GetModel().UpdateVertices(*scene.GetRig(), m_skinningMethod);
 }
 
 void AnimationPlayer::Play()
@@ -77,7 +100,7 @@ void AnimationPlayer::Reset()
 	time = 0;
 }
 
-void AnimationPlayer::ImGuiRender()
+void AnimationPlayer::ImGuiRender(Scene& scene)
 {
 	if(ImGui::IsKeyPressed('G' /*G*/))
 	{
@@ -88,8 +111,25 @@ void AnimationPlayer::ImGuiRender()
 	{
 		return;
 	}
-	
+
 	ImGui::Begin("AnimationPlayer", &m_isGuiOpen);
+
+	{
+		//Dropdown with all models that can be chosen
+		const std::string currentSelection = m_currentModel.first;
+		if (ImGui::BeginCombo("Model", currentSelection.c_str())) {
+			for (std::pair<std::string, std::shared_ptr<Model>> model : FBXLoader::fbxModels) {
+				bool is_selected = strcmp(currentSelection.c_str(), model.first.c_str()) == 0;
+				if (ImGui::Selectable(model.first.c_str(), is_selected)) {
+					SetModel(scene, model);
+				}
+				if (is_selected) {
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+	}
 
 	//Dropdown with all animations that can be chosen
 	const std::string currentSelection = m_currentAnim->GetName();
