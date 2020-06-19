@@ -30,6 +30,14 @@ glm::vec3 TransformPoint(glm::dualquat dq, glm::vec3 p)
 
 void DualQuaternionSkinning::Skin(const Rig& _rig, Mesh& _mesh)
 {
+	/*
+	 * The tutorial I followed has a different format it expects the data in than
+	 * how we store the data. To make it easier to follow this tutorial we
+	 * convert the data so that for each vertex we have a list of weights and bones
+	 * associated with it. And for each joint we have a dual quaternion representing
+	 * the rotation and translation.
+	 */
+	
 	std::vector<glm::dualquat> dquats;
 
 	std::vector<std::vector<float>> weights(_mesh.positions.size(), std::vector<float>());
@@ -60,6 +68,7 @@ void DualQuaternionSkinning::Skin(const Rig& _rig, Mesh& _mesh)
 		}
 	}
 
+	//Use the converted data to deform the vertices.
 	Skin(_mesh.positions, _mesh.normals, _mesh.animatedPositions, _mesh.animatedNormals, dquats, weights, jointsID);
 }
 
@@ -83,9 +92,14 @@ void DualQuaternionSkinning::Skin(const std::vector<glm::vec3>& i_verts, const s
 			w0 = _weights[v][0];
 		}
 		else
+		{
 			dqBlend = glm::dualquat(glm::quat(1, 0, 0, 0), glm::vec3(0, 0, 0));
+		}
 
-		if (k0 != -1) dqBlend = _dualQuat[k0] * w0;
+		if (k0 != -1)
+		{
+			dqBlend = _dualQuat[k0] * w0;
+		}
 
 		int pivot = k0;
 
