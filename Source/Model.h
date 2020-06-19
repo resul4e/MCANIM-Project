@@ -17,12 +17,21 @@ struct Face
 	unsigned int indices[3];
 };
 
+/**
+ * \brief The weight for a single vertex. Stores both the vertex index for the mesh and the weight.
+ * \remark All of the weights for a single vertex should sum up to 1.
+ */
 struct VertexWeight
 {
 	unsigned int m_vertexIndex;
 	float m_weight;
 };
 
+/**
+ * \brief A "Bone" that stores the weights for each vertex.
+ * \remark This is a mirror of how the data is layed out in Assimp, we could possibly improve this by storing this
+ * data in the rig instead. However, this would mean that each rig can only be used on a single model.
+ */
 struct Bone
 {
 	std::string m_name;
