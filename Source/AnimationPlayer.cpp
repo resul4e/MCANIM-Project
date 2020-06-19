@@ -60,9 +60,11 @@ void AnimationPlayer::Update(Scene& scene, float _dt)
 			time -= m_currentAnim->GetDuration();
 		}
 	}
-	
+
+	//If we don't have a rig we can't move anything.
 	if (scene.GetRig() == nullptr) return;
 
+	//Animate the rig.
 	for(auto j : scene.GetRig()->GetAllJoints())
 	{
 		if(!m_currentAnim->HasChannel(j->GetName()))
@@ -94,7 +96,6 @@ void AnimationPlayer::Stop()
 	m_state = PlaybackState::STOPPED;
 }
 
-
 void AnimationPlayer::Reset()
 {
 	time = 0;
@@ -102,11 +103,13 @@ void AnimationPlayer::Reset()
 
 void AnimationPlayer::ImGuiRender(Scene& scene)
 {
-	if(ImGui::IsKeyPressed('G' /*G*/))
+	//Open and close using key press.
+	if(ImGui::IsKeyPressed('G'))
 	{
 		ToggleImguiWindow();
 	}
-	
+
+	//Draw nothing if the gui isn't open
 	if(!m_isGuiOpen)
 	{
 		return;
@@ -161,6 +164,8 @@ void AnimationPlayer::ImGuiRender(Scene& scene)
 		}
 	}
 
+	ImGui::Separator();
+	
 	// Dropdown for skinning algorithms
 	{
 		const std::string currentSelection = m_skinningMethod == SkinningMethod::DUAL_QUATERNION ? "Dual Quaternion" : "Linear Blend";
@@ -188,24 +193,46 @@ void AnimationPlayer::ImGuiRender(Scene& scene)
 		}
 	}
 
-	//Play/pause button.
-	bool playing = m_state == PlaybackState::PLAYING;
-	ImGui::Checkbox(playing ? "Pause" : "Play", &playing);
-	if(playing)
+	ImGui::Separator();
+	
+	//Play/pause/stop button.
 	{
-		Play();
-	}
-	else if(m_state == PlaybackState::PLAYING && !playing)
-	{
-		Pause();
-	}
+		bool playing = m_state == PlaybackState::PLAYING;
 
-	//Stop button.
-	bool stop = false;
-	ImGui::Checkbox("Stop", &stop);
-	if(stop)
-	{
-		Stop();
+		if (playing)
+		{
+			if (ImGui::Button("Pause", ImVec2(50, 0)))
+			{
+				playing = false;
+			}
+		}
+		else
+		{
+			if (ImGui::Button("Play", ImVec2(50, 0)))
+			{
+				playing = true;
+			}
+		}
+
+		if (playing && m_state != PlaybackState::PLAYING)
+		{
+			Play();
+		}
+		else if (m_state == PlaybackState::PLAYING && !playing)
+		{
+			Pause();
+		}
+
+		ImGui::SameLine();
+
+		//Stop button.
+		bool stop = false;
+		//ImGui::Checkbox("Stop", &stop);
+		stop = ImGui::Button("Stop");
+		if (stop)
+		{
+			Stop();
+		}
 	}
 
 	//Time slider.
@@ -219,6 +246,8 @@ void AnimationPlayer::ImGuiRender(Scene& scene)
 	// Playback speed slider
 	ImGui::SliderFloat("Playback Speed", &playbackSpeed, 0, 1);
 
+	ImGui::Separator();
+	
 	// Model toggle
 	ImGui::Checkbox("Enable Model", &Options::RenderModel);
 
@@ -244,7 +273,7 @@ void AnimationPlayer::SwitchSkinning()
 		m_skinningMethod = SkinningMethod::LINEAR_BLEND;
 		break;
 	default:
-		throw std::exception("Please implement switch to other skinning method!");
+		throw std::exception("Please implement switching to other skinning method!");
 		break;
 	}
 }

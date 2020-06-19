@@ -60,11 +60,24 @@ public:
 	 */
 	void ImGuiRender(Scene& scene);
 
+	/**
+	 * \brief Show the imgui window if it is closed, otherwise close it.
+	 */
 	void ToggleImguiWindow();
 
+	/**
+	 * \brief Returns if the imgui window is currently open.
+	 */
 	bool IsGuiOpen() const { return m_isGuiOpen; };
-
+	
+	/**
+	 * \brief Toggles between Dual Quaternion mode and Linear Blending mode.
+	 */
 	void SwitchSkinning();
+	
+	/**
+	 * \brief Returns what the current Skinning Mode is. 
+	 */
 	SkinningMethod GetSkinningMethod() const { return m_skinningMethod; }
 
 private:
