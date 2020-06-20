@@ -6,6 +6,7 @@
 
 void LinearBlendSkinning::Skin(const Rig& _rig, Mesh& _mesh)
 {
+	//get references to the positions and normals we are going to use.
 	std::vector<glm::vec3>& inPositions = _mesh.positions;
 	std::vector<glm::vec3>& inNormals = _mesh.normals;
 
