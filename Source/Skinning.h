@@ -5,7 +5,7 @@ class Mesh;
 
 /**
  * \brief Abstract base class for skinning.
- * \usage In your inherited class override Skin() and use it to attach the Mesh to the Rig in a certain way.
+ * \remark In your inherited class override Skin() and use it to attach the Mesh to the Rig in a certain way.
  * \see DualQuaternionSkinning
  * \see LinearBlendSkinning
  */

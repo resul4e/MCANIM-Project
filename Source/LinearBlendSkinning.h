@@ -10,7 +10,9 @@ public:
 	LinearBlendSkinning() = default;
 	~LinearBlendSkinning() = default;
 
-	/** \see Skinning::Skin()
+	/**
+	 *\copydoc Skinning::Skin()
+	 *\see Skinning::Skin()
 	 */
 	void Skin(const Rig& _rig, Mesh& _mesh) override;
 };
