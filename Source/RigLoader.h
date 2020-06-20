@@ -6,6 +6,10 @@ class Rig;
 class Joint;
 struct aiNode;
 
+
+/**
+ * \brief Class Responsible of loading a Rig and filling it with all of the correct Joints.
+ */
 class RigLoader
 {
 public:
