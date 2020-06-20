@@ -1,6 +1,10 @@
 #pragma once
 #include "Skinning.h"
 
+#include <vector>
+#include <glm/vec3.hpp>
+#include <glm/gtx/dual_quaternion.hpp>
+
 
 /**
  * \brief Class that is resposible of attaching the Mesh to the Rig using the Dual Quaternion method first described in
