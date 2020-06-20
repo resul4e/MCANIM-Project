@@ -6,6 +6,9 @@
 
 class Model;
 
+/**
+ * \brief Class that is responsible for loading a Model using Assimp.
+ */
 class ModelLoader
 {
 public:
