@@ -12,9 +12,6 @@
  * The project is written fully in C++ using C++17. Rendering is achieved using a custom OpenGL renderer.
  * Asset loading is handled by Assimp where it is converted into our own data structures. For in-editor tweaks
  * and UI we are using ImGui. You can see an example of the finished project in the Gif below.
- *
- * For a list of most important classes see the list below:
- * \list
  * 
  * \image html SkeletonCrashingIntoWall.gif
  */
