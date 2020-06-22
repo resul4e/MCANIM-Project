@@ -9,6 +9,7 @@
 #include <limits>
 #include <iostream>
 
+// Convert an Assimp matrix to a GLM column-major matrix
 glm::mat4 convertMatrix(const aiMatrix4x4& aiMat)
 {
 	return {
@@ -26,6 +27,7 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 	unsigned int flags = aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_GenNormals | aiProcess_CalcTangentSpace | aiProcess_SortByPType;
 	const aiScene* scene = importer.ReadFile(_filePath.string(), flags);
 
+	// If the scene is null then the file has failed to load properly for some reason
 	if (!scene)
 	{
 		std::cerr << "Failed to load model: " << importer.GetErrorString() << std::endl;
@@ -33,23 +35,26 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 	}
 
 	std::shared_ptr<Model> model = std::make_shared<Model>();
-	model->meshes.resize(scene->mNumMeshes);
+	model->m_meshes.resize(scene->mNumMeshes);
+	
+	// Initial minimum and maximum bounds of the model
 	glm::vec3 minBounds = glm::vec3(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 	glm::vec3 maxBounds = glm::vec3(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
-
 
 	for (int i = 0; i < scene->mNumMeshes; i++)
 	{
 		const aiMesh* aiMesh = scene->mMeshes[i];
 
-		Mesh& mesh = model->meshes[i];
+		Mesh& mesh = model->m_meshes[i];
 
+		// Copy vertex positions from assimp mesh to our mesh
 		if (aiMesh->HasPositions())
 		{
 			mesh.positions.resize(aiMesh->mNumVertices);
 			std::memcpy(mesh.positions.data(), aiMesh->mVertices, aiMesh->mNumVertices * sizeof(glm::vec3));
 		}
 		
+		// Copy vertex texture coordinates from assimp mesh to our mesh
 		if (aiMesh->HasTextureCoords(0))
 		{
 			mesh.texCoords.resize(aiMesh->mNumVertices);
@@ -62,11 +67,14 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 			}
 		}
 
+		// Copy vertex normals from assimp mesh to our mesh
 		if (aiMesh->HasNormals())
 		{
 			mesh.normals.resize(aiMesh->mNumVertices);
 			std::memcpy(mesh.normals.data(), aiMesh->mNormals, aiMesh->mNumVertices * sizeof(glm::vec3));
 		}
+
+		// Copy faces from assimp mesh to our mesh
 		mesh.faces.resize(aiMesh->mNumFaces);
 		for (unsigned int i = 0; i < aiMesh->mNumFaces; i++)
 		{
@@ -74,7 +82,7 @@ std::shared_ptr<Model> ModelLoader::LoadModel(std::filesystem::path _filePath)
 				mesh.faces[i].indices[v] = aiMesh->mFaces[i].mIndices[v];
 		}
 
-		// If the model has bone weights
+		// If the model has bones, copy their data over to our bones data structure
 		if (aiMesh->HasBones())
 		{
 			mesh.m_bones.resize(aiMesh->mNumBones);

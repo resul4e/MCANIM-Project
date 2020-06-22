@@ -15,20 +15,25 @@ Mesh::Mesh() :
 
 }
 
-void Mesh::UpdateVertices(const Rig& rig, SkinningMethod skinningMethod)
+void Mesh::UpdateVertices(const Rig& _rig, SkinningMethod _skinningMethod)
 {
-	if (skinningMethod == SkinningMethod::LINEAR_BLEND)
+	// Create a new skinner according to the chosen blending algorithm
+	if (_skinningMethod == SkinningMethod::LINEAR_BLEND)
 		skinner = std::make_shared<LinearBlendSkinning>();
-	else if (skinningMethod == SkinningMethod::DUAL_QUATERNION)
+	else if (_skinningMethod == SkinningMethod::DUAL_QUATERNION)
 		skinner = std::make_shared<DualQuaternionSkinning>();
 
+	// Bind the vertex array object in VRAM
 	glBindVertexArray(vao);
 
+	// Reset the transformed vertex positions and normals to 0 so they can be set by the skinner
 	animatedPositions = std::vector<glm::vec3>(positions.size(), glm::vec3(0));
 	animatedNormals = std::vector<glm::vec3>(normals.size(), glm::vec3(0));
 	
-	skinner->Skin(rig, *this);
+	// Perform the skinning of the mesh vertices according to the chosen blending algorithm
+	skinner->Skin(_rig, *this);
 
+	// Go through all faces and linearize the vertex data for uploading to the graphics card
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
 	std::vector<glm::vec2> linearTextureCoords(faces.size() * 3);
@@ -65,9 +70,7 @@ void Mesh::ToggleSkinning()
 
 void Mesh::Upload()
 {
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
+	// Go through all faces and linearize the vertex data for uploading to the graphics card
 	std::vector<glm::vec3> linearPositions(faces.size() * 3);
 	std::vector<glm::vec3> linearNormals(faces.size() * 3);
 	std::vector<glm::vec2> linearTextureCoords(faces.size() * 3);
@@ -86,6 +89,10 @@ void Mesh::Upload()
 			}
 		}
 	}
+
+	// Generate the initial vertex array and buffer objects
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 
 	glGenBuffers(1, &pbo);
 	glBindBuffer(GL_ARRAY_BUFFER, pbo);
@@ -110,16 +117,16 @@ void Mesh::Upload()
 
 void Model::Upload()
 {
-	for (Mesh& mesh : meshes)
+	for (Mesh& mesh : m_meshes)
 	{
 		mesh.Upload();
 	}
 }
 
-void Model::UpdateVertices(const Rig& rig, SkinningMethod skinningMethod)
+void Model::UpdateVertices(const Rig& _rig, SkinningMethod _skinningMethod)
 {
-	for (Mesh& mesh : meshes)
+	for (Mesh& mesh : m_meshes)
 	{
-		mesh.UpdateVertices(rig, skinningMethod);
+		mesh.UpdateVertices(_rig, _skinningMethod);
 	}
 }

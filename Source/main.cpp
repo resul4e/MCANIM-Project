@@ -77,7 +77,7 @@ public:
 			}
 			if (ImGui::IsKeyPressed('S' /*S*/))
 			{
-				for(Mesh& m : scene.GetModel().meshes)
+				for(Mesh& m : scene.GetModel().m_meshes)
 				{
 					m.ToggleSkinning();
 				}

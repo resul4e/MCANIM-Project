@@ -138,7 +138,7 @@ void Renderer::RenderGroundPlane(Model& _plane, Camera& _camera, float _size, fl
 	m_planeShader->SetMatrix4("modelMatrix", modelMatrix);
 
 	// Render plane
-	for (Mesh& mesh : _plane.meshes)
+	for (Mesh& mesh : _plane.m_meshes)
 	{
 		glBindVertexArray(mesh.vao);
 		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
@@ -189,7 +189,7 @@ void Renderer::RenderModel(Scene& _scene)
 	m_modelShader->SetVec3("u_CamPos", _scene.GetCamera().position);
 
 	// Render model
-	for (Mesh& mesh : _scene.GetModel().meshes)
+	for (Mesh& mesh : _scene.GetModel().m_meshes)
 	{
 		glBindVertexArray(mesh.vao);
 		glDrawArrays(GL_TRIANGLES, 0, mesh.faces.size() * 3);
