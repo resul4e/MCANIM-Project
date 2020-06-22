@@ -33,7 +33,7 @@ void glfwOnMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
 	w->OnMouseScrollEvent(xoffset, yoffset);
 }
 
-void Window::Create(std::string title, unsigned int width, unsigned int height, bool fullScreen)
+void Window::Create(std::string _title, unsigned int _width, unsigned int _height, bool _fullScreen)
 {
 	if (!glfwInit())
 	{
@@ -42,13 +42,14 @@ void Window::Create(std::string title, unsigned int width, unsigned int height, 
 		std::cout << "GLFW init failed" << std::endl;
 	}
 
+	// Request an OpenGL 3.3 context in core profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
-	GLFWmonitor* monitor = fullScreen ? glfwGetPrimaryMonitor() : nullptr;
-	window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
+	GLFWmonitor* monitor = _fullScreen ? glfwGetPrimaryMonitor() : nullptr;
+	window = glfwCreateWindow(_width, _height, _title.c_str(), monitor, nullptr);
 	if (!window)
 	{
 		// Window or OpenGL context creation failed
@@ -56,16 +57,20 @@ void Window::Create(std::string title, unsigned int width, unsigned int height, 
 		std::cout << "GLFW window failed" << std::endl;
 	}
 
+	// Create the OpenGL context
 	glfwMakeContextCurrent(window);
 
+	// Load OpenGL functions
 	if (!gladLoadGL()) {
 		glfwTerminate();
 		printf("Something went wrong!\n");
 		exit(-1);
 	}
 
+	// Turn on V-Sync
 	glfwSwapInterval(1);
 
+	// Set up input callbacks
 	glfwSetWindowUserPointer(window, this);
 	glfwSetWindowSizeCallback(window, glfwOnResizeEvent);
 	glfwSetMouseButtonCallback(window, glfwOnMouseClick);
