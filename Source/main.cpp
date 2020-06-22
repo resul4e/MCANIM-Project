@@ -71,11 +71,11 @@ public:
 
 			CreateMainMenuBar();
 			
-			if (ImGui::IsKeyPressed('J' /*J*/))
+			if (ImGui::IsKeyPressed('J'))
 			{
 				renderer.ToggleRigRendering();
 			}
-			if (ImGui::IsKeyPressed('S' /*S*/))
+			if (ImGui::IsKeyPressed('S'))
 			{
 				for(Mesh& m : scene.GetModel().m_meshes)
 				{
