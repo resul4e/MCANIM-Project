@@ -39,17 +39,6 @@ public:
 	 * \param _texture The texture containing the cylindrical mapped environment image
 	 */
 	void SetBackgroundTexture(std::shared_ptr<Texture> _texture);
-	
-	/**
-	 * \brief Turn rendering of the rig on and off
-	 */
-	void ToggleRigRendering();
-	
-	/**
-	 * \brief Check if the rig is being rendered
-	 * \return true if the rig is rendering
-	 */
-	bool IsRenderingRig() { return m_renderRig; }
 
 private:
 	/**
@@ -75,9 +64,6 @@ private:
 	 * \param _scene The scene containing the armature
 	 */
 	void RenderRig(Scene& _scene);
-
-	/** Whether to render the armature or not */
-	bool m_renderRig;
 	
 	// Shaders
 	Shader* m_modelShader;

@@ -71,11 +71,7 @@ public:
 
 			CreateMainMenuBar();
 			
-			if (ImGui::IsKeyPressed('J'))
-			{
-				renderer.ToggleRigRendering();
-			}
-			if (ImGui::IsKeyPressed('S'))
+			if (ImGui::IsKeyPressed('S' /*S*/))
 			{
 				for(Mesh& m : scene.GetModel().m_meshes)
 				{
@@ -145,10 +141,6 @@ private:
 
 			if (ImGui::BeginMenu("Settings"))
 			{
-				if (ImGui::MenuItem("Render Rig", "J", renderer.IsRenderingRig()))
-				{
-					renderer.ToggleRigRendering();
-				}
 				if (ImGui::MenuItem("Use Dual Quaternion Skinning", "S", player.GetSkinningMethod() == SkinningMethod::DUAL_QUATERNION))
 				{
 					player.SwitchSkinning();

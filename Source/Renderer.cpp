@@ -10,9 +10,9 @@
 
 bool Options::RenderModel = true;
 bool Options::RenderTextures = true;
+bool Options::RenderRig = true;
 
 Renderer::Renderer() :
-	m_renderRig(true),
 	m_modelShader(nullptr),
 	m_planeShader(nullptr),
 	m_rigShader(nullptr),
@@ -82,11 +82,6 @@ void Renderer::Update(Scene& _scene)
 void Renderer::SetBackgroundTexture(std::shared_ptr<Texture> _texture)
 {
 	m_skyTexture = _texture;
-}
-
-void Renderer::ToggleRigRendering()
-{
-	m_renderRig = !m_renderRig;
 }
 
 void Renderer::RenderSky(Scene& _scene)
@@ -223,11 +218,10 @@ void ComputeArmature(std::vector<Line>& _lines, const Joint& _joint)
 
 void Renderer::RenderRig(Scene& _scene)
 {
-	if (!m_renderRig) return;
+	if (!Options::RenderRig) return;
 
 	// Draw without considering z-buffer depth
 	glDisable(GL_DEPTH_TEST);
-
 	m_rigShader->Bind();
 
 	// Fill and upload PVM matrices

@@ -254,6 +254,9 @@ void AnimationPlayer::ImGuiRender(Scene& scene)
 	// Texture toggle
 	ImGui::Checkbox("Enable Textures", &Options::RenderTextures);
 
+	// Rig toggle
+	ImGui::Checkbox("Enable Rig", &Options::RenderRig);
+
 	ImGui::End();
 }
 
