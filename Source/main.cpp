@@ -118,7 +118,7 @@ public:
 	{
 		if(!ImGui::IsAnyItemHovered() && !ImGui::IsAnyWindowHovered())
 		{
-			scene.GetArcBall().Move(scene, window.GetWidth(), window.GetHeight(), x, y);
+			scene.GetArcBall().Move(scene.GetCamera(), window.GetWidth(), window.GetHeight(), x, y);
 		}
 	}
 
